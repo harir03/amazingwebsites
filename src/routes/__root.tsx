@@ -1,0 +1,13 @@
+import { createRootRoute, Outlet } from '@tanstack/react-router'
+import { Toaster } from '@/components/ui/sonner'
+
+export const Route = createRootRoute({
+  component: () => {
+    return (
+      <>
+        <Outlet />
+        <Toaster duration={5000} />
+      </>
+    )
+  },
+})

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/images/favicon.svg"
+      media="(prefers-color-scheme: light)"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/images/favicon_light.svg"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary Meta Tags -->
+    <title>Lorem Ipsum: Dolor Sit Amet | Consectetur Adipiscing Elit</title>
+    <meta name="title" content="Lorem Ipsum: Dolor Sit Amet" />
+    <meta
+      name="description"
+      content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Lorem Ipsum: Dolor Sit Amet" />
+    <meta
+      property="og:description"
+      content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="Lorem Ipsum: Dolor Sit Amet" />
+    <meta
+      property="twitter:description"
+      content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+    />
+
+    <!-- Fonts: Outfit, Plus Jakarta Sans, Bebas Neue, DM Sans, Geist, Chakra Petch -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Synchronous Intro Phase Check before paint -->
+    <script>
+      (function() {
+        try {
+          var s = window.location.search;
+          var f = s.match(/[?&]intro=([^&]+)/);
+          var fv = f ? f[1] : null;
+          var r = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+          var hasSeenIntro = false;
+          try {
+            hasSeenIntro = sessionStorage.getItem('app:intro:v1') === '1';
+          } catch(e) {}
+
+          if (fv === '0' || r || hasSeenIntro) {
+            document.documentElement.dataset.intro = 'done';
+          } else {
+            document.documentElement.dataset.intro = 'playing';
+            if ('scrollRestoration' in history) {
+              history.scrollRestoration = 'manual';
+            }
+            window.scrollTo(0, 0);
+          }
+        } catch (e) {
+          document.documentElement.dataset.intro = 'playing';
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

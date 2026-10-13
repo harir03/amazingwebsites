@@ -1,0 +1,81 @@
+@import "./theme.css";
+
+/* ── Clean Production Fonts (Outfit, Plus Jakarta Sans, Bebas Neue, DM Sans) ── */
+
+:root {
+  /* ── Colour Tokens ── */
+  --color-bg: #F4F0E8;
+  --color-accent: #5C8C3A;
+  --color-accent-bright: #8FC45A;
+  --color-accent-deep: #2F5527;
+  --color-border: rgba(47, 85, 39, 0.12);
+  --color-night: #040A05;
+
+  /* ── Radius ── */
+  --radius-pill: 999px;
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+
+  /* ── Easing ── */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* ── Font Family Aliases ── */
+  --font-dm-sans: "DM Sans", system-ui, sans-serif;
+  --font-heading: "Outfit", "Plus Jakarta Sans", var(--font-dm-sans);
+  --font-headingNow: "Outfit", "Plus Jakarta Sans", var(--font-dm-sans);
+  --font-hiruko: "Outfit", var(--font-heading), sans-serif;
+  --font-display: "Outfit", var(--font-heading), sans-serif;
+  --font-geist-mono: "Geist Mono", ui-monospace, monospace;
+  --font-bebas: "Bebas Neue", "Outfit", sans-serif;
+
+  /* ── Spacing ── */
+  --padding-x: clamp(1rem, 2.5vw, 2rem);
+
+  /* ── Sponsor section stage dims ── */
+  --sxp-win-w: 100vw;
+  --sxp-win-h: 100vh;
+}
+
+/* ── Explicit Font Utility Classes for Tailwind ── */
+.font-bebasNeue {
+  font-family: 'Bebas Neue', "Outfit", sans-serif !important;
+}
+
+.font-headingNow {
+  font-family: 'Outfit', 'Plus Jakarta Sans', var(--font-dm-sans), sans-serif !important;
+}
+
+.font-display {
+  font-family: 'Outfit', 'Plus Jakarta Sans', var(--font-heading), sans-serif !important;
+}
+
+.font-geist_mono {
+  font-family: 'Geist Mono', ui-monospace, monospace !important;
+}
+
+.font-dm_sans {
+  font-family: 'DM Sans', system-ui, sans-serif !important;
+}
+
+.font-hiruko {
+  font-family: 'Outfit', var(--font-heading), sans-serif !important;
+}
+
+/* ── Reset Unwanted Outline Boxes ── */
+/* Remove Anima export outline-[3px] boxes across buttons, spans, headers, and badges */
+.outline-\[3px\],
+[class*="outline-\[3px\]"] {
+  outline: none !important;
+  outline-width: 0 !important;
+  outline-style: none !important;
+}
+
+/* Clear stray outlines on pitch elements unless explicitly keyboard focused */
+.font-dm_sans * {
+  outline: none;
+}
+.font-dm_sans *:focus-visible {
+  outline: 2px solid var(--color-accent, #5C8C3A) !important;
+  outline-offset: 2px !important;
+}
