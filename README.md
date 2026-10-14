@@ -55,10 +55,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## 📋 Site Index
 
-| Category | Site | Tech Stack | Status |
-|----------|------|------------|--------|
-| Fintech | [Recursive](fintech/recursive/) | React + Vite + TailwindCSS + TanStack Router | ✅ Complete |
-| Portfolio | [The Design Society](portfolio/thedesignsociety/) | HTML5 + CSS3 + GSAP + Lenis | ✅ Complete |
+| Category | Site Folder | Original Live Site | Tech Stack | Status |
+|----------|-------------|--------------------|------------|--------|
+| Portfolio | [The Design Society](portfolio/thedesignsociety/) | [https://www.thedesignsociety.fr/](https://www.thedesignsociety.fr/) | HTML5 + CSS3 + GSAP + Lenis | ✅ Complete ([Local Demo](http://localhost:5173/)) |
+| Fintech | [Recursive](fintech/recursive/) | [https://recursive.money/](https://recursive.money/) | React + Vite + TailwindCSS + TanStack Router | ✅ Complete |
+
 
 ---
 
