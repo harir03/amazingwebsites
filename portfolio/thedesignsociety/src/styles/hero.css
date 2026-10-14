@@ -1,0 +1,268 @@
+/* ==========================================================================
+   Hero Section (mwg020) & Interactive Sticker System
+   ========================================================================== */
+
+.mwg020 {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8rem 2rem 5rem;
+  overflow: hidden;
+  background-color: #0b0b0e;
+}
+
+.mwg020-medias {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
+}
+
+/* Eye Graphic Frames */
+.eye-hero-cropped {
+  width: 100%;
+  max-width: 820px;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.eye-hero-cropped.bottom {
+  transform: rotate(180deg);
+}
+
+.eye-hero {
+  width: 100%;
+  height: auto;
+}
+
+/* Captions and Headings */
+.caption-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 780px;
+  margin: 1.25rem 0;
+  font-family: 'GeistPixel', monospace;
+  font-size: 0.85rem;
+  color: #bcf015;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.caption-hero.padding-bottom {
+  margin-top: 2rem;
+}
+
+.content-hero-container {
+  text-align: center;
+  margin: 2rem 0;
+  max-width: 960px;
+}
+
+.hero-title {
+  font-family: 'FKRasterRomanCompact', serif;
+  font-size: clamp(2.5rem, 6.5vw, 5.5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #fefefe;
+  margin: 0;
+  text-transform: none;
+}
+
+.hero-subtitle {
+  font-family: 'KHTeka', sans-serif;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: 1.5rem;
+  max-width: 680px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* Interactive Draggable Sticker Cards */
+[data-sticker="item"] {
+  outline: 2px solid transparent;
+  outline-offset: 0;
+  transition: outline-color 0.18s ease, transform 0.2s cubic-bezier(0.625, 0.05, 0, 1);
+  overflow: visible !important;
+  will-change: transform;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+[data-sticker="item"]:active {
+  cursor: grabbing;
+}
+
+[data-sticker="item"].is-blue {
+  --select-color: #350aff;
+}
+
+[data-sticker="item"].is-green {
+  --select-color: #bcf015;
+}
+
+[data-sticker="item"]:hover {
+  outline-color: var(--select-color);
+}
+
+/* Corner Handles: Pixelated Grabber Handles */
+[data-sticker="item"]::before,
+[data-sticker="item"]::after {
+  content: "";
+  position: absolute;
+  left: -6px;
+  right: -6px;
+  height: 11px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s ease;
+  z-index: 10;
+  background-image:
+    linear-gradient(#fff, #fff),
+    linear-gradient(#fff, #fff),
+    linear-gradient(var(--select-color), var(--select-color)),
+    linear-gradient(var(--select-color), var(--select-color));
+  background-repeat: no-repeat;
+  background-size:
+    7px 7px,   7px 7px,
+    11px 11px, 11px 11px;
+  background-position:
+    2px 2px,
+    calc(100% - 2px) 2px,
+    0 0,
+    100% 0;
+}
+
+[data-sticker="item"]::before {
+  top: -6px;
+}
+
+[data-sticker="item"]::after {
+  bottom: -6px;
+}
+
+[data-sticker="item"]:hover::before,
+[data-sticker="item"]:hover::after {
+  opacity: 1;
+}
+
+/* Floating Sticker Card Layouts */
+.floating-hero-card {
+  position: absolute;
+  background: #141418;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.floating-hero-card.card-left {
+  top: 15%;
+  left: 4%;
+  width: 260px;
+}
+
+.floating-hero-card.card-right {
+  bottom: 12%;
+  right: 5%;
+  width: 280px;
+}
+
+@media (max-width: 991px) {
+  .floating-hero-card {
+    position: static;
+    margin: 1rem auto;
+    width: 90%;
+    max-width: 320px;
+  }
+}
+
+.hero-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.5rem;
+}
+
+.hero-card-tag {
+  font-family: 'GeistPixel', monospace;
+  font-size: 0.75rem;
+  color: #bcf015;
+  text-transform: uppercase;
+}
+
+.hero-card-status {
+  font-family: 'GeistPixel', monospace;
+  font-size: 0.75rem;
+  color: #350aff;
+}
+
+.hero-card-body {
+  font-family: 'KHTeka', sans-serif;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.4;
+}
+
+.badge-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.pixel-badge {
+  font-family: 'Khinterferencetrial', monospace;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.pixel-badge.green {
+  background: #bcf015;
+  color: #0b0b0e;
+}
+
+.pixel-badge.blue {
+  background: #350aff;
+  color: #fff;
+}
+
+/* Mouse Image Trail Effect */
+.mwg020 .created-img {
+  width: 7vw;
+  min-width: 60px;
+  max-width: 100px;
+  height: 7vw;
+  min-height: 60px;
+  max-height: 100px;
+  position: absolute;
+  object-fit: cover;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 5;
+  will-change: transform, opacity;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  transform: translate(-50%, -50%);
+}
