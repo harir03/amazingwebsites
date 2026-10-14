@@ -1,0 +1,121 @@
+/* ==========================================================================
+   Boot Loader Sequence & Pixel Transition Curtain
+   ========================================================================== */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #0b0b0e;
+  color: #fff;
+  font-family: 'Khinterferencetrial', monospace, sans-serif;
+  transition: opacity 0.8s cubic-bezier(0.625, 0.05, 0, 1), visibility 0.8s ease;
+}
+
+.loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.loader__bg-bar {
+  height: 100%;
+  width: 0%;
+  background: #bcf015;
+  transition: width 0.15s ease-out;
+  box-shadow: 0 0 12px #bcf015;
+}
+
+.loader__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 90vw;
+}
+
+.loader__logo-wrap {
+  position: relative;
+  width: 320px;
+  max-width: 80vw;
+  height: 60px;
+}
+
+.loader__logo-item {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader__logo-item.is--base svg {
+  opacity: 0.15;
+}
+
+.loader__logo-item.is--top {
+  clip-path: polygon(0 0, 0% 0, 0% 100%, 0 100%);
+  transition: clip-path 0.1s linear;
+}
+
+.loader__logo-item svg {
+  width: 100%;
+  height: auto;
+}
+
+.loader__text-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: #bcf015;
+  text-transform: uppercase;
+}
+
+.loader__counter {
+  font-family: 'Geistpixel Line', monospace;
+  color: #350aff;
+  font-size: 1rem;
+}
+
+/* Pixel Grid Transition Curtains */
+.transition {
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  pointer-events: none;
+  display: flex;
+}
+
+.transition__panel {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.transition__col {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+}
+
+.transition__pixel {
+  flex: 1 1 auto;
+  background-color: #350aff;
+  opacity: 0;
+  will-change: opacity;
+}
