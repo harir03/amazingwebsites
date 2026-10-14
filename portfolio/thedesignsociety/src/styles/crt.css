@@ -1,0 +1,133 @@
+/* ==========================================================================
+   CRT Display & Chromatic Aberration Shader System
+   Authentic retro-terminal phosphor screen simulation
+   ========================================================================== */
+
+:root {
+  --crt-scanline-opacity: 0.18;
+  --crt-scanline-spacing: 3px;
+  --crt-aberration: 0.8;
+  --crt-vignette-strength: 0.35;
+  --crt-glow: 0.05;
+  --crt-grain-opacity: 0.05;
+}
+
+/* Chromatic Aberration SVG filter applied to HTML root */
+html[data-crt="true"] {
+  filter: url(#crt-chroma);
+}
+
+/* Safari fix: avoids vertical tile rendering seams */
+@supports (-webkit-hyphens: none) {
+  html[data-crt="true"] {
+    filter: none;
+  }
+}
+
+.crt-svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* CRT Screen Bezel: realistic curved cathode ray tube edge shadow */
+.crt-bezel {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2147483646;
+  box-shadow:
+    inset 0 0 60px 10px rgba(0, 0, 0, 0.35),
+    inset 0 0 160px 40px rgba(0, 0, 0, 0.18);
+}
+
+/* Phosphor horizontal scanlines */
+.crt-scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2147483644;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, var(--crt-scanline-opacity)) 0px,
+    rgba(0, 0, 0, var(--crt-scanline-opacity)) 1px,
+    transparent 1px,
+    transparent var(--crt-scanline-spacing)
+  );
+}
+
+/* Tube glass glare reflection in the upper-left corner */
+.crt-glare {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2147483643;
+  background: radial-gradient(
+    ellipse 80% 50% at 30% 20%,
+    rgba(255, 255, 255, var(--crt-glow)),
+    transparent 60%
+  );
+}
+
+/* Outer vignette corner shadow */
+.crt-vignette {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2147483642;
+  background: radial-gradient(
+    ellipse 130% 90% at 50% 50%,
+    transparent 65%,
+    rgba(0, 0, 0, var(--crt-vignette-strength)) 100%
+  );
+}
+
+/* Procedural animated film/phosphor grain */
+.crt-grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 2147483641;
+  opacity: var(--crt-grain-opacity);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.7'/></svg>");
+  animation: crt-grain-shift 0.4s steps(4) infinite;
+}
+
+@keyframes crt-grain-shift {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-3%, 2%); }
+  50%  { transform: translate(2%, -3%); }
+  75%  { transform: translate(-2%, -2%); }
+  100% { transform: translate(0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crt-grain {
+    animation: none;
+  }
+}
+
+/* Optimized mobile performance profile */
+@media (max-width: 768px) {
+  html[data-crt="true"] {
+    filter: none;
+  }
+  .crt-grain {
+    display: none;
+  }
+  .crt-bezel {
+    box-shadow: inset 0 0 40px 8px rgba(0, 0, 0, 0.25);
+  }
+  .crt-scanlines {
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.12) 0px,
+      rgba(0, 0, 0, 0.12) 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  }
+}
