@@ -58,7 +58,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 | Category | Site | Tech Stack | Status |
 |----------|------|------------|--------|
 | Fintech | [Recursive](fintech/recursive/) | React + Vite + TailwindCSS + TanStack Router | ✅ Complete |
-| Portfolio | [The Design Society](portfolio/thedesignsociety/) | HTML5 + CSS3 + GSAP + Lenis | 🚧 In Progress |
+| Portfolio | [The Design Society](portfolio/thedesignsociety/) | HTML5 + CSS3 + GSAP + Lenis | ✅ Complete |
 
 ## ⚖️ License
 
