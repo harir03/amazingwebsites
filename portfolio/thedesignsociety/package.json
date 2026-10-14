@@ -1,0 +1,19 @@
+{
+  "name": "thedesignsociety-clone",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Faithful open-source recreation of The Design Society Lyon (https://www.thedesignsociety.fr/)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.18"
+  },
+  "devDependencies": {
+    "vite": "^5.4.1"
+  }
+}

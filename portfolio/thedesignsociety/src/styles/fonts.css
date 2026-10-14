@@ -1,0 +1,95 @@
+@font-face {
+  font-family: 'FKRasterRomanCompact';
+  src: url('/fonts/FKRasterRomanCompact-Smooth.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GeistPixel';
+  src: url('/fonts/GeistPixel-Line.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KHInterference';
+  src: url('/fonts/KHInterferenceTRIAL-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KHInterference';
+  src: url('/fonts/KHInterferenceTRIAL-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KHTeka';
+  src: url('/fonts/KHTekaTRIAL-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KHTeka';
+  src: url('/fonts/KHTekaTRIAL-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KHTeka';
+  src: url('/fonts/KHTekaTRIAL-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KHTeka';
+  src: url('/fonts/KHTekaTRIAL-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Aliases matching Webflow class definitions */
+@font-face {
+  font-family: 'Fkrasterromancompact Smooth';
+  src: url('/fonts/FKRasterRomanCompact-Smooth.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Geistpixel Line';
+  src: url('/fonts/GeistPixel-Line.ttf') format('truetype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Khinterferencetrial';
+  src: url('/fonts/KHInterferenceTRIAL-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Khinterferencetrial';
+  src: url('/fonts/KHInterferenceTRIAL-Bold.otf') format('opentype');
+  font-weight: 700;
+}
+@font-face {
+  font-family: 'Khtekatrial';
+  src: url('/fonts/KHTekaTRIAL-Regular.otf') format('opentype');
+  font-weight: 400;
+}
+@font-face {
+  font-family: 'Khtekatrial';
+  src: url('/fonts/KHTekaTRIAL-Bold.otf') format('opentype');
+  font-weight: 700;
+}
