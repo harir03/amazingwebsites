@@ -60,6 +60,27 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 | Fintech | [Recursive](fintech/recursive/) | React + Vite + TailwindCSS + TanStack Router | ✅ Complete |
 | Portfolio | [The Design Society](portfolio/thedesignsociety/) | HTML5 + CSS3 + GSAP + Lenis | ✅ Complete |
 
+---
+
+## 🔬 Motion Forensics & Reverse Engineering Toolkit
+
+To guarantee **1:1 fidelity**—where every animation, spring easing, and cursor interaction moves like butter—this repository integrates a forensic reverse-engineering pipeline powered by specialized agent skills in [`.agents/skills`](.agents/skills):
+
+| Tool / Skill | Capability | Motion Parity Function |
+|--------------|------------|------------------------|
+| **`ui-reverse-engineering`** | Full-pipeline URL reverse engineering | Extracts live DOM structure, computed CSS, web assets, and motion parameters directly from deployed runtimes. |
+| **`reverse-engineer-anything` (REA)** | Decompilation & AST bundle analysis | Analyzes compiled JavaScript bundles, Webpack/Vite chunks, and recovers unminified component logic and timing configs. |
+| **`ui-capture`** | High-speed multi-state visual capture | Captures multi-breakpoint viewports (desktop, tablet, mobile), scroll trajectories, hover sweeps, and interaction clips. |
+| **`visual-debug`** | Automated pixel & transition diffing | Computes Absolute Error (AE) and Structural Similarity (SSIM) across live reference and local implementation frames. |
+| **`benchmark`** | Parity scorecard & layout verification | Runs automated gate checks (`GATE_ORDER`) ensuring strict boundary, font, and motion parity before sign-off. |
+
+### Butter-Smooth Animation Standards:
+1. **Zero Guesswork Curves**: Exact easing curves extracted via `CustomEase` snapshots or runtime bezier equations (e.g. `cubic-bezier(0.16, 1, 0.3, 1)`).
+2. **Scroll-Driven Sync**: Native `Lenis` or `ScrollTrigger` scrub synchronization with clamped scroll progress and pin anchors.
+3. **Responsive Cursor Physics**: Fluid lerping (`0.08` to `0.15` factor) with velocity transforms and state mutations.
+4. **Hardware Acceleration**: Explicit `transform: translate3d(...)` and `will-change` utilization for stutter-free 60fps renders.
+
+
 ## ⚖️ License
 
 MIT — see [LICENSE](LICENSE) for details.
