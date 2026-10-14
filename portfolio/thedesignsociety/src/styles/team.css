@@ -1,0 +1,189 @@
+/* ==========================================================================
+   Team Section (mwg008) — Les Saints Représentants
+   ========================================================================== */
+
+.section-5 {
+  position: relative;
+  width: 100%;
+  padding: 8rem 2rem 5rem;
+  background-color: #0b0b0e;
+  overflow: hidden;
+}
+
+.team-container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.team-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 4rem;
+}
+
+.team-eyebrow {
+  font-family: 'GeistPixel', monospace;
+  font-size: 0.85rem;
+  color: #bcf015;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.team-h2 {
+  font-family: 'FKRasterRomanCompact', serif;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  color: #fefefe;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.team-desc {
+  font-family: 'KHTeka', sans-serif;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 600px;
+  margin: 0;
+}
+
+/* 5-Card Responsive Grid */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+}
+
+@media (min-width: 1200px) {
+  .team-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.team-card {
+  position: relative;
+  background: #141418;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: transform 0.3s cubic-bezier(0.625, 0.05, 0, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+
+.team-card:hover {
+  transform: translateY(-6px);
+  border-color: #bcf015;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+}
+
+/* Jingle Pixel Art SVG with Fluid Gradient Animation */
+.team-jingle-wrap {
+  width: 48px;
+  height: 48px;
+}
+
+.team-jingle-wrap svg {
+  width: 100%;
+  height: 100%;
+}
+
+.anime-couleur {
+  animation: fondue-fluide 12s infinite ease-in-out;
+}
+
+@keyframes fondue-fluide {
+  0%   { fill: #bcf015; }
+  50%  { fill: #350aff; }
+  100% { fill: #bcf015; }
+}
+
+/* Pixelated Image Reveal Card */
+.pixelated-image-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #000;
+}
+
+.pixelated-image-card__default,
+.pixelated-image-card__active {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.pixelated-image-card__default img,
+.pixelated-image-card__active img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.pixelated-image-card__default {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.pixelated-image-card__active {
+  opacity: 0;
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+.team-card:hover .pixelated-image-card__default {
+  opacity: 0;
+  transform: scale(0.96);
+}
+
+.team-card:hover .pixelated-image-card__active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Team Member Meta */
+.team-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.team-name {
+  font-family: 'FKRasterRomanCompact', serif;
+  font-size: 1.35rem;
+  color: #fff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.team-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.team-role-badge {
+  font-family: 'Khinterferencetrial', monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #bcf015;
+  background: rgba(188, 240, 21, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  width: fit-content;
+}
+
+.team-specialty-badge {
+  font-family: 'KHTeka', sans-serif;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
