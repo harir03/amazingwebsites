@@ -1,0 +1,115 @@
+/* ==========================================================================
+   About / Manifesto Section (mwg005) & Kinetic Typography
+   ========================================================================== */
+
+.mwg005 {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding: 8rem 2rem;
+  background-color: #0b0b0e;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mwg005-container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.about-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  font-family: 'GeistPixel', monospace;
+  font-size: 0.85rem;
+  color: #bcf015;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 1rem;
+}
+
+.about-text-wrapper {
+  position: relative;
+  margin: 2rem 0;
+}
+
+.about-large-text {
+  font-family: 'FKRasterRomanCompact', serif;
+  font-size: clamp(2rem, 4.5vw, 4rem);
+  line-height: 1.25;
+  color: #fefefe;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.about-large-text .word {
+  display: inline-block;
+  opacity: 0.2;
+  transform: translateY(15px);
+  transition: opacity 0.4s ease, transform 0.4s ease, color 0.4s ease;
+  margin-right: 0.28em;
+}
+
+.about-large-text .word.is-active {
+  opacity: 1;
+  transform: translateY(0);
+  color: #fff;
+}
+
+.about-large-text .word.highlight-green {
+  color: #bcf015 !important;
+  opacity: 1;
+}
+
+.about-large-text .word.highlight-blue {
+  color: #350aff !important;
+  opacity: 1;
+}
+
+/* Manifesto Badges Footer */
+.about-badges-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.about-pill {
+  font-family: 'Khinterferencetrial', monospace;
+  font-size: 0.85rem;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.about-pill:hover {
+  border-color: #bcf015;
+  background: rgba(188, 240, 21, 0.05);
+  color: #bcf015;
+}
+
+.about-pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #350aff;
+}
+
+.about-pill:hover .about-pill-dot {
+  background: #bcf015;
+}
