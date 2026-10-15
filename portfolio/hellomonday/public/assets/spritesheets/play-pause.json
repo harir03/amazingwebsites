@@ -1,0 +1,95 @@
+{"frames": {
+
+"play_pause0.png":
+{
+	"frame": {"x":1,"y":1,"w":21,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":21},
+	"sourceSize": {"w":21,"h":21}
+},
+"play_pause1.png":
+{
+	"frame": {"x":24,"y":1,"w":21,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":21},
+	"sourceSize": {"w":21,"h":21}
+},
+"play_pause2.png":
+{
+	"frame": {"x":47,"y":1,"w":21,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":21},
+	"sourceSize": {"w":21,"h":21}
+},
+"play_pause3.png":
+{
+	"frame": {"x":70,"y":1,"w":21,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":21},
+	"sourceSize": {"w":21,"h":21}
+},
+"play_pause4.png":
+{
+	"frame": {"x":93,"y":1,"w":21,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":21},
+	"sourceSize": {"w":21,"h":21}
+},
+"play_pause5.png":
+{
+	"frame": {"x":116,"y":1,"w":21,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":21},
+	"sourceSize": {"w":21,"h":21}
+},
+"play_pause6.png":
+{
+	"frame": {"x":139,"y":1,"w":21,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":21},
+	"sourceSize": {"w":21,"h":21}
+},
+"play_pause7.png":
+{
+	"frame": {"x":162,"y":1,"w":21,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":21},
+	"sourceSize": {"w":21,"h":21}
+},
+"play_pause8.png":
+{
+	"frame": {"x":185,"y":1,"w":21,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":21},
+	"sourceSize": {"w":21,"h":21}
+},
+"play_pause9.png":
+{
+	"frame": {"x":208,"y":1,"w":21,"h":21},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":21,"h":21},
+	"sourceSize": {"w":21,"h":21}
+}},
+"animations": {
+	"play_pause": ["play_pause0.png","play_pause1.png","play_pause2.png","play_pause3.png","play_pause4.png","play_pause5.png","play_pause6.png","play_pause7.png","play_pause8.png","play_pause9.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "play-pause.png",
+	"format": "RGBA8888",
+	"size": {"w":230,"h":23},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:19031a88c64782dbe312ab4f72067e75:e5f6550e09afd17ca7b8d92d3e4e7148:1a95cf5139683d51434a3b63fa4e8ac3$"
+}
+}

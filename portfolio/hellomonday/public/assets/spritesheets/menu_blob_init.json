@@ -1,0 +1,87 @@
+{"frames": {
+
+"blob-hover-entry_00174.png":
+{
+	"frame": {"x":21,"y":58,"w":10,"h":38},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":9,"y":0,"w":10,"h":38},
+	"sourceSize": {"w":27,"h":66}
+},
+"blob-hover-entry_00175.png":
+{
+	"frame": {"x":21,"y":17,"w":10,"h":39},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":9,"y":2,"w":10,"h":39},
+	"sourceSize": {"w":27,"h":66}
+},
+"blob-hover-entry_00176.png":
+{
+	"frame": {"x":17,"y":99,"w":12,"h":37},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":8,"y":12,"w":12,"h":37},
+	"sourceSize": {"w":27,"h":66}
+},
+"blob-hover-entry_00177.png":
+{
+	"frame": {"x":1,"y":99,"w":14,"h":34},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":31,"w":14,"h":34},
+	"sourceSize": {"w":27,"h":66}
+},
+"blob-hover-entry_00178.png":
+{
+	"frame": {"x":1,"y":1,"w":27,"h":14},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":52,"w":27,"h":14},
+	"sourceSize": {"w":27,"h":66}
+},
+"blob-hover-entry_00179.png":
+{
+	"frame": {"x":1,"y":17,"w":18,"h":19},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":43,"w":18,"h":19},
+	"sourceSize": {"w":27,"h":66}
+},
+"blob-hover-entry_00180.png":
+{
+	"frame": {"x":1,"y":38,"w":18,"h":19},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":41,"w":18,"h":19},
+	"sourceSize": {"w":27,"h":66}
+},
+"blob-hover-entry_00181.png":
+{
+	"frame": {"x":1,"y":59,"w":18,"h":19},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":43,"w":18,"h":19},
+	"sourceSize": {"w":27,"h":66}
+},
+"blob-hover-entry_00182.png":
+{
+	"frame": {"x":1,"y":80,"w":18,"h":17},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":5,"y":49,"w":18,"h":17},
+	"sourceSize": {"w":27,"h":66}
+}},
+"animations": {
+	"blob-hover-entry": ["blob-hover-entry_00174.png","blob-hover-entry_00175.png","blob-hover-entry_00176.png","blob-hover-entry_00177.png","blob-hover-entry_00178.png","blob-hover-entry_00179.png","blob-hover-entry_00180.png","blob-hover-entry_00181.png","blob-hover-entry_00182.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "menu_blob_init.png",
+	"format": "RGBA8888",
+	"size": {"w":32,"h":137},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:4ee3d245ee57cfb9e3ad7c49ba2161cc:20eb43bacccb42873c9fdbd60bd5f6ac:34bbb180e008f1280ad25586c42839e7$"
+}
+}
