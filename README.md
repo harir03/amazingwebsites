@@ -60,7 +60,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 | AI / ML | [Heron AI](ai-ml/heronai/) | [https://heronaiapp.com/](https://heronaiapp.com/) | HTML5 + Webflow CSS + GSAP + Lenis + Swiper | ✅ Complete ([Local Demo](http://localhost:3000/)) |
 | Fintech | [Recursive](fintech/recursive/) | [https://recursive.money/](https://recursive.money/) | React + Vite + TailwindCSS + TanStack Router | ✅ Complete |
 | Portfolio | [Hello Monday](portfolio/hellomonday/) | [https://www.hellomonday.com/](https://www.hellomonday.com/) | Pixi.js + WebGL + GSAP + Three.js | ✅ Complete ([Local Demo](http://localhost:3001/)) |
-| Portfolio | [Alan Menken](portfolio/alanmenken/) | [https://www.alanmenken.com/](https://www.alanmenken.com/) | Three.js + WebGL / GSAP | ⏳ Queued |
+| Portfolio | [Alan Menken](portfolio/alanmenken/) | [https://www.alanmenken.com/](https://www.alanmenken.com/) | HTML5 + CSS3 + GSAP + Audio Sync | ✅ Complete ([Local Demo](http://localhost:3002/)) |
 | Media / App | [Don't Look Up](media/dontlookup/) | [https://www.dontlookup.app/](https://www.dontlookup.app/) | Interactive Canvas / WebGL | ⏳ Queued |
 | Portfolio | [Emotion Agency](portfolio/emotionagency/) | [https://emotion-agency.com/](https://emotion-agency.com/) | Next.js / React + GSAP | ⏳ Queued |
 
