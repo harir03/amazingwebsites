@@ -1,0 +1,3621 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+    <!--
+      What the search results and the share previews say.
+
+      Google was quoting the cookie banner, because the page offered it nothing better: no
+      description, no share card, no icon. A crawler takes the first readable sentence it
+      finds, and after the consent notice went in, that sentence was the consent notice.
+
+      The title carries a descriptor because "Don't Look Up" alone belongs to a film. The
+      description is the game's own opening line rather than copy written for robots.
+    -->
+    <title>Don't Look Up — a game about keeping everyone looking down</title>
+    <meta name="description" content="You are very rich, very tall, and standing on quite a lot of people. Keep them distracted and they keep paying. Let them look up, and they push you over." />
+    <link rel="canonical" href="https://www.dontlookup.app/" />
+    <meta name="theme-color" content="#f4f3ef" />
+
+    <!-- The coin, which is the thing the whole game is about collecting. -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Slack, WhatsApp, iMessage, LinkedIn and the rest all read these. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Don't Look Up" />
+    <meta property="og:url" content="https://www.dontlookup.app/" />
+    <meta property="og:title" content="Don't Look Up — a game about keeping everyone looking down" />
+    <meta property="og:description" content="You are very rich, very tall, and standing on quite a lot of people. Keep them distracted and they keep paying. Let them look up, and they push you over." />
+    <meta property="og:image" content="https://www.dontlookup.app/assets/brand/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="DON'T LOOK UP, in heavy black type on off-white paper, with dollar coins scattered around it." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Don't Look Up — a game about keeping everyone looking down" />
+    <meta name="twitter:description" content="You are very rich, very tall, and standing on quite a lot of people. Keep them distracted and they keep paying. Let them look up, and they push you over." />
+    <meta name="twitter:image" content="https://www.dontlookup.app/assets/brand/og.jpg" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoGame",
+        "name": "Don't Look Up",
+        "url": "https://www.dontlookup.app/",
+        "description": "You are very rich, very tall, and standing on quite a lot of people. Keep them distracted and they keep paying. Let them look up, and they push you over.",
+        "image": "https://www.dontlookup.app/assets/brand/og.jpg",
+        "genre": ["Strategy", "Satire"],
+        "gamePlatform": "Web browser",
+        "applicationCategory": "Game",
+        "operatingSystem": "Any",
+        "inLanguage": "en",
+        "isAccessibleForFree": true
+      }
+    </script>
+    <style>
+      /* Self-hosted rather than pulled from Google at runtime: 53kB for the pair, and the
+         title screen cannot end up rendering in Helvetica because a CDN is slow. */
+      /**
+       * Marsipan, the game's title face — and the reason the game exists.
+       *
+       * One file, no unicode-range split: the two Google faces below are served as latin and
+       * latin-ext pairs because that is how Google ships them, but this is a single woff2 and
+       * splitting it would mean subsetting it first for no gain at 36KB.
+       *
+       * font-display: block, matching the others. The wordmark is the first thing on screen and
+       * a swap from the fallback would be visible on every load — better a beat of nothing than
+       * the title changing shape while somebody reads it.
+       */
+      @font-face {
+        font-family: 'Marsipan';
+        font-style: normal;
+        font-weight: 400;
+        font-display: block;
+        src: url('/assets/fonts/Marsipan-Regular.woff2') format('woff2');
+      }
+
+      @font-face {
+        font-family: 'Luckiest Guy';
+        font-style: normal;
+        font-weight: 400;
+        font-display: block;
+        src: url('/assets/fonts/luckiest-guy-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+          U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Luckiest Guy';
+        font-style: normal;
+        font-weight: 400;
+        font-display: block;
+        src: url('/assets/fonts/luckiest-guy-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+          U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+2C60-2C7F, U+A720-A7FF;
+      }
+      /**
+       * The body face, and it is a VARIABLE font for one specific reason.
+       *
+       * It was Elms Sans, which ships in a single weight — and unusually, a weight the
+       * browser will not even fake: measured at 11px, the same string came out 87.2px wide
+       * at weight 400 and 87.2px at weight 800, identical to the decimal. Every other face
+       * in the fallback stack widens under weight. So every `font-weight: 700` and `800` in
+       * this file below was decorative, and the spec labels on the cards could not be made
+       * to look like labels however they were styled.
+       *
+       * Nunito covers 400–800 in one file per subset, so weight is now a real axis. Same
+       * rounded, friendly register as before and rather more legible at the 9–11px this UI
+       * mostly lives at; it was already named in the --body fallback stack, so it is the
+       * face the CSS was reaching for anyway. Two subsets, matching Luckiest Guy above.
+       *
+       * elms-sans.ttf is still in assets and still in git. To go back, restore the old
+       * @font-face and put 'Elms Sans' at the front of --body.
+       */
+      @font-face {
+        font-family: 'Nunito';
+        font-style: normal;
+        font-weight: 400 800;
+        font-display: block;
+        src: url('/assets/fonts/nunito-latin.woff2') format('woff2');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+          U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+          U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: 'Nunito';
+        font-style: normal;
+        font-weight: 400 800;
+        font-display: block;
+        src: url('/assets/fonts/nunito-latin-ext.woff2') format('woff2');
+        unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+          U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+          U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+      }
+
+      :root {
+        --paper: #f4f3ef;
+        --ink: #14140f;
+        --red: #c0342a;
+        /* The launcher and the looking-up bar are built to the same height and radius, so
+           they read as one row. Both take these; never hard-code either again. */
+        --btn-h: 44px;
+        /* The three shades of noticing: just noticed, certain, recruiting others. Shared by
+           the looking-up bar and the crowd banner so the two can never drift apart. */
+        /* A convert, matching CONFIG.belief.tint applied to the paper: the same blue the
+           crowd actually turns, so the key cannot lie about it. */
+        --convert: #9abeef;
+        /* The same blue with enough weight to be read as ink on paper. --convert is the
+           colour a converted CITIZEN actually is, which is correct for the key and far too
+           pale for type; this is the menu's version of it, for the tower family's chips. */
+        --follow: #2b5a9b;
+        --y1: #f8e08a;
+        --y2: #f2c31a;
+        --y3: #c98f06;
+        --btn-r: 14px;
+        /* Two faces, one job each: DISPLAY shouts (titles, buttons, figures), BODY speaks
+           (copy, labels, everything the crowd says). The body face was Indie Flower, which
+           is charming and genuinely hard to read at 10-12px, which is most of this UI. */
+        /* Marsipan first. Luckiest Guy stays behind it as the fallback rather than being
+           deleted: same job, similar weight, so a load failure degrades to something that still
+           reads as a title instead of dropping to a system sans. Body copy is untouched. */
+        --display: 'Marsipan', 'Luckiest Guy', ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+        --body: 'Nunito', ui-rounded, "SF Pro Rounded", system-ui, sans-serif;
+        --font: var(--body);
+        /* Old name, kept so nothing breaks if a rule still asks for it. */
+        --hand: var(--body);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+        touch-action: none;
+        -webkit-tap-highlight-color: transparent;
+        background: var(--paper);
+        font-family: var(--body);
+        /* Both faces ship a single weight, so a browser asked for 800 fakes it — which
+           turns the handwriting to mush and the display face to a blob. Never synthesise. */
+        font-synthesis: none;
+        color: var(--ink);
+        -webkit-font-smoothing: antialiased;
+        user-select: none;
+      }
+
+      #stage { position: fixed; inset: 0; }
+      #stage canvas { display: block; touch-action: none; }
+
+      #bubbles { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+
+      .bubble {
+        /* One stroke weight for the body border AND the tail. Everything below is
+           derived from it, so a bolder shout stays a single continuous line. */
+        --bw: 2.5px;
+        position: absolute;
+        transform: translate(-50%, -100%);
+        padding: 5px 10px 6px;
+        background: #fff;
+        border: var(--bw) solid currentColor;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+        color: var(--ink);
+        opacity: 0;
+        transition: opacity 140ms ease-out;
+      }
+      /* The tail is a stroked SVG path, not a bordered pseudo-element.
+         A rotated square shows BOTH of its borders, so the tail read as a chevron
+         hanging under the bubble, and the square's fill cut a straight chord out of
+         the body's rounded bottom edge — which is why the bubbles looked detached
+         from the people saying them. Stacked border-triangles are no better: a
+         triangle's "stroke" is a border, so its tip always renders heavier than its
+         sides. A real stroke has neither problem.
+         Two paths, in order:
+           1. FILL erases the body's bottom border behind the tail (y = 0 is the body's
+              outer bottom edge) and fills the tail white, in one polygon.
+           2. LINE draws the two tail edges only, at the body's own weight, starting on
+              the erased border's CENTRELINE so both corners join continuously. */
+      .btail {
+        position: absolute;
+        left: 50%;
+        margin-left: -9px;
+        /* y = 0 sits on the border box's bottom edge; `bottom` resolves against the
+           padding box, hence the border-width term. */
+        bottom: calc(-9px - var(--bw));
+        width: 18px;
+        height: 14px;
+        overflow: visible;
+      }
+      .btail-fill { fill: #fff; }
+      .btail-line {
+        fill: none;
+        stroke: currentColor;
+        stroke-width: var(--bw);
+        stroke-linejoin: round;
+        stroke-linecap: round;
+      }
+      .bubble.is-visible { opacity: 1; }
+      .bubble.is-shout { --bw: 3px; font-size: 16px; color: var(--red); }
+
+      /* Everything that shouts. The rest of the page inherits the handwriting. */
+      #money, #fee, #time, #alarmtext,
+      #card-title, #card-kicker, #step-title, #step-num, #over-title, .mcap,
+      .mname, .mcost, .mtxt b,
+      #launch, .btn, #intro-start, #intro-how, #step-next, #step-skip, #over-again,
+      #polaroid-share {
+        font-family: var(--display);
+        letter-spacing: 0.02em;
+      }
+      /* Marsipan is upper case by design and carries its own spacing, so the tracking that
+         suited a rounded sans only pulls the letters further apart. Tighter again since the swap
+         off Luckiest Guy, which is a heavier face and wanted more air between caps than this
+         one does. */
+      #launch, #intro-start, #intro-how, #step-next, #step-skip, #over-again,
+      #polaroid-share { letter-spacing: 0.04em; }
+
+      /**
+       * No widows anywhere. "balance" evens the lines of a short heading so it never
+       * drops one word alone; "pretty" does the same for a paragraph's last line. Both
+       * degrade
+       * to normal wrapping where unsupported, and the titles ALSO get a hard non-breaking
+       * space glued in by main.js, which works everywhere.
+       */
+      #step-title, #card-title, #over-title, #intro-line, .mname, .mcap {
+        text-wrap: balance;
+      }
+      /* The instruction, in the display face: the title is what to DO and the line under it
+         is why. */
+      .tth {
+        display: block;
+        font-family: var(--display);
+        font-size: 13px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        margin-bottom: 3px;
+      }
+      #step-line, #card-line, #over-line, .mtag, #step-key .krow, #rc-blurb, #rc-tag {
+        text-wrap: pretty;
+      }
+
+      /* ---------------------------------------------------------------- HUD */
+      .lbl {
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 0.45;
+      }
+
+      /* One panel, top left: what you have, what it earns, what you charge, how long is
+         left. Splitting the ledger from the fee meant the two numbers the whole game is
+         about — the take and the rate — were at opposite ends of the screen. */
+      #top {
+        position: fixed;
+        top: env(safe-area-inset-top, 0px); left: 0;
+        padding: 14px 16px;
+        pointer-events: none;
+      }
+
+      #ledger {
+        display: inline-block;
+        text-align: left;
+        /* The legs run right behind this, so the figures need their own ground. */
+        padding: 12px 17px 13px;
+        border-radius: 17px;
+        background: radial-gradient(ellipse at 30% 40%, rgba(244,243,239,0.95) 0%, rgba(244,243,239,0.85) 66%, rgba(244,243,239,0.4) 100%);
+      }
+      #money {
+        font-size: clamp(24px, 3.4vw, 40px);
+        font-weight: 800;
+        letter-spacing: -0.01em;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      #rate { margin-top: 5px; font-size: 11px; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; opacity: 0.5; font-variant-numeric: tabular-nums; }
+      #goal { margin-top: 7px; font-size: 9px; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; opacity: 0.36; }
+      /* Progress to the trillion. Quiet on purpose: it is the good news, and it never
+         needs watching. */
+      #bar {
+        width: min(32vw, 260px);
+        height: 4px;
+        margin: 10px 0 0;
+        background: rgba(20,20,15,0.13);
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      #bar > i { display: block; height: 100%; width: 0%; background: var(--ink); transition: width 220ms linear; }
+
+      /* Fee, its controls and the clock, on one line under the take. */
+      #meta {
+        display: flex;
+        align-items: flex-end;
+        gap: 13px;
+        margin-top: 12px;
+      }
+      .mcell { line-height: 1; }
+      .mcell .lbl { margin-top: 4px; }
+      #fee { font-size: clamp(19px, 2.4vw, 27px); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+      #time { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums; opacity: 0.62; }
+      #time.is-low { color: var(--red); opacity: 1; }
+
+      #feebtns { display: flex; gap: 6px; pointer-events: auto; }
+      .btn {
+        appearance: none;
+        font-weight: 800;
+        font-size: 15px;
+        line-height: 1;
+        padding: 7px 13px;
+        /* Opaque, like every other button: transparent fills picked up whatever was
+           behind them and broke the black/white pairing. */
+        background: #fff;
+        color: var(--ink);
+        border: 2.5px solid var(--ink);
+        border-radius: 11px;
+        cursor: pointer;
+      }
+      .btn:hover { background: var(--ink); border-color: var(--paper); color: var(--paper); }
+      .btn:disabled { opacity: 0.28; cursor: default; }
+      .btn:disabled:hover { background: #fff; border-color: var(--ink); color: var(--ink); }
+
+      /**
+       * The fee panel. It used to sit in the top-left ledger, a screen away from the only
+       * button you press — and nothing in it said what the fee ought to BE. Now it sits on
+       * the launcher, and the track carries the one relationship that decides the run: the
+       * fill is what you charge, the red mark is what the time remaining demands.
+       */
+      #feepanel {
+        /* A containing block for the alarm ring drawn on .is-behind. */
+        position: relative;
+        /**
+         * Exactly as wide as the launcher it sits on, whatever label the launcher is
+         * showing. auto fills the dock, and the dock is sized by the button — so the two
+         * read as one object stacked in the corner rather than a narrow panel parked on a
+         * wide button.
+         *
+         * The containment is what keeps that one-way. Without it the fee note's longest
+         * line counts towards the dock's own width, so a long note widened the dock and
+         * the BUTTON grew to follow the panel — the opposite of the intent. inline-size
+         * containment makes the panel contribute nothing to that measurement, leaving the
+         * launcher the only thing that decides the width.
+         */
+        width: auto;
+        contain: inline-size;
+        position: relative;
+        z-index: 1;
+        margin-bottom: 10px;
+        padding: 11px 13px 12px;
+        background: rgba(255,255,255,0.96);
+        border: 3px solid var(--ink);
+        border-radius: 22px 27px 20px 25px / 27px 20px 25px 22px;
+        box-shadow: 5px 6px 0 var(--ink);
+        transform: rotate(-0.8deg);
+        pointer-events: auto;
+      }
+      #fee-head {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      #fee-track {
+        position: relative;
+        height: 11px;
+        margin-top: 10px;
+        /* White inside, so the fill reads against it rather than against whatever the card
+           is doing. It matters now that the card washes red when you are short: through a
+           transparent track the alarm and the bar were the same colour. */
+        background: #fff;
+        border: 2.5px solid var(--ink);
+        border-radius: 7px;
+        overflow: hidden;
+      }
+      #fee-fill {
+        position: absolute; left: 0; top: 0; bottom: 0;
+        width: 5%;
+        background: var(--ink);
+        transition: width 200ms linear;
+      }
+      /* What the clock demands. Ahead of the fill means you are behind. */
+      #fee-need {
+        position: absolute; top: -3px; bottom: -3px;
+        width: 3px;
+        margin-left: -1.5px;
+        background: var(--red);
+        transition: left 300ms ease;
+      }
+      /**
+       * The reminder, sitting on top of the fee panel.
+       *
+       * `is-behind` already colours the note under the track red, but a player reading the
+       * money and the clock does not necessarily connect them — this says the thing out
+       * loud. It is a REMINDER, not a status line: it appears when the shortfall does, says
+       * its piece, and gets out of the way, then comes back if the shortfall is still
+       * there a while later. A permanent nag becomes furniture within a minute.
+       */
+      #feetip,
+      #droptip {
+        position: absolute;
+        /* Right-aligned, not centred: centred on a 220px panel a 244px bubble hung 24px
+           past the panel on each side, and the panel already sits 22px off the viewport
+           edge — so the right-hand end was being cut off the screen entirely. */
+        left: auto;
+        right: -2px;
+        bottom: calc(100% + 12px);
+        width: max-content;
+        max-width: min(70vw, 232px);
+        transform: translateY(8px) rotate(-1.1deg);
+        padding: 8px 12px 9px;
+        background: var(--y1);
+        color: var(--ink);
+        border: 2px solid var(--ink);
+        /* The same hand-drawn corners as every other box in the game. */
+        border-radius: 15px 19px 14px 17px / 18px 14px 17px 15px;
+        box-shadow: 3px 4px 0 rgba(20, 20, 15, 0.9);
+        font-family: var(--body);
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.45;
+        text-align: left;
+        text-transform: none;
+        letter-spacing: 0;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 260ms ease, transform 420ms cubic-bezier(0.2, 1.5, 0.32, 1);
+      }
+      #feetip.is-on { opacity: 1; transform: translateY(0) rotate(-1.1deg); }
+      #droptip.is-on { opacity: 1; transform: translateX(0) rotate(0.9deg); }
+      /**
+       * The second lesson, beside the button it is about. To the LEFT of the dock on a
+       * pointer screen — above the launcher would cover the fee panel, which is the thing
+       * the player has just been asked to read — and back above the panel on a phone, where
+       * there is no room to the left of a full-width dock.
+       */
+      #droptip {
+        position: absolute;
+        /* left:auto matters: the shared rule above sets left:50%, and with a definite
+           max-content width, left + right + width is over-constrained — CSS drops `right`
+           and the bubble lands on top of the dock instead of beside it. */
+        left: auto;
+        right: calc(100% + 14px);
+        bottom: 2px;
+        width: max-content;
+        max-width: min(52vw, 250px);
+        transform: translateX(8px) rotate(0.9deg);
+      }
+      #droptip.is-on { transform: translateX(0) rotate(0.9deg); }
+      /* Tail on the right-hand side, pointing at the button. */
+
+      /**
+       * The third bubble is positioned over the CROWD — it is the only instruction about a
+       * place rather than a control, so it points at the place. Fixed rather than absolute,
+       * because main.js projects a world point into screen pixels for it every HUD tick.
+       */
+      #aimtip {
+        position: fixed;
+        z-index: 6;
+        width: max-content;
+        max-width: min(64vw, 228px);
+        padding: 8px 12px 9px;
+        background: var(--y1);
+        color: var(--ink);
+        border: 2px solid var(--ink);
+        border-radius: 15px 19px 14px 17px / 18px 14px 17px 15px;
+        box-shadow: 3px 4px 0 rgba(20, 20, 15, 0.9);
+        font-family: var(--body);
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.45;
+        text-align: left;
+        opacity: 0;
+        pointer-events: none;
+        /* Anchored by its tail: the point sits on the coordinate it was given. */
+        transform: translate(-50%, -100%) scale(0.92);
+        transform-origin: 50% 118%;
+        transition: opacity 240ms ease, transform 380ms cubic-bezier(0.2, 1.5, 0.32, 1);
+      }
+      #aimtip.is-on { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+
+      /* The emergency. Red is the alarm colour everywhere else in this game, so it is the
+         alarm colour here — and it reads instantly as a different KIND of message from the
+         yellow coaching. */
+      #feetip.is-urgent,
+      #droptip.is-urgent,
+      #aimtip.is-urgent { background: var(--red); color: var(--paper); }
+      /* The keyboard hint under the crowd is the same advice, worse said: stand down. */
+      body.is-teaching #hint { opacity: 0; transition: opacity 200ms ease; }
+
+      /* The tail, drawn as a rotated square so its two visible edges carry the border. */
+      /**
+       * The tail, as a stroked path rather than a rotated square.
+       *
+       * A square with two borders cannot erase the bubble's own border where it crosses,
+       * so it reads as a diamond glued to the outside instead of part of the shape. Same
+       * fix as the citizens' speech bubbles: the fill erases the body's border across the
+       * tail's mouth, then the line draws the two tail edges out from that border's
+       * centreline, so body and tail are one continuous stroke.
+       */
+      .ttail {
+        position: absolute;
+        width: 18px;
+        height: 14px;
+        overflow: visible;
+        /* y = 0 sits on the border box's bottom edge; `bottom` resolves against the
+           padding box, hence the border-width term. */
+        bottom: calc(-9px - 2px);
+        right: 24px;
+      }
+      .ttail-fill { fill: var(--y1); }
+      .ttail-line {
+        fill: none;
+        stroke: var(--ink);
+        stroke-width: 2px;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+      }
+      /* The world bubble hangs from its point, so its tail is centred under it. */
+      #aimtip .ttail { right: auto; left: 50%; margin-left: -9px; }
+      /* The button bubble points sideways: same path, quarter-turned onto the right edge. */
+      #droptip .ttail {
+        bottom: auto;
+        top: 50%;
+        right: calc(-11px - 2px);
+        margin-top: -7px;
+        transform: rotate(-90deg);
+      }
+      #feetip.is-urgent .ttail-fill,
+      #droptip.is-urgent .ttail-fill,
+      #aimtip.is-urgent .ttail-fill { fill: var(--red); }
+      #fee-note {
+        margin-top: 7px;
+        font-size: 10.5px;
+        text-align: center;
+        opacity: 0.6;
+      }
+      #feepanel.is-behind #fee-note { opacity: 1; color: var(--red); }
+      /**
+       * Short of the mark, the fill is red AND breathing. Steady red said "wrong" but not
+       * "still wrong, right now"; the pulse is what makes it read as a thing to act on. It
+       * stops dead the moment the fee covers what the clock is asking for, and going still
+       * is the reward.
+       */
+      #feepanel.is-behind #fee-fill { background: var(--red); }
+      /**
+       * The whole card breathes, not the fill alone and not a ring around it. A bar changing
+       * colour inside a panel is easy to miss while you are watching the crowd; the panel
+       * going pink under your hand is not. The fill itself washes in and out with it, so the
+       * two move as one thing rather than competing.
+       */
+      #feepanel.is-behind { animation: feeAlarm 1.3s ease-in-out infinite; }
+      @keyframes feeAlarm {
+        0%, 100% { background: rgba(255, 255, 255, 0.96); }
+        55% { background: rgba(214, 64, 44, 0.2); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #feepanel.is-behind { animation: none; background: rgba(214, 64, 44, 0.14); }
+      }
+
+      /* ------------------------------------------------------------ dock */
+      #dock {
+        position: fixed;
+        /* Bottom right, with the looking-up bar bottom left: the two things you touch sit
+           in the two bottom corners and leave the crowd clear between them. */
+        bottom: calc(20px + env(safe-area-inset-bottom, 0px)); right: 22px;
+        pointer-events: auto;
+        /* #hud comes later in the document, so without this the stats paint straight
+           over the open menu. */
+        z-index: 12;
+      }
+
+      /**
+       * The inspect control. Square, the launcher's height, and it lives on the same row —
+       * the launcher stretches, this does not. Pressed-in while nothing is armed, which is
+       * the state where the magnifier is live.
+       */
+      #inspect {
+        appearance: none;
+        position: absolute;
+        right: calc(100% + 8px);
+        bottom: 0;
+        width: var(--btn-h);
+        height: var(--btn-h);
+        display: grid;
+        place-items: center;
+        padding: 0;
+        background: #fff;
+        border: 3px solid var(--ink);
+        border-radius: 16px 20px 15px 19px / 20px 15px 19px 16px;
+        box-shadow: 3px 4px 0 var(--ink);
+        cursor: pointer;
+        transition: transform 140ms ease, background-color 160ms ease, box-shadow 140ms ease;
+      }
+      #inspect .micon {
+        width: 22px;
+        height: 22px;
+        /* The lens art is white on transparency; on a white button it has to invert. */
+        filter: invert(1);
+        mix-blend-mode: normal;
+      }
+      #inspect:hover { transform: translate(1px, 1px); box-shadow: 2px 3px 0 var(--ink); }
+      /* Held down while it is the active state: no shadow, sat into the page. */
+      #inspect.is-on {
+        background: var(--ink);
+        transform: translate(3px, 4px);
+        box-shadow: 0 0 0 var(--ink);
+      }
+      #inspect.is-on .micon { filter: none; }
+
+      #launch {
+        appearance: none;
+        /* No `font: inherit` here: the shorthand resets font-family too, which quietly
+           undid the display face set further up. Size and weight are declared below. */
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 18px 11px 15px;
+        /* Idle black, white on hover — the inverse of every other control, because this
+           one is the verb. */
+        background: #000;
+        color: #fff;
+        /* Black fill, white border — see the note on the primary buttons. An ink border
+           on black is invisible and the button reads as a featureless slab. */
+        border: 2.5px solid var(--paper);
+        border-radius: 24px 30px 22px 28px / 30px 22px 28px 24px;
+        box-shadow: 5px 6px 0 var(--ink);
+        border-width: 3px;
+        height: var(--btn-h);
+        transform: rotate(0.7deg) translate(0, 0);
+        transition: transform 130ms ease-out, box-shadow 130ms ease-out, background 150ms ease, color 150ms ease;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      /* They are noticing. Nothing else on screen asks you to act, so the button does. */
+      @keyframes urgent {
+        0%, 100% { background: #000; border-color: var(--paper); }
+        50% { background: var(--red); border-color: #fff; }
+      }
+      #launch.is-urgent { animation: urgent 900ms ease-in-out infinite; }
+      #launch.is-urgent.is-armed { animation: none; }
+
+      #launch:hover {
+        background: #fff;
+        color: var(--ink);
+        border-color: var(--ink);
+        transform: rotate(0.7deg) translate(3px, 3px);
+        box-shadow: 2px 3px 0 var(--ink);
+      }
+      #launch:active {
+        transform: rotate(0.7deg) translate(5px, 6px);
+        box-shadow: 0 0 0 var(--ink);
+      }
+      #launch.is-armed { background: #fff; color: var(--ink); border-color: var(--ink); }
+      #launch.is-armed.is-blame { background: var(--red); border-color: var(--red); color: #fff; }
+      #launch-glyph { font-size: 17px; line-height: 1; }
+      #launch-key {
+        font-size: 9px;
+        /* Was 0.4 of white on black, which read as a smudge. */
+        opacity: 0.8;
+        border: 2px solid currentColor;
+        border-radius: 6px;
+        padding: 3px 6px;
+        letter-spacing: 0.08em;
+      }
+
+      #menu {
+        position: absolute;
+        /* Anchored to the button's right edge, so it opens leftward and stays on screen —
+           and to the LAUNCHER's top edge rather than the dock's, so it lies over the fee
+           panel instead of stacking above it. That is 105px of viewport back on a phone,
+           and it reads as belonging to the button. */
+        bottom: calc(var(--btn-h) + 10px);
+        right: 0;
+        z-index: 3;
+        width: min(92vw, 430px);
+        background: rgba(255,255,255,0.97);
+        border: 3px solid var(--ink);
+        border-radius: 16px;
+        box-shadow: 7px 8px 0 rgba(20,20,15,0.1);
+        overflow: hidden;
+      }
+      #menu[hidden] { display: none; }
+      .mcap {
+        font-size: 9px; font-weight: 800; letter-spacing: 0.18em;
+        text-transform: uppercase; opacity: 0.38;
+        padding: 11px 15px 5px;
+      }
+      .mcap.is-blame { color: var(--red); opacity: 0.8; }
+      /**
+       * Each entry is a header plus a drawer. The drawer opens on hover on a pointer
+       * device and on tap on a phone (where main.js toggles .is-open, since there is no
+       * hover to work with). max-height rather than the grid-rows trick, because this has
+       * to behave the same in every engine.
+       *
+       * Timing matters more than it looks. Two things were making it feel abrupt:
+       *   - Sweeping the pointer down eight rows fired eight opens. The open is delayed,
+       *     so passing over a row never reaches it; the close is immediate, so leaving
+       *     feels answered.
+       *   - A blanket `max-height: 300px` against 134px of content meant the easing was
+       *     mapped onto twice the travel that was ever visible: the open arrived early at
+       *     the curve's fastest moment and then sat still, and the close sat still before
+       *     dropping. main.js measures each drawer into --h, so the curve now describes
+       *     exactly the distance the eye follows.
+       */
+      .mitem { border-top: 1.5px solid rgba(20,20,15,0.09); }
+      .mitem.is-broke { opacity: 0.42; }
+      .mbody {
+        max-height: 0;
+        overflow: hidden;
+        /* easeInOutQuad out of the open state: leaves rest smoothly instead of stepping. */
+        transition: max-height 300ms cubic-bezier(0.45, 0.05, 0.55, 0.95);
+      }
+      .mitem:hover .mbody,
+      .mitem.is-open .mbody {
+        /* --h is this drawer's own height, measured in main.js. The fallback only ever
+           applies for the frame before that runs. */
+        max-height: var(--h, 300px);
+        /* easeOutCubic: all of the speed at the start, a long settle, no overshoot —
+           overshoot on a clipping box shows as the content jumping and coming back. */
+        transition: max-height 420ms cubic-bezier(0.33, 1, 0.68, 1) 120ms;
+        will-change: max-height;
+      }
+      /* The contents ease in behind the height rather than arriving with it, which is what
+         made the old drawer feel like a jolt. */
+      /* The whole drawer arms the distraction, so it has to look like it does. */
+      .mbody { cursor: pointer; }
+      .minner {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 2px 15px 15px;
+        opacity: 0;
+        transform: translateY(-6px);
+        transition: opacity 140ms ease, transform 220ms ease;
+      }
+      .mitem:hover .minner,
+      .mitem.is-open .minner {
+        opacity: 1;
+        transform: none;
+        transition:
+          opacity 280ms ease 190ms,
+          transform 420ms cubic-bezier(0.33, 1, 0.68, 1) 170ms;
+      }
+      /* The picture is the reason to open the drawer at all, so it gets the room the
+         taglines used to take up in the closed rows. */
+      .mimg {
+        flex: 0 0 118px;
+        width: 118px;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border: 2.5px solid var(--ink);
+        border-radius: 13px;
+      }
+      .mtext { flex: 1 1 auto; min-width: 0; }
+      .mdesc {
+        margin: 0;
+        font-size: 12px;
+        line-height: 1.5;
+        opacity: 0.78;
+        max-width: 25em;
+        text-wrap: pretty;
+      }
+      /* Only a touch device needs this: a pointer arms the row by clicking it. */
+      .mplace {
+        display: none;
+        appearance: none;
+        margin-top: 11px;
+        padding: 8px 16px;
+        font-family: var(--display);
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        background: #000;
+        color: var(--paper);
+        border: 2.5px solid var(--paper);
+        border-radius: 16px 20px 15px 18px / 20px 15px 18px 16px;
+        box-shadow: 3px 4px 0 var(--ink);
+        cursor: pointer;
+      }
+      .mplace:active { transform: translate(3px, 4px); box-shadow: 0 0 0 var(--ink); }
+
+      .mrow {
+        display: grid;
+        grid-template-columns: 26px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 7px 15px;
+        transition: background 180ms ease;
+        background: none;
+        border: 0;
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        color: var(--ink);
+      }
+      .mrow:hover { background: rgba(20,20,15,0.055); }
+      .mrow:disabled { opacity: 0.32; cursor: default; }
+      .mrow:disabled:hover { background: none; }
+      .mglyph { font-size: 19px; line-height: 1; text-align: center; }
+      /* Drawn marks for the props with no icon art: ink line work at the same weight as
+         the rest of the chrome. currentColor, so they invert with the launcher — and the
+         launcher needs the same rule, not just the menu, or its mark renders as nothing. */
+      .mglyph svg,
+      #launch-glyph svg {
+        display: block;
+        width: 23px; height: 23px;
+        margin: 0 auto;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+      #launch-glyph svg { width: 18px; height: 18px; }
+      /* The drawn icons come on white, not on transparency. Multiply drops that white
+         straight into the paper, so they sit exactly like the cut-out ones — and on the
+         armed launcher, where the ground is ink, inverting and screening drops the black
+         instead. No pixel editing, and it works for both kinds of file. */
+      .micon { display: block; width: 26px; height: 26px; margin: 0 auto; object-fit: contain; mix-blend-mode: multiply; }
+      /* The launcher is black at rest, so its icon is the one that has to invert — and
+         back again on hover and when armed, where the ground turns white. */
+      /* invert alone leaves the ink at 92%% grey, which reads dirty against pure white
+         type. The brightness push clamps it to white; the black background it inverts to
+         contributes nothing under screen. */
+      #launch .micon { filter: invert(1) brightness(1.4); mix-blend-mode: screen; }
+      #launch:hover .micon,
+      #launch.is-armed .micon { filter: none; mix-blend-mode: multiply; }
+      #launch.is-armed.is-blame .micon { filter: invert(1); mix-blend-mode: screen; }
+      #launch .micon { width: 19px; height: 19px; }
+      .mname { font-size: 12.5px; font-weight: 800; letter-spacing: 0.01em; }
+      /* The spec sheet, set as chips.
+
+         It began as one dim line at 0.48 opacity, which buried the only numbers a player
+         actually chooses on. Turning up the weight was the obvious fix and it does nothing:
+         Elms Sans ships in a SINGLE weight, so `font-weight: 800` on body text is either
+         ignored or faked by the browser. The display face is genuinely heavy but it is
+         caps-only, and a 57-character tower spec in capitals is a paragraph, not a label.
+
+         So the label is built out of shape and colour instead of type. Each fact gets a
+         pill; the first one — the head count, which is what the card is really being
+         compared on — is solid in its family's colour and the rest are outlines. Reads as a
+         spec sheet at a glance, needs no bold, and colour-codes the three families on the
+         same red/ink logic the rest of the menu already uses. */
+      .mtag {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin: 0 0 8px;
+      }
+      .mchip {
+        font-size: 9.5px;
+        /* Now that the body face has a weight axis, the chips use it. Shape and colour
+           still do most of the work; this is the last bit of emphasis they were missing. */
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        padding: 3px 7px 2px;
+        border-radius: 999px;
+        white-space: nowrap;
+        border: 1.5px solid rgba(20, 20, 15, 0.28);
+        color: var(--ink);
+        opacity: 0.85;
+      }
+      .mchip.is-lead {
+        background: var(--ink);
+        border-color: var(--ink);
+        color: var(--paper);
+        font-weight: 800;
+        opacity: 1;
+      }
+      /* The families, on the same colour logic as .mcap and .mrow above.
+
+         Order matters here and it bit once already: the outline rule is three classes and
+         the base `.mchip.is-lead` only two, so listing the lead first let the outline's
+         colour repaint it and the solid chip came out red text on a red pill. The lead rule
+         goes last and carries its own colour, so it wins on both count and order. */
+      .mitem.is-blame .mchip { border-color: rgba(192, 52, 42, 0.45); color: var(--red); opacity: 0.95; }
+      .mitem.is-follow .mchip { border-color: rgba(43, 90, 155, 0.4); color: var(--follow); opacity: 0.95; }
+      .mitem.is-blame .mchip.is-lead {
+        background: var(--red); border-color: var(--red); color: var(--paper); opacity: 1;
+      }
+      .mitem.is-follow .mchip.is-lead {
+        background: var(--follow); border-color: var(--follow); color: var(--paper); opacity: 1;
+      }
+      .mcost {
+        font-size: 12px; font-weight: 800;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+      }
+      .mrow.is-blame .mname { color: var(--red); }
+      .mkey {
+        display: inline-block; margin-left: 7px;
+        font-size: 9px; font-weight: 800; opacity: 0.35;
+        border: 1.5px solid currentColor; border-radius: 4px; padding: 1px 4px;
+      }
+      .drop {
+        appearance: none;
+        font: inherit;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 10px 14px;
+        background: rgba(244,243,239,0.9);
+        color: var(--ink);
+        border: 2.5px solid var(--ink);
+        border-radius: 12px;
+        cursor: pointer;
+      }
+      .drop.is-on { background: var(--ink); color: var(--paper); }
+      .drop.is-on::after {
+        content: "";
+        position: absolute;
+        inset: -5px;
+        border: 2px dashed currentColor;
+        border-radius: 15px;
+        opacity: 0.5;
+      }
+      .drop { position: relative; }
+      .drop.is-on small { opacity: 0.6; }
+      .drop.is-blame { border-color: var(--red); color: var(--red); }
+      .drop.is-blame.is-on { background: var(--red); color: #fff; }
+
+      /* ------------------------------------------------------------ stats */
+      #hud {
+        position: fixed;
+        z-index: 2;
+        left: 22px; bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        opacity: 0.44;
+        pointer-events: none;
+        line-height: 1.75;
+      }
+      #hud b { font-variant-numeric: tabular-nums; opacity: 1; }
+
+      /* One reading, one bar: how many of them have looked up. Nothing else on screen
+         needs a number — the crowd itself shows you who is distracted, in yellow, which
+         is the same yellow that fills this. Built to the same height and the same ink
+         border as the launcher beside it, so the two read as one row of controls. */
+      #hud { width: min(34vw, 250px); opacity: 1; }
+      /* The bar and the launcher are the same object in two states: same height, same
+         hand-drawn corners, same sticker shadow, tilted opposite ways in their corners. */
+      .meter {
+        position: relative;
+        height: var(--btn-h);
+        display: flex;
+        align-items: center;
+        border: 3px solid var(--ink);
+        border-radius: 24px 30px 22px 28px / 30px 22px 28px 24px;
+        box-shadow: 5px 6px 0 var(--ink);
+        background: rgba(244,243,239,0.94);
+        overflow: hidden;
+        transform: rotate(-0.7deg);
+      }
+      /**
+       * Fills left to right, in the three shades of noticing — not red. Red belongs to the
+       * limit line and to arguing; the crowd going yellow IS the escalation, so the bar
+       * uses the same colour they do, deepening by stage: just noticed, certain, then
+       * recruiting others.
+       */
+      /**
+       * One fill, and it is the only number that ends the run: how much of the ring at the
+       * feet is assembled. Full means over.
+       *
+       * There used to be three yellow segments and a red limit line at the share of the
+       * crowd that had merely NOTICED — which a player could sit past for minutes while
+       * nothing happened, because noticing is not standing at the feet. One bar, one
+       * meaning: when it fills, you are going down.
+       */
+      #m-up {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 0%;
+        background: var(--y2);
+        border-radius: inherit;
+        transition: width 200ms linear, background-color 400ms ease;
+      }
+      #hud .meter.is-brink #m-up {
+        background: var(--red);
+        animation: brink 520ms ease-in-out infinite alternate;
+      }
+      @keyframes brink {
+        from { opacity: 0.5; }
+        to { opacity: 1; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #hud .meter.is-brink #m-up { animation: none; }
+      }
+
+      .meter > u {
+        position: absolute; top: 0; bottom: 0;
+        width: 2px;
+        margin-left: -1px;
+        background: var(--red);
+      }
+      .mtxt {
+        position: relative;
+        padding: 0 15px;
+        font-family: var(--display);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        opacity: 0.62;
+        white-space: nowrap;
+      }
+      .mtxt b { font-size: 14px; opacity: 1; }
+      #hud.is-warn .mtxt { opacity: 1; color: #8a5d02; }
+      /**
+       * Readable over the red.
+       *
+       * The label sits ACROSS the fill — part of it over red, the rest over the empty
+       * track — so neither light nor dark type works for the whole word. Ink letters with a
+       * paper halo do: over red the halo is the contrast, over the track it is invisible.
+       * Full opacity too, because this is the one moment the label matters.
+       */
+      #hud .meter.is-brink ~ * .mtxt,
+      #hud .meter.is-brink .mtxt {
+        opacity: 1;
+        color: var(--ink);
+        text-shadow:
+          0 0 4px var(--paper),
+          0 0 8px var(--paper),
+          0 0 12px var(--paper);
+      }
+
+      /* Centred between the bar and the launcher: both bottom corners are taken now.
+         Hidden on small screens, where the tutorial does this job and there is no
+         keyboard to hint at anyway. */
+      #hint {
+        position: fixed;
+        /* 34px, not 22: the credit line sits on the bottom edge under this one. */
+        left: 50%; bottom: 34px;
+        transform: translateX(-50%);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        opacity: 0.32;
+        pointer-events: none;
+        text-align: center;
+        line-height: 1.7;
+      }
+
+      /**
+       * The credit, on the bottom edge, centred.
+       *
+       * ONE element for two screens rather than one per screen, so the two cannot drift apart:
+       * it is the last line on the title and it stays under the keyboard hint through a desktop
+       * run. Grey by way of the ink at low opacity rather than a new grey — the palette has one
+       * dark and this is it, turned down — and the hover is the same ink turned back up.
+       *
+       * Body copy, and it carries the title's own paper halo: on the title screen it sits over
+       * the crowd and over the giant's shoes, and without the halo it disappears into a trouser
+       * leg. Same three blurred layers as #intro-line, at the smaller size.
+       *
+       * z-index 28 puts it over #intro and #steps (26) and under #over (30). Over, because
+       * those two are full-viewport overlays that would otherwise swallow the click; under,
+       * because an ending should not have a link hanging off the bottom of it.
+       *
+       * Deliberately NOT animated in with the rest of the title. An entrance would need
+       * fill-mode `both` to hold its value, and a filled animation beats every normal rule —
+       * including the hover, which would then do nothing. Same trap the drop bubble's bob fell
+       * into. It is a quiet line; it can simply be there.
+       */
+      #credit {
+        position: fixed;
+        left: 50%; bottom: 10px;
+        transform: translateX(-50%);
+        z-index: 28;
+        font-family: var(--body);
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        text-transform: none;
+        /* Was nowrap while this was three words. At forty-odd characters a phone would push it
+           off both edges instead, so it wraps and centres — and stays capped short of the
+           viewport so it never touches the sides. */
+        max-width: min(92vw, 460px);
+        text-align: center;
+        line-height: 1.5;
+        color: var(--ink);
+        opacity: 0.34;
+        text-shadow:
+          0 0 9px var(--paper),
+          0 0 17px var(--paper),
+          0 0 26px var(--paper);
+        transition: opacity 180ms ease;
+      }
+      /**
+       * The line is quiet; the two words in it that do something are underlined.
+       *
+       * Underlined rather than merely coloured: at 11px and a third opacity, over a moving
+       * scene, colour alone is not a strong enough signal that a word is a target — and the
+       * live word is one short word inside a sentence, not the sentence itself.
+       *
+       * Only that word lifts, not the whole line. Brightening everything would promise that
+       * "Made with FGD fonts" is clickable when it is not.
+       */
+      #credit a {
+        color: inherit;
+        text-decoration: underline;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 2px;
+        transition: opacity 180ms ease;
+      }
+      #credit a:hover,
+      #credit a:focus-visible { opacity: 1; text-decoration-thickness: 2px; }
+      /* Hovering anywhere on the line brings the sentence up out of the background, so the
+         words are legible while you are aiming at one of them. */
+      #credit:hover { opacity: 0.72; }
+
+      /* ---------------------------------------------------------- consent */
+      /**
+       * The cookie question, asked once.
+       *
+       * Bottom-left rather than across the top: a banner over the wordmark would make the
+       * first thing anybody sees a legal notice, and the title screen is the game's only
+       * chance to look like a game. Down here it is answerable and ignorable in equal
+       * measure — which is the honest shape for a question whose "no" costs the player
+       * nothing.
+       *
+       * z-index 44 clears everything: the ending (30), the dev bench (40), all of it. A
+       * consent notice that something else can cover is not a consent notice.
+       */
+      #consent {
+        position: fixed;
+        left: 12px; bottom: 12px;
+        z-index: 44;
+        /**
+         * Deliberately small. A consent notice has to be READABLE, not prominent — it is the
+         * least interesting thing on a title screen, and sizing it like a headline made the
+         * first thing anybody saw a legal notice. Two lines of 11px, and a pair of buttons
+         * that are the game's own buttons scaled down.
+         */
+        width: min(calc(100vw - 20px), 286px);
+        padding: 10px 11px 9px;
+        background: var(--paper);
+        color: var(--ink);
+        border: 2px solid var(--ink);
+        border-radius: 12px;
+        box-shadow: 0 3px 12px rgba(20, 20, 15, 0.13);
+        font-family: var(--body);
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.4;
+        /* Comes in a beat after the title has landed, so it reads as a footnote to the
+           screen rather than as part of it. */
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 260ms ease, transform 260ms ease;
+      }
+      #consent.is-on { opacity: 1; transform: none; }
+      /* The sentence sits back; the two choices stay at full strength. */
+      /* text-wrap: pretty because the last line was landing as a single orphaned word.
+         Where it is unsupported the paragraph simply wraps as before. */
+      #consent p { margin: 0 0 8px; opacity: 0.78; text-wrap: pretty; }
+      #consent a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+
+      /**
+       * Two buttons, the same size, the same weight, the same colour.
+       *
+       * Deliberately identical. A big green YES beside a grey little no is the pattern the
+       * GDPR guidance calls out by name, and it would be a poor joke to make a game about
+       * manufactured consent and then manufacture some.
+       */
+      #consent-btns { display: flex; gap: 6px; }
+      #consent-btns button {
+        flex: 1 1 0;
+        min-height: 26px;
+        padding: 4px 8px;
+        font-family: var(--display);
+        font-size: 11px;
+        letter-spacing: 0.03em;
+        color: var(--ink);
+        background: var(--paper);
+        border: 2px solid var(--ink);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 140ms ease, color 140ms ease;
+      }
+      #consent-btns button:hover,
+      #consent-btns button:focus-visible { background: var(--ink); color: var(--paper); }
+      #consent-btns button:active { transform: translateY(1px); }
+
+      /* Only where they would actually collide. The card is narrow enough now to sit in
+         its corner beside a centred credit line on a desktop; on a phone it still takes the
+         width the sentence needs, so there the credit stands down until the question is
+         answered. */
+      /**
+       * 1060px, not 720. The card ends 298px from the left edge and the credit is a centred
+       * line up to 460px wide, so the two only truly clear each other once the viewport is
+       * about 1060px — below that a laptop window would have run the sentence straight under
+       * the card. The credit is gone for one interaction, and only until the question is
+       * answered.
+       *
+       * The same number decides where the card sits, and for the same reason. With room to
+       * spare it tucks into the left corner and leaves the middle of the screen to the game.
+       * Once the screen is narrow enough that it is most of that width anyway, hugging one
+       * edge just looks like it missed, so it centres.
+       *
+       * Centred with auto margins rather than a translate: the entrance already owns
+       * `transform`, and a second one on the same property would replace it and take the
+       * rise with it.
+       */
+      @media (max-width: 1060px) {
+        body.is-asking #credit { display: none; }
+        #consent { left: 0; right: 0; margin-inline: auto; }
+      }
+
+      /* ----------------------------------------------------------- danger */
+      #alarm {
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: var(--red);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 140ms linear;
+      }
+      #alarmtext {
+        position: fixed;
+        top: 96px; left: 50%;
+        transform: translateX(-50%);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--red);
+        opacity: 0;
+        transition: opacity 200ms ease;
+        pointer-events: none;
+      }
+      #alarmtext.is-on { opacity: 1; animation: pulse 1.1s ease-in-out infinite; }
+      @keyframes pulse { 50% { opacity: 0.35; } }
+
+      /* ----------------------------------------------------------- banner */
+      #card {
+        position: fixed;
+        z-index: 8;
+        /* Top right, opposite the ledger — the two things the player watches sit in
+           opposite corners with the crowd clear between them. */
+        /* Below the help button, which owns the very corner. */
+        top: calc(env(safe-area-inset-top, 0px) + 16px + var(--btn-h) + 12px);
+        right: 16px;
+        transform: translateY(-12px);
+        /* Every figure below is the original at 0.85 — picture, type, bar, rules, shadow
+           all came down 15% in one pass, so nothing inside the card changed weight
+           relative to anything else. */
+        width: min(27.5vw, 276px);
+        padding: 10px 10px 12px;
+        background: rgba(255,255,255,0.96);
+        border: 2.5px solid var(--ink);
+        border-radius: 15px;
+        box-shadow: 6px 7px 0 rgba(20,20,15,0.1);
+        /* The picture is the point, so it gets the full width of the card with the copy
+           under it, and the art is square — the whole drawing, cropped nowhere. */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 280ms ease, transform 280ms cubic-bezier(.2,.9,.3,1);
+      }
+      #card.is-on { opacity: 1; transform: none; }
+      /* No art for this one: back to a plain block of copy. */
+      #card:not(.is-art) { display: block; }
+      #card.is-blame { border-color: var(--red); }
+      /* aspect-ratio 1/1 matches the art exactly, so `cover` crops nothing at all — and
+         still crops rather than letterboxes if a future picture comes in another shape. */
+      #card-art {
+        display: block;
+        flex: none;
+        width: 100%;
+        min-width: 0;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border: 2px solid var(--ink);
+        border-radius: 10px;
+      }
+      #card-art[hidden] { display: none; }
+      #card.is-blame #card-art { border-color: var(--red); }
+      #card-body { flex: 1 1 auto; min-width: 0; }
+      #card-kicker { font-size: 7.25px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.42; }
+      #card.is-blame #card-kicker { color: var(--red); opacity: 0.85; }
+      #card-title {
+        /**
+         * break-word, NOT anywhere. `anywhere` lets the browser split a word at any letter
+         * whenever that produces a tidier line — so NATURE DOCUMENTARY came out as
+         * NATURE DOCUMENTAR / Y. `break-word` only breaks a word that cannot fit on a line
+         * of its own, which is the case this was added for: a long headline in a display
+         * face in a phone-width column.
+         */
+        overflow-wrap: break-word;
+        margin-top: 7px;
+        font-size: clamp(15.5px, 2.34vw, 24px);
+        /* Balanced, so a three-word headline does not leave one word alone on line two. */
+        text-wrap: balance;
+        font-weight: 800;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        line-height: 1.08;
+      }
+      #card-line {
+        margin-top: 7px;
+        font-size: clamp(10px, 1.21vw, 12px);
+        font-weight: 600;
+        opacity: 0.66;
+        line-height: 1.3;
+        /* pretty over balance for a sentence: it only fixes the last line, so the rag stays
+           natural and no single word is left stranded. noWidow() in main.js pins the final
+           two words together as well, for browsers without it. */
+        text-wrap: pretty;
+      }
+      /* Only the hover readout uses this: how much longer a story runs, how much of a
+         guru's work is still ahead. */
+      /**
+       * The magnifier's footnote. The card above it is exactly what the player saw when the
+       * thing landed — same picture, same headline — and this is the only part that is
+       * about right now: seconds left, and how many people it is holding.
+       */
+      #card-note {
+        margin-top: 6px;
+        font-size: 8.5px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        opacity: 0.5;
+        font-variant-numeric: tabular-nums;
+        overflow-wrap: break-word;
+      }
+      #card-note[hidden] { display: none; }
+      #card.is-blame #card-note { color: var(--red); opacity: 0.75; }
+
+      #card-meter {
+        width: 100%;
+        height: 8.5px;
+        margin-top: 10px;
+        border: 2px solid var(--ink);
+        border-radius: 6px;
+        overflow: hidden;
+      }
+      #card-meter[hidden] { display: none; }
+      /**
+       * The magnifier's footnote. The card above it is exactly what the player saw when the
+       * thing landed ��� same picture, same headline — and this is the only part that is
+       * about right now: seconds left, and how many people it is holding.
+       */
+      #card-note {
+        margin-top: 6px;
+        font-size: 8.5px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        opacity: 0.5;
+        font-variant-numeric: tabular-nums;
+        overflow-wrap: break-word;
+      }
+      #card-note[hidden] { display: none; }
+      #card.is-blame #card-note { color: var(--red); opacity: 0.75; }
+
+      #card-meter { position: relative; }
+      /* One fill for a single quantity — a blame timer, a distraction's remaining life. */
+      #card-fill {
+        position: absolute; left: 0; top: 0; bottom: 0;
+        width: 0%;
+        background: var(--ink);
+        transition: width 200ms linear;
+      }
+      #card.is-blame #card-meter { border-color: var(--red); }
+      #card.is-blame #card-fill { background: var(--red); }
+      /**
+       * ...and three fills when the quantity is a crowd, in the same shades the citizens
+       * themselves turn. Yellow is awareness; red stays reserved for arguing and for the
+       * limit line, so the two readings never blur into each other.
+       */
+      #card-stages {
+        position: absolute; inset: 0;
+        display: none;
+      }
+      #card-meter.is-staged #card-stages { display: flex; }
+      #card-meter.is-staged #card-fill { display: none; }
+      #card-stages i { height: 100%; width: 0%; transition: width 200ms linear; }
+      /* The same two shades as the key directly beneath it, in the same order: dark is
+         looking up, light is recruiting. */
+      #cs-up { background: var(--y3); }
+      #cs-recruit { background: var(--y1); }
+
+      /**
+       * The key to the yellows. Two rows, because two things are worth knowing: heads are
+       * up, and somebody is turning the rest.
+       *
+       * Dark for looking up and light for recruiting, which is the wrong way round until
+       * you look at the ground: a citizen's tint follows their AWARENESS, not their job, so
+       * the deepest yellow is somebody utterly certain, and a recruiter — who starts the
+       * moment they cross the threshold — is usually paler. The key names what is there. Shown when the
+       * lens is on a yellow citizen, and over the bar on hover — not on every card.
+       */
+      .legend {
+        display: flex;
+        /* Side by side. Stacked, the two rows plus their rule cost three lines of card
+           height, and the card was reaching down to the fee panel. */
+        flex-flow: row wrap;
+        gap: 4px 14px;
+      }
+      .lrow {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        line-height: 1.25;
+        font-family: var(--body);
+        font-size: 10.5px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: none;
+        opacity: 0.78;
+      }
+      .lsw {
+        width: 11px;
+        height: 11px;
+        flex: 0 0 11px;
+        border: 1.5px solid var(--ink);
+        border-radius: 3px;
+      }
+      .sw1 { background: var(--y1); }
+      .sw2 { background: var(--y2); }
+      .sw3 { background: var(--y3); }
+      /* The count, pushed to the end of the row. Blank when there are none. */
+      /* Beside its label rather than pushed to the far edge — there is no column to line
+         up with now. */
+      .lct {
+        margin-left: 0;
+        padding-left: 0;
+        font-variant-numeric: tabular-nums;
+        opacity: 0.6;
+      }
+
+      /* The onboarding colour key. Same swatch language as the in-game legend, one row per
+         colour, so the two teach the same thing in the same shapes. */
+      /* The swatches stand in for the picture on this one card, so they occupy the same
+         box the art would have. Without it the colour card was 109px taller than the other
+         four and the whole panel jumped as you stepped onto it. */
+      #step-key {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 5px;
+        margin-top: 14px;
+        text-align: left;
+        /* The same box the illustrations get: same 3:2, same paper, same drawn border and
+           radius. Loose rows on the page read as a different kind of card entirely. */
+        /* Pinned to the visual box rather than sized by its contents. At height:100% the
+           rows could push past the bottom edge, which is why this card's gap to the step
+           number read as zero while every other card had eleven. */
+        position: absolute;
+        inset: 0;
+        margin-top: 0;
+        box-sizing: border-box;
+        padding: 13px 15px;
+        overflow: hidden;
+        background: rgb(253, 250, 245);
+        border: 2.5px solid var(--ink);
+        border-radius: 12px;
+      }
+      #step-key[hidden] { display: none; }
+      #step-key .krow {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        font-family: var(--body);
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.3;
+        opacity: 0.82;
+      }
+      #step-key .kfig {
+        width: 56px; height: 68px; flex: none;
+        object-fit: contain;
+      }
+      #step-key .ksw {
+        flex: 0 0 15px;
+        width: 15px;
+        height: 15px;
+        border: 2px solid var(--ink);
+        border-radius: 4px;
+      }
+      @media (max-width: 820px) {
+        /* The key card sizes to its rows here rather than to the picture's 3:2, which is
+           too short on a narrow card to hold three figures and their lines without
+           clipping them. */
+        #step-visual.is-key { aspect-ratio: auto; }
+        #step-visual.is-key #step-key { position: static; height: auto; }
+        #step-key { gap: 8px; margin-top: 0; padding: 12px 13px; }
+        #step-key .kfig { width: 46px; height: 56px; }
+        #step-key .krow { align-items: center; }
+        #step-key .krow { font-size: 11.5px; gap: 7px; }
+        #step-key .kfig {
+        width: 56px; height: 68px; flex: none;
+        object-fit: contain;
+      }
+      #step-key .ksw { flex-basis: 13px; width: 13px; height: 13px; }
+      }
+
+      #card-legend {
+        margin-top: 6px;
+        padding-top: 6px;
+        border-top: 1.5px solid rgba(20,20,15,0.12);
+      }
+      #card-legend[hidden] { display: none; }
+      /* The key came down 15% with the rest of the card. Scoped here rather than on .legend
+         itself, because the same two rows are also the bar's hover key (#bar-legend), which
+         is not inside a card and did not shrink. */
+      #card-legend .legend { gap: 3.5px 12px; }
+      #card-legend .lrow { font-size: 9px; gap: 5px; }
+      #card-legend .lsw { width: 9.5px; height: 9.5px; flex: 0 0 9.5px; border-radius: 2.5px; }
+
+      /* Over the bar, on hover, and never in the way of it. */
+      #bar-legend {
+        position: absolute;
+        left: 0;
+        bottom: calc(100% + 9px);
+        padding: 9px 12px 10px;
+        background: rgba(255,255,255,0.97);
+        border: 2.5px solid var(--ink);
+        border-radius: 14px 18px 13px 16px / 17px 13px 16px 14px;
+        box-shadow: 4px 5px 0 rgba(20,20,15,0.12);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(6px);
+        transition: opacity 180ms ease, transform 280ms cubic-bezier(0.2, 1.4, 0.35, 1);
+      }
+      #hud:hover #bar-legend { opacity: 1; transform: translateY(0); }
+      /* No hover on a phone, and no room either. */
+      @media (max-width: 820px), (pointer: coarse) {
+        #bar-legend { display: none; }
+      }
+
+      /* -------------------------------------------------------------- end */
+      /* No panel: the title art, one line, one figure and the button sit straight on a
+         full-screen wash of the paper colour at 80%, so the game and the money read
+         through at 20% without ever competing with the type. Entrance timing lives in
+         GSAP (see finish()), not here — these rules only describe the rest state, which
+         means a missing GSAP still leaves a readable screen. */
+      #over {
+        position: fixed;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: rgba(244,243,239,0.8);
+        z-index: 30;
+        text-align: center;
+        padding: 30px;
+      }
+      #over.is-on { display: flex; }
+
+      #over-art {
+        width: min(86vw, 660px);
+        max-height: 46vh;
+        height: auto;
+        object-fit: contain;
+        margin-bottom: 2px;
+      }
+      #over-art[hidden] { display: none; }
+
+      /**
+       * Capitals are asked for, not assumed.
+       *
+       * This is the version that only ever appears when the ending PICTURE could not be
+       * fetched — and the art it stands in for shouts. It had no text-transform at all and
+       * was leaning on Marsipan being a caps-only face, which is a promise that breaks in
+       * precisely the situation this element exists for: a run where the network is poor
+       * enough to lose the artwork is a run that may not have the display font either, and
+       * the stack falls through to a system sans that will happily set "A trillion." exactly
+       * as written. #over-sum has always said this out loud; now so does the title.
+       */
+      #over-title {
+        font-size: clamp(34px, 7vw, 74px); font-weight: 800; line-height: 1;
+        text-transform: uppercase;
+      }
+      #over-title[hidden] { display: none; }
+
+      /* Over a live scene rather than a solid panel, so both texts carry a paper halo
+         to hold their edges against whatever is tumbling past. */
+      #over-line {
+        font-size: clamp(14px, 1.8vw, 18px); font-weight: 600;
+        max-width: 30em; line-height: 1.55; opacity: 0.85;
+      }
+
+      #over-sum {
+        font-family: var(--display);
+        font-size: clamp(20px, 3.4vw, 34px);
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        font-variant-numeric: tabular-nums;
+      }
+      /* The row owns the spacing now — see #over-buttons. */
+
+      #over.lost #over-title { color: var(--red); }
+
+      /* ------------------------------------------------------- small screens */
+      @media (max-width: 820px), (pointer: coarse) {
+        #top { padding: 9px 10px; }
+        #money { font-size: clamp(19px, 5.6vw, 28px); }
+        #rate { font-size: 9px; letter-spacing: 0.06em; }
+        #goal { display: none; }
+        #ledger { padding: 8px 12px 10px; }
+        #fee { font-size: clamp(16px, 4.6vw, 21px); }
+        #time { font-size: 13px; white-space: nowrap; }
+        .btn { padding: 7px 11px; font-size: 14px; border-width: 2px; }
+        /* Stacked, and the same width as each other: side by side they would each be too
+           narrow to read at this size, and two struck pills of different widths read as a
+           mistake rather than as a pair. */
+        #over-buttons > button { width: 100%; padding: 0 18px; }
+        #meta { gap: 9px; margin-top: 9px; }
+        #feebtns { gap: 5px; }
+
+        #droptip {
+          right: auto; left: 50%; bottom: calc(100% + 12px);
+          max-width: 74vw;
+          transform: translate(-50%, 8px) rotate(0.9deg);
+        }
+        #droptip.is-on { transform: translate(-50%, 0) rotate(0.9deg); }
+        /**
+         * On a phone it sits ON the fee panel, just above the launcher, with its tail
+         * pointing down at the button it is telling you to press. Beside the dock is not
+         * an option — there is no room — and above the whole dock read as unattached.
+         */
+        /**
+         * Fixed, not absolute. It lives inside #dock, so `left: 50%` was half the DOCK's
+         * width — which sits hard against the right edge of the screen, and the bubble's
+         * right half went off it. Positioned against the viewport it can actually be
+         * centred, and its bottom is measured from the screen edge up past the launcher.
+         */
+        /**
+         * Centred on the BUTTON, not on the screen. `position: fixed` with left: 50% put it
+         * in the middle of the viewport while the launcher sits over to the right, so the
+         * tail pointed down at nothing. Back inside the dock — which on a phone is now just
+         * the launcher, the fee panel having moved to the top — so centring on it centres on
+         * the button. The earlier bleed off-screen came from a 330px bubble on a 218px dock;
+         * at 168px it fits with room to spare.
+         */
+        #droptip {
+          position: absolute;
+          right: auto;
+          left: 50%;
+          bottom: calc(100% + 22px);
+          /* Half the width it was: a short instruction over a phone-width dock reads better
+             as three tight lines than as one long one. */
+          max-width: min(46vw, 168px);
+          transform: translate(-50%, 8px) rotate(0.9deg);
+          z-index: 4;
+        }
+        #droptip.is-on { transform: translate(-50%, 0) rotate(0.9deg); }
+        #droptip .ttail {
+          top: auto; bottom: calc(-9px - 2px);
+          right: auto; left: 50%; margin: 0 0 0 -9px;
+          transform: none;
+        }
+
+        /**
+         * Phone layout: the four corners each get one job.
+         *
+         * Money top left, the fee top right, the bar bottom left, the button bottom right.
+         * The fee panel comes out of the dock to do it — on a phone the dock was carrying
+         * the fee AND the launcher AND the menu, which is why the fee sat in the middle of
+         * the right-hand edge with nothing to anchor it to.
+         */
+        #feepanel {
+          position: fixed;
+          top: calc(env(safe-area-inset-top, 0px) + 12px);
+          right: 10px;
+          margin-bottom: 0;
+          width: min(52vw, 214px);
+          z-index: 13;
+        }
+        /**
+         * Hanging from the top now, so its bubble drops BELOW the panel and the tail points
+         * up. And it is exactly the panel's width: right: 0 and left: 0 together, with the
+         * max-width lifted, so the two read as one object instead of a bubble that happens
+         * to be near a panel.
+         */
+        #feetip {
+          /* -3px each side: these insets resolve against the panel's PADDING box, so at 0
+             the bubble came out 6px narrower than the panel it hangs from. The panel's
+             border is 3px, so this lines their outer edges up exactly. */
+          left: -3px;
+          right: -3px;
+          max-width: none;
+          width: auto;
+          top: calc(100% + 12px);
+          bottom: auto;
+          transform: translateY(-8px) rotate(-1.1deg);
+        }
+        #feetip.is-on { transform: translateY(0) rotate(-1.1deg); }
+        #feetip .ttail {
+          top: calc(-9px - 2px);
+          bottom: auto;
+          transform: scaleY(-1);
+        }
+
+        /* No magnifier on touch, so nothing to put anything down for. */
+        #inspect { display: none; }
+
+        #hint { display: none; }
+        /* The credit stays on the title screen and goes once the run starts. There is no
+           keyboard hint to sit under here, and the bottom edge belongs to the bar and the
+           rail — a link down there would be under a thumb rather than under the game. */
+        body:not(.is-title) #credit { display: none; }
+        :root { --btn-h: 40px; }
+        #launch { padding: 10px 14px; font-size: 11px; }
+        #launch-key { display: none; }
+        #menu { width: min(calc(100vw - 16px), 430px); border-width: 2.5px; }
+        .mrow { padding: 11px 13px; grid-template-columns: 26px 1fr auto; }
+        .mname { font-size: 12px; }
+        .mtag { font-size: 10px; }
+        .mkey { display: none; }
+        /* Touch: the drawer is opened by tapping, and committed with its own button. */
+        .mplace { display: inline-block; }
+        .mimg { flex-basis: 102px; width: 102px; }
+        .micon { width: 22px; height: 22px; }
+
+        /* Too narrow for two columns: the drawing goes back on top, but at its own
+           3:2 so it is still the whole picture. */
+        /* No room beside the ledger on a phone, so the message drops just below it —
+           still the top right corner, just under the panel it would otherwise hit. */
+        /**
+         * On a phone the drop card comes DOWN from the top edge, full width, over the
+         * money and the clock. There is no room beside them for a floating panel, and the
+         * card is only up for a few seconds — covering the numbers while it announces what
+         * just landed is the right trade on a screen this size.
+         */
+        /**
+         * A card sitting at the top, not a banner welded to the edge.
+         *
+         * It ran to all three edges with a border on the bottom only, which on a phone reads as
+         * a browser notification rather than as one of this game's objects: everything else here
+         * is a struck shape with a complete ink contour and corners that do not match. Inset a
+         * little and given the whole outline, it becomes the same kind of thing as the fee panel
+         * and the ending card.
+         *
+         * Scaled to 0.93 rather than re-typed at 93%, so the picture, the copy, the rules and
+         * the shadow all come down together and nothing inside changes weight against anything
+         * else. transform-origin is the top edge so it still hangs from there, and the slide-in
+         * carries the scale with it — one transform owns both, or the animation would drop it.
+         */
+        #card {
+          top: calc(env(safe-area-inset-top, 0px) + 10px);
+          /* 5, not 10. The 0.93 scale already pulls the visible edge in by about 13px a side, so
+             the inset reads as roughly 18 rather than the 5 written here. */
+          left: 5px;
+          right: 5px;
+          width: auto;
+          /* Above #help (30). The button owns the top-right corner and the card covers it while
+             it is up, so the (i) was landing on the title. Rather than fade the button out, the
+             card simply passes over it, and being opaque and on top it takes the taps too. */
+          z-index: 31;
+          flex-direction: row;
+          align-items: center;
+          text-align: left;
+          gap: 14px;
+          padding: 12px 14px 13px;
+          border-width: 3px;
+          border-radius: 17px 22px 15px 20px / 22px 15px 20px 17px;
+          box-shadow: 5px 6px 0 var(--ink);
+          background: rgba(255,255,255,0.98);
+          transform-origin: top center;
+          transform: translateY(-130%) scale(0.93);
+        }
+        #card.is-on { transform: translateY(0) scale(0.93); }
+        /* The money and the (i) step back while the card is up. It used to cover them outright;
+           inset, it does not, and two things asking to be read at once is one too many. Out
+           quickly so the card arrives into space, back slowly so nothing snaps. */
+        body.has-card #top,
+        body.has-card #feepanel,
+        body.has-card #help { opacity: 0; pointer-events: none; transition: opacity 180ms ease-out; }
+        #top, #feepanel { transition: opacity 340ms ease-in; }
+        /**
+         * Square beside the copy, and big: at 74px the bar was a strip and the drawing was
+         * a thumbnail. The card owns the top of the screen for a few seconds — the picture
+         * is the reason it exists, so it gets the height to be looked at.
+         */
+        #card-art { flex: 0 0 118px; width: 118px; max-width: 118px; border-width: 2.5px; }
+        /**
+       * The magnifier's footnote. The card above it is exactly what the player saw when the
+       * thing landed — same picture, same headline — and this is the only part that is
+       * about right now: seconds left, and how many people it is holding.
+       */
+      #card-note {
+        margin-top: 7px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        opacity: 0.5;
+        font-variant-numeric: tabular-nums;
+        overflow-wrap: break-word;
+      }
+      #card-note[hidden] { display: none; }
+      #card.is-blame #card-note { color: var(--red); opacity: 0.75; }
+
+      #card-meter { margin-top: 10px; }
+
+        /* Centred on the viewport rather than hung off the dock in the corner. */
+        #menu {
+          position: fixed;
+          left: 8px;
+          right: 8px;
+          width: auto;
+          bottom: calc(8px + env(safe-area-inset-bottom, 0px) + var(--btn-h) + 10px);
+        }
+        /* Cap the WIDTH on a short viewport, never the height — capping height against a
+           square box is what crops it. */
+        #card-title { font-size: clamp(16px, 5vw, 21px); line-height: 1.12; }
+        #card-line { font-size: 12.5px; margin-top: 7px; line-height: 1.3; }
+
+        #over-line { font-size: 13px; }
+        #over-sum { font-size: clamp(17px, 5vw, 23px); }
+        .bubble { --bw: 2px; font-size: 11px; padding: 4px 8px 5px; border-radius: 10px; }
+        .bubble.is-shout { --bw: 2.5px; font-size: 13px; }
+      }
+
+      /* Portrait phones: the corner HUD would sit under the dock, so it becomes a
+         single compact strip above it. */
+      @media (orientation: portrait) and (max-width: 820px) {
+        /* The bar shares the bottom edge with the dock rather than sitting above it:
+           the dock is two stacked modules tall now, so anything above it landed in the
+           middle of the screen. It takes whatever width is left beside the panel. */
+        #hud {
+          left: 10px;
+          right: auto;
+          /* A starting guess only: main.js measures the dock and sets the real width,
+             because the dock is as wide as whatever label the launcher is showing. */
+          width: max(120px, calc(100vw - 232px));
+          bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+          font-size: 9px; letter-spacing: 0.03em;
+        }
+        #feepanel { padding: 9px 11px 10px; }
+        .mtxt { padding: 0 10px; font-size: 9.5px; }
+        .mtxt b { font-size: 12px; }
+        .oword { height: clamp(22px, 7vw, 40px); }
+        #over-art { width: min(76vw, 340px); max-height: 40vh; }
+      }
+
+      /* Landscape phones are very short, so vertical space is the scarce thing. */
+      @media (orientation: landscape) and (max-height: 520px) {
+        #top { padding: 5px 12px; }
+        #money { font-size: 19px; }
+        #rate { display: none; }
+        #ledger { padding: 3px 10px 5px; }
+        #fee { font-size: 17px; }
+        #time { font-size: 12px; margin-top: 2px; }
+        .btn { padding: 5px 9px; font-size: 13px; }
+        #feebtns { margin-top: 5px; }
+        #hud { bottom: 10px; font-size: 8.5px; line-height: 1.45; }
+        #dock { bottom: calc(8px + env(safe-area-inset-bottom, 0px)); }
+        /* Must clear the top bar. The menu opens upward from the dock, so the budget is
+           viewport minus (dock offset + dock height + gap) minus the bar. */
+        #menu { max-height: calc(100vh - 178px); overflow-y: auto; }
+        .mcap { padding: 7px 13px 3px; }
+        .mrow { padding: 8px 13px; }
+        /* A landscape phone has no vertical room to spare, so side by side again. */
+        .oword { height: clamp(20px, 5vh, 38px); }
+        #over-art { width: min(42vw, 260px); max-height: 34vh; }
+      }
+
+      /**
+       * The armed prompt on touch. Over the crowd rather than in a corner: it is about the
+       * whole playfield, and the playfield is what the player is about to tap.
+       */
+      #tapaway {
+        position: fixed;
+        left: 50%;
+        /* Under the header, not over the crowd: the crowd is what the player is about to
+           tap, and an instruction sitting in the middle of it is in the way of its own
+           advice. 132 clears the money-and-clock strip, which measures 120 tall. */
+        top: calc(env(safe-area-inset-top, 0px) + 132px);
+        transition: top 260ms cubic-bezier(0.2, 0.9, 0.3, 1);
+        z-index: 9;
+        display: none;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 15px 10px 11px;
+        background: var(--ink);
+        color: var(--paper);
+        border: 2.5px solid var(--paper);
+        border-radius: 22px 26px 21px 25px / 26px 21px 25px 22px;
+        box-shadow: 3px 4px 0 rgba(20,20,15,0.35);
+        font-family: var(--display);
+        font-size: 12px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        pointer-events: none;
+        transform: translate(-50%, 0);
+        animation: tapbeat 1.9s ease-in-out infinite;
+      }
+      /* Only ever shown on a device without a pointer. */
+      @media (max-width: 820px), (pointer: coarse) {
+        #tapaway:not([hidden]) { display: flex; }
+      }
+      /**
+       * The drop card slides down over the top edge and would land on this. Rather than hide
+       * the instruction — it is still true, and it is what the player is about to act on —
+       * the prompt steps down below the card and slides back when it goes. 200px clears the
+       * tallest version of the card, which is 183 with its picture.
+       *
+       * A sibling selector rather than :has(), because #tapaway sits after #card in the
+       * document and this needs no new support.
+       */
+      #card.is-on ~ #tapaway {
+        top: calc(env(safe-area-inset-top, 0px) + 200px);
+      }
+
+      #tapaway-icon {
+        width: 26px;
+        height: 26px;
+        object-fit: contain;
+        /* The icons are ink on white; this is a black pill, so they invert. */
+        filter: invert(1) brightness(1.35);
+        mix-blend-mode: screen;
+      }
+      #tapaway-icon[hidden] { display: none; }
+      @keyframes tapbeat {
+        0%, 100% { transform: translate(-50%, 0) scale(1); }
+        50% { transform: translate(-50%, -4px) scale(1.03); }
+      }
+      @media (prefers-reduced-motion: reduce) { #tapaway { animation: none; } }
+
+      /* ------------------------------------------------------------ intro */
+      /* The scene keeps running underneath, so these two layers carry no wash of their
+         own — only a soft floor gradient so the type and buttons stay readable over
+         whatever the camera happens to be looking at. */
+      #intro, #steps {
+        position: fixed;
+        inset: 0;
+        /**
+         * Centred on what the player can SEE, not on the layout viewport.
+         *
+         * `inset: 0` on a fixed element measures the full page height, which on a phone
+         * includes the strip behind the browser's own toolbar — so the title and its buttons
+         * were centred on a box the better part of a hundred pixels taller than the window,
+         * and sat low in it. `100dvh` is the visible height, and it follows the toolbar as it
+         * hides and comes back. Dropped silently by anything too old to know it, which falls
+         * back to the inset above.
+         */
+        height: 100dvh;
+        z-index: 26;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 22px;
+        padding: 30px;
+        text-align: center;
+        /* Light enough to keep the scene the star, heavy enough to read type over it. */
+        background: radial-gradient(ellipse at 50% 55%, rgba(244,243,239,0.72) 0%, rgba(244,243,239,0.42) 58%, rgba(244,243,239,0.04) 100%);
+        transition: opacity 420ms ease;
+      }
+      #intro[hidden], #steps[hidden] { display: none; }
+      #intro.is-out, #steps.is-out { opacity: 0; pointer-events: none; }
+
+      #intro-word {
+        /* The file is cropped to the ink now, so this is the type's real size. */
+        width: min(56vw, 430px);
+        height: auto;
+        /* Lands rather than appears. */
+        animation: dropIn 900ms cubic-bezier(0.16, 1.3, 0.3, 1) both;
+      }
+      @keyframes dropIn {
+        from { opacity: 0; transform: translateY(-26px) scale(0.94) rotate(-2deg); }
+        to { opacity: 1; transform: none; }
+      }
+      /**
+       * The copy that sits over the live scene — here and on both endings — carries a halo
+       * in the paper's own colour. Three blurred layers, no hard edge anywhere: against
+       * the background it cannot be seen at all, and against a citizen or a trouser leg it
+       * is the only reason the sentence is still readable. Cheaper and far less intrusive
+       * than a panel behind the text.
+       */
+      #intro-line,
+      #over-line,
+      #over-sum {
+        text-shadow:
+          0 0 9px var(--paper),
+          0 0 17px var(--paper),
+          0 0 26px var(--paper);
+      }
+      #intro-line {
+        max-width: 30em;
+        font-size: clamp(13px, 1.6vw, 17px);
+        font-weight: 600;
+        opacity: 0;
+        animation: fadeUp 700ms ease 500ms both;
+      }
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 0.72; transform: none; }
+      }
+      /* The buttons rise the same way the line does, but they arrive SOLID. They used to
+         borrow fadeUp, whose 0.72 was written for body copy — and with fill-mode `both`
+         they kept it, so the black fill sat at 72% over the paper for the whole title
+         screen and read as a wash instead of a mark. */
+      @keyframes riseIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: none; }
+      }
+      #intro-btns {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        opacity: 0;
+        animation: riseIn 700ms ease 900ms both;
+      }
+
+      /**
+       * Hand-drawn buttons, and they behave like real ones.
+       *
+       * Two tricks make the shape: corner radii that differ on every corner AND between
+       * the two axes — the one thing CSS can do that reads as drawn rather than computed —
+       * and a hard offset shadow plus a slight tilt, so each sits on the paper like a
+       * sticker. --lift is how far the button stands proud of its own shadow.
+       *
+       * They start UP and PRESS DOWN: on hover the button travels toward its shadow and
+       * the shadow shortens by the same amount, so the thing appears to sink; on click it
+       * goes flush to the page. Nothing scales, because a button that grows under the
+       * cursor moves its own hit target out from under you.
+       */
+      #intro-start, #intro-how, #step-next, #step-skip, #help, #over-again, #polaroid-share {
+        --lift: 5px;
+        appearance: none;
+        font-family: var(--display);
+        text-transform: uppercase;
+        height: var(--btn-h);
+        border: 3px solid var(--ink);
+        border-radius: 24px 30px 22px 28px / 30px 22px 28px 24px;
+        cursor: pointer;
+        transition:
+          transform 130ms ease-out,
+          box-shadow 130ms ease-out,
+          background 150ms ease,
+          color 150ms ease;
+      }
+
+      /* The primary: pure black, not the brown-black used for line work. */
+      #intro-start, #step-next, #over-again {
+        font-size: 15px;
+        /* 0.045em. The 0.08 was set for Luckiest Guy; in Marsipan at 15px that much tracking
+           read as gaps between letters rather than as emphasis on the word. */
+        letter-spacing: 0.045em;
+        padding: 0 32px;
+        background: #000;
+        /* Black fill takes a white border; white fill takes a black one. That pairing is
+           the whole button language here, and the launcher already used it. */
+        border-color: var(--paper);
+        color: var(--paper);
+        transform: rotate(-1.2deg) translate(0, 0);
+        box-shadow: var(--lift) calc(var(--lift) + 1px) 0 #000;
+      }
+      #intro-start:hover, #step-next:hover, #over-again:hover {
+        transform: rotate(-1.2deg) translate(3px, 3px);
+        box-shadow: 2px 3px 0 #000;
+      }
+      #intro-start:active, #step-next:active, #over-again:active {
+        transform: rotate(-1.2deg) translate(var(--lift), calc(var(--lift) + 1px));
+        box-shadow: 0 0 0 #000;
+      }
+
+      /* The secondary: white, and it presses down AND turns black. Tilted the other way,
+         so the pair reads as two things put down by hand rather than a matched set. */
+      /* Paused mid-game this button resumes, so it takes the filled treatment and the
+         quiet one goes to Next. In the tutorial it is just Skip, and stays quiet. */
+      #step-skip.is-resume {
+        background: #000;
+        border-color: var(--paper);
+        color: var(--paper);
+        box-shadow: var(--lift) calc(var(--lift) + 1px) 0 #000;
+      }
+      /* Next steps back when the panel is a pause: getting to the game is the action, and
+         stepping through cards is the option. id+class, so it beats the primary rule. */
+      #step-next.is-quiet {
+        background: #fff;
+        border-color: var(--ink);
+        color: var(--ink);
+        box-shadow: var(--lift) calc(var(--lift) + 1px) 0 var(--ink);
+      }
+      /* Share is the quiet one: PLAY AGAIN is the action, keeping the picture is the
+         option. Same white treatment as SKIP, by joining its rules rather than copying. */
+      #intro-how, #step-skip, #polaroid-share {
+        font-size: 12px;
+        /* A hair looser than the primary's 0.045em, on purpose: this one is 12px, and small
+           caps need marginally more air than large ones to stay readable. */
+        letter-spacing: 0.05em;
+        padding: 0 22px;
+        background: #fff;
+        color: var(--ink);
+        transform: rotate(1.1deg) translate(0, 0);
+        box-shadow: var(--lift) calc(var(--lift) + 1px) 0 var(--ink);
+      }
+      /**
+       * TUTORIAL is one half of the title screen's only choice, so it is sized as START's
+       * equal — not as a caption beside it.
+       *
+       * It inherits the white fill and the opposite tilt from the rule above, which is what
+       * says "this is the other one" — but it took that rule's 12px too, and at 12px next to a
+       * 15px START it read as a footnote rather than an option. Tracking comes with the size:
+       * the 0.05em above is reasoned for 12px, and at 15px the primary's 0.045em is correct.
+       *
+       * Scoped to this button alone. SKIP and SHARE keep 12px — they are captions on a
+       * tutorial card and on a photograph, not one of two things you choose between.
+       */
+      #intro-how { font-size: 15px; letter-spacing: 0.045em; }
+
+      #intro-how:hover, #step-skip:hover, #polaroid-share:hover {
+        background: var(--ink);
+        border-color: var(--paper);
+        color: var(--paper);
+        transform: rotate(1.1deg) translate(3px, 3px);
+        box-shadow: 2px 3px 0 var(--ink);
+      }
+      #intro-how:active, #step-skip:active, #polaroid-share:active {
+        transform: rotate(1.1deg) translate(var(--lift), calc(var(--lift) + 1px));
+        box-shadow: 0 0 0 var(--ink);
+      }
+
+      /* The in-game help: the same button, shrunk to one drawn mark. */
+      #help {
+        position: fixed;
+        top: calc(env(safe-area-inset-top, 0px) + 16px);
+        right: 16px;
+        /* ABOVE the tutorial overlay (26), not under it. At 13 the overlay covered the
+           button while the tutorial was open, so the close mark could be seen through the
+           wash but never clicked — the only way out was Skip. */
+        z-index: 30;
+        width: var(--btn-h);
+        padding: 0;
+        display: grid;
+        place-items: center;
+        background: #fff;
+        color: var(--ink);
+        transform: rotate(1.4deg) translate(0, 0);
+        box-shadow: var(--lift) calc(var(--lift) + 1px) 0 var(--ink);
+      }
+
+      /**
+       * On a phone the (i) drops to the bottom row, in the gap between the bar and the
+       * launcher — fitHud reserves that width and parks it there, because the gap's position
+       * depends on the dock, which changes width when the fee panel leaves it. This rule has
+       * to come AFTER #help's own: an override earlier in the sheet loses on source order,
+       * which is exactly what happened the first time.
+       */
+      @media (max-width: 820px), (pointer: coarse) {
+        /**
+         * Bottom LEFT on a phone, first in the row: (i), then the bar, then the button. Its
+         * height is the row's height — the same --btn-h the bar and the launcher use — so the
+         * three read as one strip along the bottom instead of three unrelated objects.
+         * fitHud parks it and shifts the bar along, because the room available depends on the
+         * dock, which changes width.
+         */
+        #help {
+          top: auto;
+          bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+          right: auto;
+          width: var(--btn-h);
+          height: var(--btn-h);
+          transform: rotate(1.4deg);
+        }
+      }
+      #help:hover {
+        background: var(--ink);
+        border-color: var(--paper);
+        color: var(--paper);
+        transform: rotate(1.4deg) translate(3px, 3px);
+        box-shadow: 2px 3px 0 var(--ink);
+      }
+      #help:active {
+        transform: rotate(1.4deg) translate(var(--lift), calc(var(--lift) + 1px));
+        box-shadow: 0 0 0 var(--ink);
+      }
+      .hicon {
+        width: 23px;
+        height: 23px;
+        fill: none;
+        stroke: currentColor;
+        stroke-width: 2.2;
+        stroke-linecap: round;
+      }
+      .hicon .hdot { fill: currentColor; stroke: none; }
+      /* One mark at a time: the tutorial is either shut or open. */
+      .hicon-x, #help.is-open .hicon-i { display: none; }
+      #help.is-open .hicon-x { display: block; }
+      #intro-how:active, #step-skip:active {
+        transform: rotate(1.1deg) scale(0.97);
+        box-shadow: 2px 3px 0 rgba(20,20,15,0.32);
+      }
+
+      /* ------------------------------------------------------- onboarding */
+      #step-card {
+        width: min(86vw, 460px);
+        padding: 15px 15px 17px;
+        background: rgba(255,255,255,0.97);
+        border: 3px solid var(--ink);
+        border-radius: 18px;
+        box-shadow: 7px 8px 0 rgba(20,20,15,0.1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 11px;
+      }
+      #step-art {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: opacity 180ms ease;
+        border: 2.5px solid var(--ink);
+        border-radius: 12px;
+      }
+      #step-art[hidden] { display: none; }
+      #step-num { font-size: 9px; font-weight: 800; letter-spacing: 0.22em; text-transform: uppercase; opacity: 0.4; }
+      #step-title {
+        text-wrap: balance;
+        font-size: clamp(18px, 2.6vw, 26px);
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        text-transform: uppercase;
+        line-height: 1.1;
+      }
+      /* Tighter leading, and a floor under the copy block so five cards of slightly
+         different length do not resize the panel as you step through them. */
+      #step-line {
+        font-size: clamp(12px, 1.5vw, 15px);
+        font-weight: 600;
+        opacity: 0.7;
+        line-height: 1.34;
+        min-height: calc(1.34em * 4);
+      }
+      #step-btns { display: flex; gap: 10px; margin-top: 3px; }
+
+      /* ---------------------------------------------------------- loading */
+      #loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        background: var(--paper);
+        z-index: 40;
+        transition: opacity 500ms ease 120ms;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        opacity: 1;
+      }
+      #loader.is-done { opacity: 0; pointer-events: none; }
+      /* Nothing to play with until the title is out of the way. */
+      body.is-title #top,
+      body.is-title #dock,
+      body.is-title #hud,
+      body.is-title #hint,
+      body.is-title #card,
+      body.is-title #help { opacity: 0 !important; pointer-events: none; transition: opacity 300ms ease; }
+      #pile {
+        position: relative;
+        width: 300px;
+        height: 190px;
+        /* Only for the fall: the coins come in from nearer the viewer than they land. */
+        perspective: 700px;
+        perspective-origin: 50% 60%;
+        /**
+         * The pile fades as ONE PICTURE, and that is the whole point of putting it here.
+         *
+         * Every coin used to fade itself. Twenty overlapping pieces of line art all going
+         * translucent at once stop hiding one another, so halfway through the wipe you could
+         * read every stroke of every coin buried inside the stacks — the pile turned into its
+         * own skeleton on the way out. Opacity on the PARENT composites the stacks first and
+         * fades the finished image, so the coins go on occluding each other the whole way
+         * down and the pile simply leaves.
+         */
+        animation: pilewipe 5.0s linear infinite;
+      }
+      @keyframes pilewipe {
+        0%, 85% { opacity: 1; }
+        93%, 100% { opacity: 0; }
+      }
+      .coin {
+        position: absolute;
+        left: 50%;
+        bottom: 34px;
+        width: 46px;
+        height: 46px;
+        margin-left: -23px;
+        opacity: 0;
+        /* Each coin rests one thickness above the one below it in its column. */
+        --lift: calc(var(--h) * -12px);
+        /**
+         * No animation-delay any more, and that is the whole fix.
+         *
+         * A delay gives every coin its own cycle boundary, so the first coin was falling
+         * again 0.3s before the last one had even landed — the pile was never once complete
+         * and empty at the same moment, and every wave rained onto the leftovers of the one
+         * before. Each coin now carries its own start time baked into its own keyframes, so
+         * all twenty share one clock: they arrive staggered, the finished pile is held, and
+         * then the whole thing clears together before anything falls again.
+         */
+        animation-duration: 5.0s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+      .coin img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      /* Face on while it falls, solid once it lands. Same clock, same delay. */
+      .flat { animation: coinface 5.0s linear infinite var(--d); }
+      .solid { opacity: 0; animation: coinsolid 5.0s linear infinite var(--d); }
+
+      /**
+         GENERATED, and it has to stay that way: twenty keyframe sets that differ only
+         in WHEN each coin leaves the top. Each one now HOLDS its landing all the way to
+         100% and never fades itself — clearing the pile belongs to pilewipe above, for
+         the reason written there. Regenerate rather than hand-edit; the stagger is 0.13s
+         a coin.
+      */
+      @keyframes coindrop-0 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        1.6% { opacity: 1; }
+        21% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        23% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        25%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-1 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        2.6% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        4.2% { opacity: 1; }
+        23.6% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        25.6% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        27.6%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-2 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        5.2% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        6.8% { opacity: 1; }
+        26.2% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        28.2% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        30.2%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-3 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        7.8% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        9.4% { opacity: 1; }
+        28.8% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        30.8% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        32.8%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-4 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        10.4% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        12% { opacity: 1; }
+        31.4% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        33.4% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        35.4%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-5 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        13% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        14.6% { opacity: 1; }
+        34% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        36% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        38%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-6 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        15.6% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        17.2% { opacity: 1; }
+        36.6% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        38.6% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        40.6%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-7 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        18.2% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        19.8% { opacity: 1; }
+        39.2% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        41.2% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        43.2%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-8 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        20.8% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        22.4% { opacity: 1; }
+        41.8% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        43.8% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        45.8%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-9 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        23.4% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        25% { opacity: 1; }
+        44.4% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        46.4% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        48.4%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-10 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        26% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        27.6% { opacity: 1; }
+        47% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        49% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        51%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-11 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        28.6% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        30.2% { opacity: 1; }
+        49.6% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        51.6% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        53.6%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-12 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        31.2% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        32.8% { opacity: 1; }
+        52.2% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        54.2% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        56.2%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-13 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        33.8% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        35.4% { opacity: 1; }
+        54.8% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        56.8% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        58.8%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-14 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        36.4% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        38% { opacity: 1; }
+        57.4% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        59.4% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        61.4%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-15 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        39% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        40.6% { opacity: 1; }
+        60% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        62% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        64%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-16 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        41.6% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        43.2% { opacity: 1; }
+        62.6% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        64.6% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        66.6%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-17 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        44.2% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        45.8% { opacity: 1; }
+        65.2% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        67.2% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        69.2%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-18 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        46.8% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        48.4% { opacity: 1; }
+        67.8% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        69.8% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        71.8%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+      @keyframes coindrop-19 {
+        0% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; }
+        49.4% { transform: translate3d(var(--x), calc(var(--lift) - 200px), 90px) rotate(var(--spin)); opacity: 0; animation-timing-function: cubic-bezier(0.4, 0, 0.9, 0.42); }
+        51% { opacity: 1; }
+        70.4% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); animation-timing-function: ease-out; }
+        72.4% { transform: translate3d(var(--x), calc(var(--lift) - 8px), var(--z)) rotate(var(--tilt)); }
+        74.4%, 100% { transform: translate3d(var(--x), var(--lift), var(--z)) rotate(var(--tilt)); opacity: 1; }
+      }
+
+      #pile .coin:nth-child(1) { animation-name: coindrop-0; }
+      #pile .coin:nth-child(2) { animation-name: coindrop-1; }
+      #pile .coin:nth-child(3) { animation-name: coindrop-2; }
+      #pile .coin:nth-child(4) { animation-name: coindrop-3; }
+      #pile .coin:nth-child(5) { animation-name: coindrop-4; }
+      #pile .coin:nth-child(6) { animation-name: coindrop-5; }
+      #pile .coin:nth-child(7) { animation-name: coindrop-6; }
+      #pile .coin:nth-child(8) { animation-name: coindrop-7; }
+      #pile .coin:nth-child(9) { animation-name: coindrop-8; }
+      #pile .coin:nth-child(10) { animation-name: coindrop-9; }
+      #pile .coin:nth-child(11) { animation-name: coindrop-10; }
+      #pile .coin:nth-child(12) { animation-name: coindrop-11; }
+      #pile .coin:nth-child(13) { animation-name: coindrop-12; }
+      #pile .coin:nth-child(14) { animation-name: coindrop-13; }
+      #pile .coin:nth-child(15) { animation-name: coindrop-14; }
+      #pile .coin:nth-child(16) { animation-name: coindrop-15; }
+      #pile .coin:nth-child(17) { animation-name: coindrop-16; }
+      #pile .coin:nth-child(18) { animation-name: coindrop-17; }
+      #pile .coin:nth-child(19) { animation-name: coindrop-18; }
+      #pile .coin:nth-child(20) { animation-name: coindrop-19; }
+      /* The swap, over the last few frames of the drop. */
+      @keyframes coinface {
+        0%, 19.0% { opacity: 1; }
+        23.0%, 100% { opacity: 0; }
+      }
+      @keyframes coinsolid {
+        0%, 19.0% { opacity: 0; }
+        23.0%, 100% { opacity: 1; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #pile { animation: none; opacity: 1; }
+        .coin { animation: none; opacity: 1; transform: translate3d(var(--x), var(--lift), var(--z)); }
+        .flat { display: none; }
+        .solid { animation: none; opacity: 1; }
+      }
+      #loader .dots::after { content: ""; animation: dots 1.4s steps(4, end) infinite; }
+      @keyframes dots { 0%{content:"";} 25%{content:".";} 50%{content:"..";} 75%{content:"...";} }
+      #loader .err {
+        max-width: 460px; text-align: center; text-transform: none;
+        letter-spacing: 0; font-weight: 600; font-size: 13px; line-height: 1.6;
+      }
+      #loader .err code {
+        display: block; margin-top: 10px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px; opacity: 0.6;
+      }
+    
+      /* ------------------------------------------------------------------ the rail
+       *
+       * Desktop only. Nine distractions on the bar at once instead of behind a menu: one
+       * click instead of two, and the whole economy visible while you decide. A phone keeps
+       * the menu — nine targets do not fit, and there is no hover to explain them with.
+       */
+      #rail { display: none; }
+      #railcard { display: none; }
+
+      /**
+       * How the rail's buttons and its card LOOK.
+       *
+       * Out here rather than inside the desktop block below, because the same buttons and
+       * the same card are now used on a phone in portrait — as a column down the right rather
+       * than a row along the bottom. Only the layout differs between the two, so only the
+       * layout lives in the media blocks; this is one drawing, described once.
+       *
+       * Inert until something turns #rail and #railcard on: both are display:none above.
+       */
+      .rbtn {
+        appearance: none;
+        position: relative;
+        width: var(--btn-h);
+        height: var(--btn-h);
+        padding: 0;
+        display: grid;
+        place-items: center;
+        background: #fff;
+        border: 3px solid var(--ink);
+        border-radius: 22px 26px 20px 24px / 26px 20px 24px 22px;
+        box-shadow: 4px 5px 0 var(--ink);
+        cursor: pointer;
+        transition: transform 120ms ease-out, box-shadow 120ms ease-out, opacity 140ms ease;
+      }
+      .rbtn:hover { transform: translate(2px, 2px); box-shadow: 2px 3px 0 var(--ink); }
+      .rbtn.is-on { transform: translate(4px, 5px); box-shadow: 0 0 0 var(--ink); background: var(--ink); }
+      .rbtn.is-on .ricon { filter: invert(1); }
+      .rbtn .ricon { width: 66%; height: 66%; object-fit: contain; }
+
+      /* The price, and the digit that fires it. Both readable without hovering, because
+         choosing between nine things means comparing them at a glance. */
+      /* Clear of the icon AND of its sticker shadow, which reaches 5px below the button —
+         at -15px the price was sitting in it and reading as a smudge. */
+      .rcost {
+        position: absolute; left: 50%; bottom: -21px; transform: translateX(-50%);
+        font-size: 10px; font-weight: 800; letter-spacing: 0.01em;
+        white-space: nowrap; opacity: 0.85;
+      }
+      .rkey {
+        position: absolute; top: -7px; right: -6px;
+        min-width: 14px; height: 14px; padding: 0 3px;
+        display: grid; place-items: center;
+        background: var(--ink); color: var(--paper);
+        border-radius: 50%;
+        font-size: 8px; font-weight: 800;
+        /**
+         * An ink ring, so a tinted badge belongs to the button it sits on.
+         *
+         * The badge had no outline at all, which was invisible while every one of them was ink
+         * on an ink disc. Once the blue and red ones arrived they read as stickers floating
+         * beside the icon rather than part of it — nothing tied them to the line work. Faint:
+         * enough to close the shape, not enough to make a fourteen-pixel circle look armoured.
+         *
+         * A shadow rather than a border, because a 1.5px border on a 14px badge eats a tenth of
+         * it and shifts the layout; a ring grows outward and costs nothing.
+         */
+        box-shadow: 0 0 0 1.5px var(--ink);
+      }
+      /* Cannot afford it: still there, still explains itself, just plainly out of reach. */
+      .rbtn:disabled { cursor: default; opacity: 0.34; box-shadow: 2px 3px 0 var(--ink); }
+      .rbtn:disabled:hover { transform: none; }
+
+      #railcard {
+        position: fixed;
+        /**
+         * Above #help, which is 30, and above #card, which is 31.
+         *
+         * At 20 the pause button painted straight over this card, which shows up most on the
+         * last rail item because that card sits lowest, exactly where the button is. #card got
+         * lifted over #help when it moved to the top of the screen and this one never did.
+         *
+         * Over #card too, deliberately: a card the player has TAPPED open outranks one that
+         * appeared on its own.
+         */
+        z-index: 32;
+        display: grid;
+        grid-template-columns: 96px 1fr;
+        gap: 12px;
+        width: 372px;
+        padding: 13px;
+        background: var(--paper);
+        border: 3px solid var(--ink);
+        border-radius: 20px 26px 18px 24px / 26px 18px 24px 20px;
+        box-shadow: 5px 6px 0 var(--ink);
+        pointer-events: none;
+      }
+      #railcard[hidden] { display: none; }
+      #rc-art {
+        width: 96px; height: 96px; object-fit: cover;
+        border: 2px solid var(--ink); border-radius: 14px 16px 12px 15px / 16px 12px 15px 14px;
+      }
+      #rc-body { display: flex; flex-direction: column; justify-content: center; }
+      /* Title, then the joke, then the thing you actually need to know -- and the last of
+         those is the heaviest type on the card, because what a stage LEAVES BEHIND is the
+         only thing that tells the three influencers apart. */
+      #rc-head { display: block; padding-right: 6px; }
+      #rc-name { font-family: var(--display); font-size: 15px; text-transform: uppercase; letter-spacing: 0.04em; }
+      /* How hard it hits: a struck label, hung off the top right corner so it reads as a
+         stamp on the card rather than another line of prose inside it. */
+      #rc-effect {
+        position: absolute;
+        top: -11px;
+        right: -9px;
+        padding: 5px 10px 6px;
+        background: var(--ink);
+        color: var(--paper);
+        border-radius: 10px 13px 9px 12px / 13px 9px 12px 10px;
+        box-shadow: 2px 3px 0 rgba(20, 20, 15, 0.22);
+        font-family: var(--display);
+        font-size: 11px; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase;
+        white-space: nowrap;
+      }
+      /* The tower life bars. One per standing stage, moved every frame by main.js.
+
+         Drawn as ink on paper like everything else, and small on purpose: this is a glance,
+         not a readout. It answers one question — is this one nearly gone — and the player
+         should be able to answer it without stopping to look. The whole layer ignores the
+         pointer so a bar can never swallow a click meant for the ground behind it. */
+      #tbars {
+        position: absolute; inset: 0;
+        pointer-events: none;
+        z-index: 3;
+      }
+      .tbar {
+        position: absolute;
+        width: 34px; height: 5px;
+        /* left/top are the tower's head in screen pixels, so pull back by half the width
+           to centre the bar on it rather than hanging it off to the right. */
+        margin: -3px 0 0 -17px;
+        border: 1.5px solid var(--ink);
+        border-radius: 999px;
+        background: var(--paper);
+        overflow: hidden;
+        opacity: 0.9;
+      }
+      .tbar > i {
+        display: block; height: 100%;
+        background: var(--ink);
+        /* Width is set per frame. No transition: it is already a smooth countdown, and a
+           transition would make it lag its own tower. */
+        transform-origin: left center;
+      }
+      /* Nearly out. The bar is the warning, so it says so itself rather than relying on
+         the player to judge a length. */
+      .tbar.is-low { border-color: var(--red); }
+      .tbar.is-low > i { background: var(--red); }
+      /* The souvenir.
+
+         Sized off the VIEWPORT's short edge rather than a fixed pixel width, because the
+         thing it holds is square: on a phone in portrait the limit is the width, on a
+         desktop it is the height, and min() picks whichever is actually scarce without
+         needing a breakpoint. It never gets between the player and Play again — the backdrop
+         dismisses it, and it is out of the flow entirely. */
+      #polaroid-wrap {
+        position: absolute; inset: 0;
+        display: grid; place-items: center;
+        /* Centred in the space ABOVE the buttons, not in the whole panel. The button row is
+           lifted over this backdrop so it stays reachable, which meant a centred photograph
+           put its caption directly underneath them — the one part of the souvenir with words
+           on it was the part you could not read. */
+        padding-bottom: 155px;
+        background: rgba(244, 243, 239, 0.55);
+        z-index: 6;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+      #polaroid-wrap.is-on { opacity: 1; }
+      /* Drawn, like everything else. The first pass was a soft-shadowed rounded rectangle,
+         which is a web card — the game has exactly one shape language and it is a heavy ink
+         contour with corners that do not match, struck with a hard offset shadow instead of
+         a blurred one. Same border, same asymmetric radius idiom and same struck shadow as
+         #inspect and the PLAY AGAIN pill, scaled up for something this size. */
+      #polaroid {
+        margin: 0;
+        width: min(74vw, 48vh, 340px);
+        /* No padding and no fill. The white border and the caption are drawn INTO the image
+           by crowdPhoto, so a frame here was a second one — which is what put the ink line a
+           visible gap away from where the photograph actually ends. The line now sits exactly
+           on the image's edge, and the white inside it belongs to the picture. */
+        padding: 0;
+        font-size: 0;
+        /* Square. A polaroid IS a rectangle, and the mismatched corners that suit a button
+           read as a sticker at this size — the frame should look printed, held together by
+           one heavy line. The struck shadow stays: that is what keeps it sitting ON the paper
+           rather than floating above it. */
+        border: 4px solid var(--ink);
+        border-radius: 0;
+        box-shadow: 5px 6px 0 var(--ink);
+        transform: rotate(-1.6deg) translateY(10px) scale(0.97);
+        transition: transform 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.1);
+      }
+      #polaroid-wrap.is-on #polaroid { transform: rotate(-1.6deg) translateY(0) scale(1); }
+      /* No second contour. One line does the job: the picture's own edge against the white of
+         the frame is already a boundary, and drawing it again made the thing read as two
+         nested boxes rather than as one photograph. */
+      #polaroid-img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      /* Both endings buttons in one row, and the row is what clears the souvenir's backdrop.
+         That backdrop covers the whole panel, so without the lift the only controls that
+         matter sat underneath it and could not be reached until the photograph had been
+         dismissed — a nice picture is not worth trapping somebody on the ending screen for.
+         Share takes the #step-next treatment by joining its selector lists above rather than
+         by copying the values, so the two can never drift apart. */
+      #over-buttons {
+        position: relative;
+        z-index: 7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+      }
+      #polaroid-share[hidden] { display: none; }
+      #polaroid-share[disabled] { opacity: 0.5; cursor: default; }
+
+
+      /**
+       * Phones, and this block has to live HERE rather than up with the rest of the small
+       * screen rules.
+       *
+       * It was written next to the other mobile overrides around the dock, several hundred
+       * lines above #over-buttons and #polaroid-wrap — same specificity, earlier in the file,
+       * so the base rules quietly won and none of it applied. The row stayed `relative` and
+       * the photograph kept the desktop's clearance, which is why the buttons went on sitting
+       * across the caption. Cascade order, not a media query problem.
+       */
+      @media (max-width: 820px), (pointer: coarse) {
+        /**
+         * The buttons stay in the flow. The PHOTOGRAPH moves.
+         *
+         * Pinning the row to the bottom of the screen was tried and it came out visibly
+         * off-centre horizontally, for a reason worth writing down: `position: fixed` needs
+         * `translateX(-50%)` to centre, and the ending timeline animates this row's transform
+         * — so GSAP overwrote the centring the layout depended on. Two things owning one
+         * property. Left in the flow the panel centres it for free and nothing competes.
+         *
+         * So the clearance is the photograph's problem instead, which is the right place for
+         * it: the souvenir is the thing that can afford to move.
+         */
+        #over-buttons {
+          flex-direction: column;
+          align-items: stretch;
+          width: min(72vw, 300px);
+        }
+        #over-buttons > button { width: 100%; padding: 0 18px; }
+        /**
+         * Lifts the picture clear of the stacked pair.
+         *
+         * The wrap fills the panel and centres the photograph in whatever is left after this,
+         * so the padding is doubled in effect — half of it comes off the bottom of the picture.
+         * 240 puts the caption about 25px above the first button on a 812-tall handset, which
+         * is the tightest it can be and still read as deliberate.
+         */
+        #polaroid-wrap { padding-bottom: calc(240px + env(safe-area-inset-bottom, 0px)); }
+      }
+      /* Out of the way while the camera is being dragged — phones only, added by main.js off
+         OrbitControls' own start/end. Pointer-events go with the opacity so a finger already
+         travelling cannot clip a button on its way past, and the transition is asymmetric on
+         purpose: leaves quickly so the picture opens up, returns gently so it does not snap
+         back under the finger that just let go. */
+      body.is-dragging #rail,
+      body.is-dragging #dock,
+      body.is-dragging #help,
+      body.is-dragging #inspect,
+      body.is-dragging #hud {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 130ms ease-out;
+      }
+      #rail, #dock, #help, #inspect, #hud { transition: opacity 260ms ease-in; }
+      #rc-blurb { font-size: 11px; opacity: 0.62; margin-top: 4px; line-height: 1.45; font-style: italic; }
+      #rc-tag {
+        font-size: 11px; font-weight: 800; letter-spacing: 0.01em;
+        margin-top: 7px; padding-top: 7px; line-height: 1.4;
+        border-top: 2px solid rgba(20, 20, 15, 0.16);
+      }
+      /* The one control on the card, and it only exists on a phone — see the portrait block
+         below, which is the only thing that ever shows it. Same struck pill as PLAY AGAIN. */
+      /* The price and the button share the last line: what it costs, then what it costs you
+         to say yes. Hidden with the button, since neither exists on a desktop. */
+      #rc-foot {
+        display: none;
+        align-items: center;
+        gap: 11px;
+        margin-top: 9px;
+      }
+      #rc-cost { font-size: 13px; font-weight: 800; letter-spacing: 0.01em; white-space: nowrap; }
+      #rc-place {
+        appearance: none;
+        padding: 8px 16px 9px;
+        background: var(--ink);
+        color: var(--paper);
+        border: 0;
+        border-radius: 14px 17px 12px 16px / 17px 12px 16px 14px;
+        box-shadow: 3px 4px 0 rgba(20, 20, 15, 0.28);
+        font-family: var(--display);
+        font-size: 13px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
+        cursor: pointer;
+      }
+      #rc-place:active,
+      /**
+       * .is-hit is the same pressed state, replayed from JS when the tap landed on the CARD
+       * rather than on this button. The whole card is the target by design, so the button has to
+       * answer for a tap it never received, or hitting the picture reads as nothing happening.
+       * Added and removed on a timer in main.js, because the card is hidden underneath it.
+       */
+      #rc-place.is-hit { transform: translate(2px, 3px); box-shadow: 0 0 0 var(--ink); }
+      /* The tail, pointing down at the icon it belongs to. */
+      /* The chevron is part of the bubble, so it takes the bubble's own fill -- the shared
+         tooltip rule paints it white, which showed as a paler notch hanging off a
+         paper-coloured card. Dropped a couple of pixels so it reads as one shape with the
+         card rather than a triangle touching it. */
+      #railcard .ttail-fill { fill: var(--paper); }
+      #railcard .ttail {
+        position: absolute;
+        bottom: -11px;
+        left: 50%;
+        width: 18px; height: 14px;
+        transform: translateX(-50%);
+        overflow: visible;
+      }
+
+      /**
+       * The rail on a phone, held in portrait: a column down the right-hand side.
+       *
+       * The bottom sheet it replaces cost two taps and covered half the square to show a list
+       * of things that are all pictures anyway. This is the desktop rail stood on its end, in
+       * the one part of a portrait screen that is reliably empty — the fee panel finishes
+       * around 95px and the dock starts at the very bottom, which on a 390x844 phone leaves
+       * about 585px of clear column. Eight buttons at 40px with 10px between them is 390.
+       *
+       * Portrait only. In landscape that column is barely 230px, and the sheet stays.
+       */
+      @media (max-width: 820px) and (orientation: portrait),
+             (pointer: coarse) and (orientation: portrait) {
+        :root {
+          /* Where the column sits, and how tall it is. Both are needed twice — the rail
+             stands on the first and the drop bubble is hung off the top of the second — so
+             they are named once here rather than repeated as arithmetic in two places.
+
+             --rail-n is the number of icons actually in the rail, set by buildRail. It used
+             to be the literal 8, which was true while the whole deck was always available;
+             now the deck unlocks with the teaching stage and opens at two, so a hard 8 put
+             the top of the column six button-heights above where the icons really reach — and
+             the instruction hung off it pointed at nothing. The 8 fallback only applies for
+             the frame before buildRail has run. */
+          --rail-n: 8;
+          --rail-bottom: calc(var(--btn-h) + 26px + env(safe-area-inset-bottom, 0px));
+          --rail-h: calc(var(--rail-n) * var(--btn-h) + (var(--rail-n) - 1) * 10px);
+        }
+        #menu { display: none !important; }
+        #launch { display: none; }
+
+        #rail {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 10px;
+          position: fixed;
+          right: calc(10px + env(safe-area-inset-right, 0px));
+          /**
+           * Sat on the bottom bar rather than centred.
+           *
+           * Centred, the top of the column landed in the RAISE THE FEE bubble that hangs off
+           * the fee panel for the first minute of a run — and that bubble is the one thing on
+           * screen the player is being asked to read. Anchored down here it clears the bubble
+           * entirely, and it puts eight buttons within a thumb of the bar instead of halfway
+           * up a six-inch screen.
+           */
+          top: auto;
+          bottom: var(--rail-bottom);
+          /* Above the scene, below the cards and the endings. */
+          z-index: 18;
+        }
+        .rgroup { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        /**
+         * The price comes off the icon here and goes on the card instead.
+         *
+         * Eight of them down the side of a column, each about as wide as the button it
+         * belongs to, is a second column of text on a screen with one hand's width to spare —
+         * and it is the one number you do not need until you are already reading the card.
+         */
+        .rcost { display: none; }
+        .rkey { top: -6px; right: auto; left: -7px; }
+
+        /**
+         * "Plant a distraction", pointing at the buttons rather than at where the launcher
+         * used to be. It is anchored inside #dock, which on a phone is the bar in the bottom
+         * left, so with the launcher gone it was hanging off the side of the screen aimed at
+         * nothing. Taken out to the viewport, stood on top of the column, with the tail moved
+         * to the right-hand end so it points down at the first icon.
+         */
+        #droptip {
+          position: fixed;
+          left: auto;
+          right: calc(10px + env(safe-area-inset-right, 0px));
+          bottom: calc(var(--rail-bottom) + var(--rail-h) + 14px);
+          max-width: min(62vw, 232px);
+          transform: translateY(8px) rotate(0.9deg);
+        }
+        #droptip.is-on { transform: translateY(0) rotate(0.9deg); }
+        /* -12px for the same reason as the pointer-screen tails: at -10 the chevron's mouth
+           stops short of the bubble's own border and reads as a separate mark under it. */
+        #droptip .ttail {
+          top: auto; bottom: -12px;
+          left: auto; right: 14px; margin: 0;
+          transform: none;
+        }
+
+        /* Tapped, the card comes in beside the rail — and it is a thing you press rather than
+           a thing you read past, so it takes pointer events and wears a button. */
+        #railcard {
+          width: min(calc(100vw - 78px), 320px);
+          grid-template-columns: 74px 1fr;
+          pointer-events: auto;
+        }
+        #rc-art { width: 74px; height: 74px; }
+        /* No tail: it would have to point sideways at a button the card already sits beside. */
+        #railcard .ttail { display: none; }
+        #rc-foot { display: flex; }
+      }
+
+      @media (min-width: 821px) and (pointer: fine) {
+        /* The dock becomes a row: the rail, then the lens that puts things down. */
+        #dock { display: flex; align-items: flex-end; gap: 10px; bottom: calc(30px + env(safe-area-inset-bottom, 0px)); }
+        #menu { display: none !important; }
+        #launch { display: none; }
+        #inspect { position: static; flex: none; }
+
+        #rail {
+          display: flex;
+          align-items: flex-end;
+          /* Evenly spaced, all eight. The wider gap between families read as a fault in the
+             row rather than as grouping, and the hover card names the shelf anyway. */
+          gap: 8px;
+        }
+        .rgroup { display: flex; align-items: flex-end; gap: 8px; }
+
+
+        /* The fee sits at the top now, so its bubble hangs BELOW it with the tail flipped
+           to point back up at the panel. */
+        #feetip {
+          top: calc(100% + 12px);
+          bottom: auto;
+          transform: translateY(-8px) rotate(-1.1deg);
+        }
+        #feetip.is-on { transform: translateY(0) rotate(-1.1deg); }
+        /* -12px, the exact mirror of the drop bubble's tail below. At -10 this chevron was
+           seated two pixels deeper into the bubble than that one: four pixels of it hanging
+           out instead of seven, and the mouth six pixels past the border rather than four. A
+           stub sunk into the top edge, where the other reads as a point coming off it. */
+        #feetip .ttail { top: -12px; bottom: auto; transform: scaleY(-1); }
+
+        /* And the inspect card clears the fee panel rather than sliding under it. The
+           height is measured every tick, because the note under the fee rewraps. */
+        #card { top: calc(env(safe-area-inset-top, 0px) + 16px + var(--fee-h, 150px) + 14px); }
+
+        /**
+         * Over the buttons it is talking about, anchored to the dock's RIGHT edge.
+         *
+         * It was centred on the dock, which does not work here: the dock is about 150px wide and
+         * sits hard against the right of the screen, so centring a 300px bubble on it hung half
+         * the bubble off the edge. Anchoring the right edges together puts the whole thing on
+         * screen at any width, and it is the same fix the portrait rule already uses further
+         * down for the same reason.
+         *
+         * Both states are declared here on purpose. #droptip.is-on lives outside this block and
+         * is id-plus-class, so it out-specifies a bare #droptip and was quietly replacing the
+         * centring transform the moment the bubble appeared — which is why the overflow was
+         * worse when visible than at rest. Whatever this block sets, it has to set for both.
+         */
+        #droptip {
+          left: auto;
+          right: 0;
+          bottom: calc(100% + 16px);
+          width: max-content;
+          max-width: min(34vw, 300px);
+          transform: translateY(8px) rotate(-0.8deg);
+        }
+        #droptip.is-on { transform: translateY(0) rotate(-0.8deg); }
+        /**
+         * Pointing down at the buttons, from the bubble's right end rather than its centre.
+         *
+         * The bubble is anchored to the dock's right edge and is wider than the dock, so its
+         * centre now sits well to the LEFT of any button and a centred tail pointed at empty
+         * paving. Offset from the right instead, which keeps it over the icons whatever the
+         * teaching stage has unlocked. The base rule hangs this off the side, for when the
+         * bubble sat beside the dock.
+         *
+         * -12px rather than -9px: at -9 the chevron's tip stopped a couple of pixels short of
+         * the bubble's own border and read as a separate mark floating under it.
+         */
+        #droptip .ttail {
+          top: auto;
+          bottom: -12px;
+          left: auto;
+          right: 34px;
+          margin-left: 0;
+          transform: none;
+        }
+
+        /**
+         * A slow bob on the two that are asking for something. Soft and long enough that it
+         * reads as the bubble breathing rather than blinking, and each keyframe carries the
+         * bubble's own tilt so the bob does not undo it.
+         *
+         * translateY, not translate(-50%, …). An animation beats every stylesheet rule there
+         * is, so the -50% these keyframes still carried from the version that CENTRED this
+         * bubble on the dock was silently re-centring it the instant it appeared — shoving it
+         * half its own width (150px) to the left, off the icons and out towards the middle of
+         * the screen, with the chevron pointing at empty paving. Worse on the way out: the
+         * animation stops the moment .is-on goes, so the bubble snapped back over the icons
+         * for the length of the fade and read as a flash in the right place.
+         */
+        #droptip.is-on { animation: dropBob 2.3s ease-in-out infinite; }
+        @keyframes dropBob {
+          0%, 100% { transform: translateY(0) rotate(-0.8deg); }
+          50% { transform: translateY(-6px) rotate(-0.8deg); }
+        }
+        #feetip.is-on { animation: feeBob 2.3s ease-in-out infinite; }
+        @keyframes feeBob {
+          0%, 100% { transform: translateY(0) rotate(-1.1deg); }
+          50% { transform: translateY(-6px) rotate(-1.1deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          #droptip.is-on, #feetip.is-on { animation: none; }
+        }
+
+        /* The fee is the primary lever, so it gets the corner to itself instead of sharing
+           the bottom right with the thing you spend the money on. */
+        #feepanel {
+          position: fixed;
+          top: calc(env(safe-area-inset-top, 0px) + 16px);
+          right: 16px;
+          width: 268px;
+          contain: none;
+        }
+        /* ...which frees the bottom left for the two readouts, side by side. */
+        #help {
+          top: auto; right: auto;
+          left: 22px;
+          bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+        }
+        #hud { left: calc(22px + var(--btn-h) + 12px); }
+      }
+    
+      /* ------------------------------------------------- tutorial overlays */
+      /* The box keeps its height whether or not the image has arrived, so stepping between
+         cards does not collapse and re-expand the panel. */
+      #step-visual { position: relative; width: 100%; aspect-ratio: 3 / 2; }
+      #step-visual.is-empty { aspect-ratio: auto; }
+      /* Bleeding the bottom edge: the row sits ON the seam rather than under the picture.
+         It takes no room at all on the cards that have nothing to put there, which is what
+         was leaving four and five looking over-padded against the rest. */
+      #step-extras { display: none; }
+      #step-extras.has-extras {
+        /* Explicit, because the card centres its children: without it this row is sized by
+           its contents, and the bar's own percentage width resolves against a container
+           that depends on the bar. It collapsed to the width of its border, which is the
+           black hairline it was showing instead of a bar. */
+        width: 100%;
+        min-height: 58px;
+        display: flex; align-items: center; justify-content: center;
+        position: relative; z-index: 2;
+        margin-top: -41px;
+      }
+      #step-fee, #step-icons {
+        background: var(--paper);
+        border: 2.5px solid var(--ink);
+        border-radius: 16px 20px 14px 18px / 20px 14px 18px 16px;
+        box-shadow: 3px 4px 0 var(--ink);
+        padding: 8px 11px;
+      }
+      #step-fee[hidden], #step-icons[hidden] { display: none; }
+
+      /* Round, like the buttons on the dock, so what you meet in the tutorial is the shape
+         you go looking for afterwards. */
+      #step-icons { display: flex; align-items: center; gap: 8px; background: none; border: 0; box-shadow: none; padding: 0; }
+      /* The colour key, taught on the card that explains the tools rather than left to be
+         reverse-engineered off the field. Blue behind the doctrines, red behind the two that
+         divide — the same two colours the citizens themselves turn.
+
+         Only in the onboarding. The menu stays black and white: there the icons are things you
+         buy, and the one-colour rule is the whole look. */
+      /* The disc, and the art multiplies into it — see the note in main.js for why the colour
+         is on this wrapper rather than on the image.
+
+         Round, like the buttons on the dock, so what you meet in the tutorial is the shape you
+         go looking for afterwards. */
+      .sicon {
+        position: relative;
+        display: grid;
+        place-items: center;
+        width: 42px; height: 42px;
+        background: #fff;
+        border: 2.5px solid var(--ink);
+        border-radius: 50%;
+        box-shadow: 2px 3px 0 var(--ink);
+      }
+      .sicon img {
+        width: 28px; height: 28px;
+        object-fit: contain;
+        display: block;
+        /* Whatever white the drawing carries goes to the disc colour; the ink stays ink. */
+        mix-blend-mode: multiply;
+      }
+      /* The colour key, taught on the card that explains the tools rather than left to be
+         reverse-engineered off the field: blue behind the two that make believers, red behind
+         the two that set people against each other. The same colours the citizens turn.
+
+         Only here. The menu stays black and white — there the icons are things you buy, and the
+         one-colour rule is the whole look of the game. */
+      /* The number, and it is the number that carries the colour — the drawing reads best on the
+         white it was drawn for, and a row of coloured plates stops looking like the black-and-white
+         dock the player is about to use. Same badge as the dock's keyboard hint, so one small circle
+         teaches the shortcut and the family at once. */
+      .sicon b {
+        position: absolute;
+        top: -5px; right: -5px;
+        width: 18px; height: 18px;
+        display: grid; place-items: center;
+        font-family: var(--display);
+        font-size: 10px;
+        line-height: 1;
+        background: var(--ink);
+        color: var(--paper);
+        /* Ink, matching the ring the dock's badge carries: this card is teaching that badge, so
+           it has to BE that badge. Paper here read as a gap punched in the disc. */
+        border: 2px solid var(--ink);
+        border-radius: 50%;
+      }
+      /* Blue makes believers, the crowd's own soft red sets them against each other. Both are
+         light, so the numeral goes to ink rather than paper to stay legible. */
+      .sicon.is-follow b,
+      .rkey.is-follow,
+      .mkey.is-follow { background: var(--convert); color: var(--ink); }
+      .sicon.is-divide b,
+      .rkey.is-divide,
+      .mkey.is-divide { background: #eda6a0; color: var(--ink); }
+
+
+      #step-fee { width: 92%; display: flex; align-items: center; gap: 11px; padding: 10px 13px; }
+      .sf-pct { font-size: 14px; font-weight: 800; min-width: 36px; }
+      /* The mark the clock is asking for, exactly as the real panel draws it. */
+      .sf-need { position: absolute; top: -3px; bottom: -3px; left: 54%; width: 3px; margin-left: -1.5px; background: var(--red); }
+      .sf-head {
+        display: flex; justify-content: space-between; align-items: baseline;
+        font-size: 10px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+      }
+      .sf-track {
+        position: relative;
+        flex: 1;
+        height: 20px;
+        background: #fff;
+        border: 2.5px solid var(--ink);
+        border-radius: 7px;
+        overflow: hidden;
+      }
+      /* The same move the player is about to make, on a loop: the fee going up. */
+      .sf-fill { display: block; height: 100%; width: 10%; background: var(--red); animation: feeDemo 3.4s ease-in-out infinite; }
+      /**
+       * The whole rule in four seconds: the bar climbs just after the + goes down, and the
+       * instant it reaches the red line it stops being red. Short of the line is a run that
+       * does not arrive; on it or past it is one that does. The colour snaps rather than
+       * blending, because reaching the mark is a threshold and not a gradient.
+       */
+      @keyframes feeDemo {
+        0%, 30% { width: 10%; background: var(--red); }
+        41.9% { background: var(--red); }
+        42% { width: 54%; background: var(--ink); }
+        88% { width: 54%; background: var(--ink); }
+        88.1% { background: var(--red); }
+        100% { width: 10%; background: var(--red); }
+      }
+      /* The + being pressed: the same button the player is about to reach for. */
+      .sf-plus {
+        display: grid; place-items: center;
+        width: 32px; height: 32px; flex: none;
+        background: #fff; color: var(--ink);
+        border: 2.5px solid var(--ink);
+        border-radius: 50%;
+        font-weight: 800; font-size: 18px; line-height: 1;
+        box-shadow: 2px 3px 0 var(--ink);
+        animation: feePlus 3.4s ease-in-out infinite;
+      }
+      @keyframes feePlus {
+        0%, 20% { transform: translate(0, 0); box-shadow: 2px 3px 0 var(--ink); }
+        28%, 38% { transform: translate(2px, 3px); box-shadow: 0 0 0 var(--ink); }
+        46%, 100% { transform: translate(0, 0); box-shadow: 2px 3px 0 var(--ink); }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .sf-fill { animation: none; width: 44%; }
+        .sf-plus { animation: none; }
+      }
+    
+    
+      /* ------------------------------------------------- card entrances
+       *
+       * Everything a card SHOWS rather than says arrives on its own beat: the bar, the
+       * icons, the three colours. Scale and fade together, staggered, so the eye is walked
+       * across them instead of meeting them all at once.
+       */
+      #step-fee,
+      #step-icons img,
+      #step-key .krow {
+        opacity: 0;
+        transform: translateY(9px) scale(0.94);
+      }
+      #step-card.is-in #step-fee,
+      #step-card.is-in #step-icons img,
+      #step-card.is-in #step-key .krow {
+        opacity: 1;
+        transform: none;
+        transition: opacity 300ms ease, transform 430ms cubic-bezier(0.2, 0.9, 0.3, 1);
+      }
+      #step-card.is-in #step-icons img:nth-child(2),
+      #step-card.is-in #step-key .krow:nth-child(2) { transition-delay: 110ms; }
+      #step-card.is-in #step-icons img:nth-child(3),
+      #step-card.is-in #step-key .krow:nth-child(3) { transition-delay: 220ms; }
+      #step-card.is-in #step-icons img:nth-child(4) { transition-delay: 330ms; }
+      @media (prefers-reduced-motion: reduce) {
+        #step-fee, #step-icons img, #step-key .krow { opacity: 1; transform: none; }
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-urJsVLlw.js"></script>
+  </head>
+  <body>
+    <div id="stage"></div>
+    <div id="bubbles"></div>
+
+    <div id="alarm"></div>
+    <div id="alarmtext">they are organising</div>
+
+    <div id="top">
+      <div id="ledger">
+        <div id="money">$0</div>
+        <div id="rate">&mdash;</div>
+        <div id="bar"><i></i></div>
+        <div id="goal">target &nbsp;$1 trillion</div>
+        <div id="meta">
+          <div class="mcell">
+            <div id="time">0:00</div>
+            <!-- Counting up. It is the score, not a deadline — see economy.elapsed. -->
+            <div class="lbl">elapsed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="card">
+      <img id="card-art" alt="" hidden />
+      <div id="card-body">
+        <div id="card-kicker">a distraction</div>
+        <div id="card-title"></div>
+        <div id="card-line"></div>
+        <!-- Only the magnifier fills this: how long it has left, and how many it holds. -->
+        <div id="card-note" hidden></div>
+        <!-- What the yellows mean, with how many of each are inside this thing's reach. -->
+        <div id="card-legend" hidden><div class="legend"><span class="lrow"><i class="lsw sw3"></i>looking up<b class="lct"></b></span><span class="lrow"><i class="lsw sw1"></i>recruiting others<b class="lct"></b></span></div></div>
+        <div id="card-meter" hidden>
+          <i id="card-fill"></i>
+          <span id="card-stages"><i id="cs-up"></i><i id="cs-recruit"></i></span>
+        </div>
+      </div>
+    </div>
+
+    <div id="dock">
+      <div id="menu" hidden></div>
+
+      <!-- The fee, and what the clock says the fee ought to be. -->
+      <div id="feepanel">
+        <div id="fee-head">
+          <div>
+            <div id="fee">5%</div>
+            <div class="lbl">fee</div>
+          </div>
+          <div id="feebtns">
+            <button class="btn" id="btn-down" title="Lower the fee">&minus;</button>
+            <button class="btn" id="btn-up" title="Raise the fee">+</button>
+          </div>
+        </div>
+        <div id="fee-track"><i id="fee-fill"></i><u id="fee-need"></u></div>
+        <div id="fee-note">working it out&hellip;</div>
+        <div id="feetip" role="status"><span class="tt"></span><svg class="ttail" viewBox="-3 -5 18 14" aria-hidden="true"><path class="ttail-fill" d="M0 -5H12V-1.25L6 6 0 -1.25Z"/><path class="ttail-line" d="M0 -1.25 6 6 12 -1.25"/></svg></div>
+      </div>
+
+      <!--
+        Inspect. Not a third mode: nothing armed IS inspecting, so this is the control that
+        puts down whatever you are holding. It shows as pressed while your hands are empty.
+      -->
+      <button id="inspect" title="Inspect the crowd" aria-label="Inspect the crowd">
+        <img class="micon" src="/assets/brand/cursor_lens.png" alt="" />
+      </button>
+      <!--
+        The rail. Desktop only: every distraction on the bar at once, as icons the size of
+        the inspect lens, in the three families with a gap between them. The menu below still
+        exists and is what a phone uses — there is no room for nine targets on a handset, and
+        no hover to explain them with.
+      -->
+      <div id="rail" hidden></div>
+
+      <button id="launch">
+        <span id="launch-glyph"><img class="micon" src="/assets/brand/icon_launch.png" alt="" /></span>
+        <span id="launch-text">Plant a distraction</span>
+        <span id="launch-key">space</span>
+      </button>
+      <!-- Anchored to the dock, so it lands beside the button it is talking about. -->
+      <div id="droptip" role="status"><span class="tt"></span><svg class="ttail" viewBox="-3 -5 18 14" aria-hidden="true"><path class="ttail-fill" d="M0 -5H12V-1.25L6 6 0 -1.25Z"/><path class="ttail-line" d="M0 -1.25 6 6 12 -1.25"/></svg></div>
+    </div>
+
+    <!--
+      What an icon actually is: the art, the name, and the line saying what it LEAVES
+      BEHIND — which for the three influencers is the only thing telling them apart.
+    -->
+    <div id="railcard" hidden>
+      <img id="rc-art" alt="" />
+      <div id="rc-body">
+        <div id="rc-head"><span id="rc-name"></span><span id="rc-effect"></span></div>
+        <div id="rc-blurb"></div>
+        <div id="rc-tag"></div>
+        <!-- Both only ever seen on a phone: on a desktop the price is under the icon and the
+             icon itself is the button. -->
+        <div id="rc-foot"><span id="rc-cost"></span><button id="rc-place" type="button">Place it</button></div>
+      </div>
+      <svg class="ttail" viewBox="-3 -5 18 14" aria-hidden="true">
+        <path class="ttail-fill" d="M0 -5H12V-1.25L6 6 0 -1.25Z"/>
+        <path class="ttail-line" d="M0 -1.25 6 6 12 -1.25"/>
+      </svg>
+    </div>
+
+    <!-- Two drawn marks, one shown at a time: the "i" of a display face is a bar with a
+         dot and reads as nothing, so the icon is drawn. -->
+    <button id="help" title="Pause and read the tutorial" aria-label="Pause and read the tutorial">
+      <!-- A pause mark, not an "i": opening this stops the clock, so it should say so. -->
+      <svg class="hicon hicon-i" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="9.2" />
+        <path d="M9.7 8.6v6.8M14.3 8.6v6.8" />
+      </svg>
+      <svg class="hicon hicon-x" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6.4 6.4 17.6 17.6M17.6 6.4 6.4 17.6" />
+      </svg>
+    </button>
+
+    <div id="hud">
+      <div class="meter">
+        <!-- One fill. Full means over. -->
+        <i id="m-up"></i>
+        <span class="mtxt">at your feet <b id="hud-awake">0</b></span>
+      </div>
+      <!-- The same key, over the bar, while the pointer rests on it. -->
+      <div id="bar-legend"><div class="legend"><span class="lrow"><i class="lsw sw3"></i>looking up<b class="lct"></b></span><span class="lrow"><i class="lsw sw1"></i>recruiting others<b class="lct"></b></span></div></div>
+    </div>
+
+    <div id="hint">
+yellow means they have noticed &mdash; drop it on them<br />
+      space menu &middot; 1&ndash;9 pick &middot; esc cancel &middot; &uarr;&darr; fee
+    </div>
+
+    <!--
+      Who the type belongs to, and where to get it. One link, on "here" — the credit is a
+      sentence rather than a banner, and a reader who wants the fonts will follow the word that
+      offers them. Opens away from the game, so a run is never lost to a click on a credit.
+    -->
+    <div id="credit">Made with FGD fonts, download <a href="https://fgdesigners.xyz/" target="_blank" rel="noopener noreferrer">here</a></div>
+
+    <!--
+      The cookie question. Hidden by default and only ever revealed by src/analytics.js —
+      on localhost and on the preview deployments nothing is tracked, so there is nothing
+      to ask about and the card never appears at all.
+    -->
+    <div id="consent" hidden>
+      <p>
+        We count runs, not people. Anonymously, through Google Analytics,
+        and only if you say yes.
+      </p>
+      <div id="consent-btns">
+        <button id="consent-yes">Count me</button>
+        <button id="consent-no">No thanks</button>
+      </div>
+    </div>
+
+    <!-- The title, over the living scene. No art of its own: the game IS the backdrop,
+         and the camera is doing the work behind this. -->
+    <div id="intro">
+      <img id="intro-word" src="/assets/brand/wordmark.png" alt="Don't Look Up" />
+      <div id="intro-line">You are very rich, very tall, and standing on quite a lot of people.</div>
+      <div id="intro-btns">
+        <button id="intro-start">Start</button>
+        <button id="intro-how">Tutorial</button>
+      </div>
+    </div>
+
+    <!-- Three steps, skippable, over the same moving scene. -->
+    <div id="steps" hidden>
+      <div id="step-card">
+        <!--
+          The picture, with the game's own controls laid over it. A tutorial that draws the
+          fee bar and the distraction icons is showing you the thing you are about to touch,
+          rather than an illustration of it.
+        -->
+        <div id="step-visual">
+          <img id="step-art" alt="" />
+
+          <!--
+            The colour key, shown only on its own step, and it REPLACES the picture rather
+            than sitting under it. Swatches drawn here rather than supplied as an image, so
+            they are the exact colours the crowd is tinted with and cannot drift.
+          -->
+          <div id="step-key" hidden>
+            <span class="krow"><img class="kfig" src="/assets/steps/new_yellow.png" alt="" /><span><b>Yellow</b> has noticed. Pays nothing, talks the others round, and walks to your feet.</span></span>
+            <span class="krow"><img class="kfig" src="/assets/steps/new_blue.png" alt="" /><span><b>Blue</b> believes. Pays you best, and cannot be argued back.</span></span>
+            <span class="krow"><img class="kfig" src="/assets/steps/new_red.png" alt="" /><span><b>Red</b> is arguing. Still pays, and drifts away from your feet.</span></span>
+          </div>
+        </div>
+        <!--
+          Anything the card SHOWS rather than illustrates lives here, under the picture. It
+          used to sit on top of it, which covered the part of the drawing the card was
+          about. The row keeps its height on every step so the panel does not resize.
+        -->
+        <div id="step-extras">
+          <div id="step-fee" hidden>
+            <span class="sf-pct">5%</span>
+            <div class="sf-track"><i class="sf-fill"></i><u class="sf-need"></u></div>
+            <span class="sf-plus" aria-hidden="true">+</span>
+          </div>
+          <div id="step-icons" hidden></div>
+        </div>
+        <div id="step-num">1 of 3</div>
+        <div id="step-title"></div>
+        <div id="step-line"></div>
+        <div id="step-btns">
+          <button id="step-skip">Play</button>
+          <button id="step-next">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="over">
+      <!-- The title is art, and it lives OUTSIDE the box so it can be as big as it likes. -->
+      <img id="over-art" alt="" hidden />
+      <div id="over-title" hidden></div>
+      <div id="over-line"></div>
+      <div id="over-sum"></div>
+      <!-- One row. Share joins it on a win and is hidden otherwise, so the pair is always
+           the same shape and nothing reflows underneath the player's thumb. -->
+      <div id="over-buttons">
+        <button id="polaroid-share" type="button" hidden>Share</button>
+        <button id="over-again">Play again</button>
+      </div>
+      <!-- The souvenir, on a win only. Filled and revealed by main.js; tapping the backdrop
+           puts it away, and the buttons sit above it either way. -->
+      <div id="polaroid-wrap" hidden>
+        <figure id="polaroid">
+          <img id="polaroid-img" alt="The crowd, where they stood when the trillion landed" />
+        </figure>
+      </div>
+    </div>
+
+    <!--
+      Touch has no cursor, so an armed distraction has nothing following the finger to say
+      what is about to happen. This says it instead, with the thing itself on the left.
+    -->
+    <div id="tapaway" hidden aria-live="polite">
+      <img id="tapaway-icon" src="" alt="" />
+      <span id="tapaway-text">Tap anywhere to place it</span>
+    </div>
+
+    <!-- One life bar per standing tower, parked over its head by main.js. No text: the
+         only question it answers is "how long have I got", and a bar answers that faster
+         than a number does. Pointer-events off — it must never eat a click on the field. -->
+    <div id="tbars" aria-hidden="true"></div>
+
+    <!-- Beat three of the lesson, parked over the crowd by main.js. -->
+    <div id="aimtip" role="status"><span class="tt"></span><svg class="ttail" viewBox="-3 -5 18 14" aria-hidden="true"><path class="ttail-fill" d="M0 -5H12V-1.25L6 6 0 -1.25Z"/><path class="ttail-line" d="M0 -1.25 6 6 12 -1.25"/></svg></div>
+
+    <div id="loader">
+      <!-- The money piling up, which is the only thing the giant is actually doing.
+
+           Two drawings of the same coin: face on for the fall, so the $ is readable as it
+           spins down, and a solid cylinder with a visible rim for the pile. The swap
+           happens at the moment of landing. This is why the coins are drawn rather than
+           CSS-transformed: a flat image tilted in 3D shows a squashed FACE, not an edge —
+           it has no thickness to show. The thickness is in the art.
+
+           Pure CSS: this plays while the main thread is parsing the game and decoding three
+           glTF files, so nothing here may depend on script, and only transforms and
+           opacity animate. -->
+      <div id="pile" aria-hidden="true">
+        <span class="coin" style="--x:-94px; --h:0; --z:14px; --spin:-160deg; --tilt:-5deg; --d:0.00s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:-47px; --h:0; --z:-6px; --spin:-89deg; --tilt:0deg; --d:0.13s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:0px; --h:0; --z:18px; --spin:-18deg; --tilt:5deg; --d:0.26s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:47px; --h:0; --z:-10px; --spin:53deg; --tilt:-1deg; --d:0.39s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:94px; --h:0; --z:6px; --spin:124deg; --tilt:4deg; --d:0.52s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:-94px; --h:1; --z:14px; --spin:-117deg; --tilt:-5deg; --d:0.65s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:-47px; --h:1; --z:-6px; --spin:-46deg; --tilt:0deg; --d:0.78s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:0px; --h:1; --z:18px; --spin:25deg; --tilt:5deg; --d:0.91s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:47px; --h:1; --z:-10px; --spin:96deg; --tilt:-1deg; --d:1.04s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:94px; --h:1; --z:6px; --spin:-153deg; --tilt:4deg; --d:1.17s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:-94px; --h:2; --z:14px; --spin:-74deg; --tilt:-5deg; --d:1.30s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:-47px; --h:2; --z:-6px; --spin:-3deg; --tilt:0deg; --d:1.43s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:0px; --h:2; --z:18px; --spin:68deg; --tilt:5deg; --d:1.56s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:47px; --h:2; --z:-10px; --spin:139deg; --tilt:-1deg; --d:1.69s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:94px; --h:2; --z:6px; --spin:-110deg; --tilt:4deg; --d:1.82s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:-94px; --h:3; --z:14px; --spin:-31deg; --tilt:-5deg; --d:1.95s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:-47px; --h:3; --z:-6px; --spin:40deg; --tilt:0deg; --d:2.08s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:0px; --h:3; --z:18px; --spin:111deg; --tilt:5deg; --d:2.21s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:47px; --h:3; --z:-10px; --spin:-138deg; --tilt:-1deg; --d:2.34s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+        <span class="coin" style="--x:94px; --h:3; --z:6px; --spin:-67deg; --tilt:4deg; --d:2.47s"><img class="flat" src="/assets/brand/coin.png" alt="" /><img class="solid" src="/assets/brand/coin3d.png" alt="" /></span>
+      </div>
+      <span class="dots">loading</span>
+    </div>
+
+  </body>
+</html>

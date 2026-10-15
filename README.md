@@ -61,7 +61,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 | Fintech | [Recursive](fintech/recursive/) | [https://recursive.money/](https://recursive.money/) | React + Vite + TailwindCSS + TanStack Router | ✅ Complete |
 | Portfolio | [Hello Monday](portfolio/hellomonday/) | [https://www.hellomonday.com/](https://www.hellomonday.com/) | Pixi.js + WebGL + GSAP + Three.js | ✅ Complete ([Local Demo](http://localhost:3001/)) |
 | Portfolio | [Alan Menken](portfolio/alanmenken/) | [https://www.alanmenken.com/](https://www.alanmenken.com/) | HTML5 + CSS3 + GSAP + Audio Sync | ✅ Complete ([Local Demo](http://localhost:3002/)) |
-| Media / App | [Don't Look Up](media/dontlookup/) | [https://www.dontlookup.app/](https://www.dontlookup.app/) | Interactive Canvas / WebGL | ⏳ Queued |
+| Media / App | [Don't Look Up](media/dontlookup/) | [https://www.dontlookup.app/](https://www.dontlookup.app/) | Interactive Canvas / WebGL (Three.js) | ✅ Complete ([Local Demo](http://localhost:3003/)) |
 | Portfolio | [Emotion Agency](portfolio/emotionagency/) | [https://emotion-agency.com/](https://emotion-agency.com/) | Next.js / React + GSAP | ⏳ Queued |
 
 
