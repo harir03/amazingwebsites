@@ -6,11 +6,8 @@ import './styles/crt.css';
 import { initCRTOverlay } from './components/CRTOverlay.js';
 import { renderLoader, initLoaderAnimation } from './components/Loader.js';
 import { renderNavigation, initNavigation } from './components/Navigation.js';
-import { renderHeroSection, initHeroAnimations } from './components/HeroSection.js';
-import { renderAboutSection, initAboutAnimations } from './components/AboutSection.js';
-import { renderEventsSection, initEventsAnimations } from './components/EventsSection.js';
-import { renderTeamSection, initTeamAnimations } from './components/TeamSection.js';
-import { renderFooterSection, initFooterAnimations } from './components/FooterSection.js';
+import { renderPageTransition } from './components/PageTransition.js';
+import { initRouter } from './router.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const app = document.getElementById('app');
@@ -50,31 +47,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // 3. Mount CRT Monitor Shader Effect
   initCRTOverlay(true);
 
-  // 4. Render All Official 1:1 Sections into DOM
+  // 4. Render App Shell into DOM
   app.innerHTML = `
     ${renderLoader()}
     ${renderNavigation()}
-    <main class="main-wrapper">
-      ${renderHeroSection()}
-      ${renderAboutSection()}
-      ${renderEventsSection()}
-      ${renderTeamSection()}
-    </main>
-    ${renderFooterSection()}
+    ${renderPageTransition()}
+    <div id="router-view" class="router-viewport"></div>
   `;
 
-  // 5. Initialize Controllers & Micro-Animations Section by Section
+  // 5. Initialize Controllers & Router
   initLoaderAnimation();
   initNavigation();
-  initHeroAnimations();
-  initAboutAnimations();
-  initEventsAnimations();
-  initTeamAnimations();
-  initFooterAnimations();
+  initRouter();
 
-  if (window.ScrollTrigger) {
-    window.ScrollTrigger.refresh();
-  }
-
-  console.log('The Design Society — Full Forensic 1:1 Recreation Active 🚀');
+  console.log('The Design Society — Client Router & Subpages Active 🚀');
 });

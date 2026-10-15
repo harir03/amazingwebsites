@@ -46,4 +46,5 @@ desktop.ini
 .agents/skills/foco/
 foco/
 **/foco-reports/
-
+# Scratch / Temporary extraction files
+scratch/
