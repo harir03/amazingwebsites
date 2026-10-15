@@ -58,6 +58,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 | Category | Site Folder | Original Live Site | Tech Stack | Status |
 |----------|-------------|--------------------|------------|--------|
 | Portfolio | [The Design Society](portfolio/thedesignsociety/) | [https://www.thedesignsociety.fr/](https://www.thedesignsociety.fr/) | HTML5 + CSS3 + GSAP + Lenis | ✅ Complete ([Local Demo](http://localhost:5173/)) |
+| AI / ML | [Heron AI](ai-ml/heronai/) | [https://heronaiapp.com/](https://heronaiapp.com/) | React + Vite + TailwindCSS + Framer Motion | 🚧 In Progress |
 | Fintech | [Recursive](fintech/recursive/) | [https://recursive.money/](https://recursive.money/) | React + Vite + TailwindCSS + TanStack Router | ✅ Complete |
 
 
