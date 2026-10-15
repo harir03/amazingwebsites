@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr-FR" data-crt="true">
+<html lang="fr-FR" data-wf-page="698de82080130d2fe9cada58" data-wf-site="698de82080130d2fe9cada54" class="w-mod-js">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -9,9 +9,40 @@
   <meta property="og:description" content="Talks, apéros et rencontres pour les designers lyonnais. Depuis 2025."/>
   <meta property="og:type" content="website"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <link rel="icon" type="image/png" href="/images/favicon.png"/>
+  <link rel="icon" type="image/png" href="/assets/69ad5354025cc843779553a9_favicon-bleu.png"/>
+
+  <!-- Core Webflow & Custom CSS -->
+  <link rel="stylesheet" href="/src/styles/fonts.css"/>
+  <link rel="stylesheet" href="/src/styles/webflow.css"/>
+  <link rel="stylesheet" href="/src/styles/custom.css"/>
+  
+  <!-- GSAP & Plugins (Official Webflow CDN builds) -->
+  <script src="/vendor/gsap.min.js"></script>
+  <script src="/vendor/CustomEase.min.js"></script>
+  <script src="/vendor/ScrambleTextPlugin.min.js"></script>
+  <script src="/vendor/Draggable.min.js"></script>
+  <script src="/vendor/Observer.min.js"></script>
+  <script src="/vendor/InertiaPlugin.min.js"></script>
+  <script src="/vendor/SplitText.min.js"></script>
+  <script src="/vendor/ScrollTrigger.min.js"></script>
+  <script src="/vendor/lenis.min.js"></script>
 </head>
-<body class="body" data-crt="true">
+<body class="body" data-page-theme="dark">
+  <!-- CRT Screen SVG Filter -->
+  <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" aria-hidden="true">
+    <defs>
+      <filter id="crt-chroma" x="0%" y="0%" width="100%" height="100%">
+        <feColorMatrix type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="red"/>
+        <feOffset in="red" dx="1.2" dy="0" result="red-offset"/>
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="green"/>
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blue"/>
+        <feOffset in="blue" dx="-1.2" dy="0" result="blue-offset"/>
+        <feBlend in="red-offset" in2="green" mode="screen" result="rg"/>
+        <feBlend in="rg" in2="blue-offset" mode="screen"/>
+      </filter>
+    </defs>
+  </svg>
+
   <div id="app" class="page-wrapper"></div>
   <script type="module" src="/src/main.js"></script>
 </body>

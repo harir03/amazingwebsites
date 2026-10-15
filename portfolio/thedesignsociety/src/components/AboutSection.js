@@ -1,90 +1,47 @@
 /**
- * AboutSection (mwg005) Component
- * Features:
- * - Dynamic scroll-activated kinetic typography
- * - Word-by-word reveal effect
- * - Interactive metadata pills
+ * The Design Society Lyon — Official About / Manifesto Section
+ * Exact 1:1 markup & ScrollTrigger pinned kinetic word-by-word scroll
  */
-
 export function renderAboutSection() {
-  const section = document.createElement('section');
-  section.className = 'mwg005';
-  section.id = 'about';
-
-  const rawText = "Née de l'envie de 5 designers, The Design Society organise des évènements pour rassembler les designers de Lyon. Entre les talks pour partager le savoir et les apéros pour l'oublier, on poursuit un but qu'on garde presque secret : créer les occasions qui manquaient de se rencontrer.";
-
-  // Split into words with highlighting logic
-  const wordsHtml = rawText.split(' ').map(word => {
-    let extraClass = '';
-    const cleanWord = word.toLowerCase().replace(/[^a-z0-9éèêàù]/g, '');
-    if (cleanWord === '5' || cleanWord === 'designers') extraClass = 'highlight-green';
-    if (cleanWord === 'lyon' || cleanWord === 'talks' || cleanWord === 'apros') extraClass = 'highlight-blue';
-    return `<span class="word ${extraClass}">${word}</span>`;
-  }).join(' ');
-
-  section.innerHTML = `
-    <div class="mwg005-container">
-      <div class="about-header">
-        <span>[ A PROPOS // NOTRE HISTOIRE ]</span>
-        <span>RNA: W691112617 — LYON, FR</span>
-      </div>
-
-      <div class="about-text-wrapper">
-        <p class="about-large-text">
-          ${wordsHtml}
-        </p>
-      </div>
-
-      <div class="about-badges-grid">
-        <div class="about-pill">
-          <span class="about-pill-dot"></span>
-          <span>Association Loi 1901</span>
-        </div>
-        <div class="about-pill">
-          <span class="about-pill-dot"></span>
-          <span>5 Fondateurs Bénévoles</span>
-        </div>
-        <div class="about-pill">
-          <span class="about-pill-dot"></span>
-          <span>0 Privilège, 100% Inclusif</span>
-        </div>
-        <div class="about-pill">
-          <span class="about-pill-dot"></span>
-          <span>Indépendant & Non-Lucratif</span>
-        </div>
-      </div>
-    </div>
-  `;
-
-  return section;
+  return `<section class="mwg005"><div class="w-embed"></div><div class="mwg005-pin-height"><div class="mwg005-container"><p class="mwg005-paragraph">Née de l&#x27;envie de 5 designers, The Design Society organise des évènements pour rassembler les designers de Lyon. Entre les talks pour partager le savoir et les apéros pour l&#x27;oublier, on poursuit un but qu&#x27;on garde presque secret : créer les occasions qui manquaient de se voir, et fédérer la profession</p><div class="footer-about"><div class="footer-text"><div class="r">société secrète</div><div class="r-2">Basée à Lyon</div></div><div class="image-about-container"><div class="text-about"><div class="about-text">Since 2025</div><div class="about-text-2">The design society©</div></div><div data-sticker="item" class="slot-image-blue is-green"><img src="/assets/699366ae6dd9cc79926d2f70_09.png" loading="lazy" width="162" height="162" alt="" class="img-about"/></div><div data-sticker="item" class="slot-image-blue is-green"><img src="/assets/699366ae4acad95b19c6c42f_01.webp" loading="lazy" width="162" height="162" alt="Public en audience écoutant un présentateur lors d&#x27;un événement" srcset="/assets/699366ae4acad95b19c6c42f_01-p-500.webp 500w, /assets/699366ae4acad95b19c6c42f_01-p-800.webp 800w, /assets/699366ae4acad95b19c6c42f_01.webp 1080w" sizes="(max-width: 479px) 100vw, 162px" class="img-about"/></div></div></div></div></div></section>`;
 }
 
-export function initAboutScrollAnimation() {
-  const aboutSection = document.getElementById('about');
-  if (!aboutSection) return;
+export function initAboutAnimations() {
+  const aboutEl = document.querySelector(".mwg005");
+  if (!aboutEl || aboutEl.__aboutInit) return;
+  aboutEl.__aboutInit = true;
 
-  const words = aboutSection.querySelectorAll('.about-large-text .word');
+  const initScroll = () => {
+    const pinHeight = aboutEl.querySelector(".mwg005-pin-height");
+    const container = aboutEl.querySelector(".mwg005-container");
+    const paragraph = aboutEl.querySelector(".mwg005-paragraph");
+    if (!pinHeight || !container || !paragraph) return;
 
-  const onScroll = () => {
-    const rect = aboutSection.getBoundingClientRect();
-    const windowHeight = window.innerHeight;
+    const rawText = paragraph.textContent;
+    paragraph.innerHTML = rawText.split(" ").map((w) => `<span class="word">${w}</span>`).join(" ");
+    const words = paragraph.querySelectorAll(".word");
 
-    // Calculate progression through the section
-    const start = windowHeight * 0.8;
-    const end = -rect.height * 0.2;
-    const progress = Math.min(1, Math.max(0, (start - rect.top) / (start - end)));
-
-    const activeCount = Math.floor(progress * words.length);
-
-    words.forEach((word, index) => {
-      if (index <= activeCount) {
-        word.classList.add('is-active');
-      } else {
-        word.classList.remove('is-active');
-      }
-    });
+    if (window.gsap && window.ScrollTrigger) {
+      window.gsap.to(words, {
+        x: 0,
+        stagger: 0.02,
+        ease: "power4.inOut",
+        scrollTrigger: {
+          trigger: pinHeight,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: true,
+          pin: container,
+          pinSpacing: false,
+          invalidateOnRefresh: true
+        }
+      });
+    }
   };
 
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(initScroll);
+  } else {
+    initScroll();
+  }
 }

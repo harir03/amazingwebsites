@@ -1,0 +1,920 @@
+html.w-mod-js:not(.w-mod-ix3) :is([data-animation], .marquee-css__item-p, .text-100) {visibility: hidden !important;}
+
+/* ==================== */
+
+
+html:not(.tds-loader-off) [data-load-wrap]{display:block}
+html:not(.tds-loader-off) [data-load-text]{visibility:hidden}
+
+
+/* ==================== */
+
+
+  [data-transition-wrap]{
+  position: fixed; inset: 0; z-index: 1000; pointer-events: none;
+}
+[data-transition-panel]{
+  display: flex; width: 100%; height: 100%;
+}
+[data-transition-col]{ display: flex; flex: 1 1 auto; }
+[data-transition-pixel]{
+  flex: 1 1 auto;
+  background: #350AFF;   /* la couleur de ta transition — ajuste si besoin */
+  opacity: 0;            /* évite tout flash au chargement */
+}
+  :root {
+    /* ====== VARIABLES À AJUSTER ====== */
+    --crt-scanline-opacity: 0.18;     /* visibilité des lignes (plus haut = plus marqué) */
+    --crt-scanline-spacing: 3px;      /* espace entre les lignes (2px = très dense, 4px = aéré) */
+    --crt-aberration: 0.8;            /* décalage RGB en px (0 = aucun, 1.5 = très visible) */
+    --crt-vignette-strength: 0.35;    /* assombrissement bords (0 = rien, 1 = très sombre) */
+    --crt-glow: 0.05;                 /* reflet en haut-gauche */
+    --crt-grain-opacity: 0.05;        /* intensité du grain animé */
+    /* ================================== */
+  }
+
+  .crt-svg-defs { position: absolute; width: 0; height: 0; pointer-events: none; }
+
+  html {
+   filter: url(#crt-chroma);
+  }
+
+  /* Safari : ce filtre sur la racine fait repasser toute la page dans un
+     graphe SVG a chaque image, et laisse des coutures verticales entre ses
+     tuiles de rendu. Les autres navigateurs gardent l'aberration.
+     Retirer ce bloc restaure le comportement precedent. */
+  @supports (-webkit-hyphens: none) {
+    html { filter: none; }
+  }
+
+  /* Bezel : juste une ombre interne discrète, sans masque radial qui rognait les coins */
+  .crt-bezel {
+    position: fixed; inset: 0; pointer-events: none; z-index: 2147483646;
+    box-shadow:
+      inset 0 0 60px 10px rgba(0,0,0,0.35),
+      inset 0 0 160px 40px rgba(0,0,0,0.18);
+  }
+
+  .crt-scanlines {
+    position: fixed; inset: 0; pointer-events: none; z-index: 2147483644;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,0,0,var(--crt-scanline-opacity)) 0px,
+      rgba(0,0,0,var(--crt-scanline-opacity)) 1px,
+      transparent 1px,
+      transparent var(--crt-scanline-spacing)
+    );
+  }
+
+  .crt-glare {
+    position: fixed; inset: 0; pointer-events: none; z-index: 2147483643;
+    background:
+      radial-gradient(ellipse 80% 50% at 30% 20%, rgba(255,255,255,var(--crt-glow)), transparent 60%);
+  }
+
+  .crt-vignette {
+    position: fixed; inset: 0; pointer-events: none; z-index: 2147483642;
+    background: radial-gradient(ellipse 130% 90% at 50% 50%, transparent 65%, rgba(0,0,0,var(--crt-vignette-strength)) 100%);
+  }
+
+  .crt-grain {
+    position: fixed; inset: -50%; width: 200%; height: 200%;
+    pointer-events: none; z-index: 2147483641;
+    opacity: var(--crt-grain-opacity);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.7'/></svg>");
+    animation: crt-grain-shift 0.4s steps(4) infinite;
+  }
+  @keyframes crt-grain-shift {
+    0%   { transform: translate(0,0); }
+    25%  { transform: translate(-3%, 2%); }
+    50%  { transform: translate(2%, -3%); }
+    75%  { transform: translate(-2%, -2%); }
+    100% { transform: translate(0,0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .crt-grain { animation: none; }
+  }
+
+  /* ====== VERSION MOBILE SIMPLIFIÉE ======
+     - Filtre SVG d'aberration coupé (le plus lourd pour le GPU)
+     - Grain animé coupé (consomme la batterie en boucle)
+     - On garde : scanlines (statiques, gratuites), vignette légère, glare
+  */
+  @media (max-width: 768px) {
+    html { filter: none; }
+    .crt-grain { display: none; }
+    .crt-bezel { box-shadow: inset 0 0 40px 8px rgba(0,0,0,0.25); }
+    /* scanlines un peu moins denses sur mobile pour rester lisible */
+    .crt-scanlines {
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.12) 0px,
+        rgba(0,0,0,0.12) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    }
+  }
+
+  /* Button */
+
+    .btn-bubble-arrow__content {
+    transition: transform 0.735s cubic-bezier(0.625, 0.05, 0, 1);
+    transform: translateX(-3.75em) rotate(0.001deg);
+  }
+
+  .btn-bubble-arrow__arrow {
+    transition: transform 0.735s cubic-bezier(0.625, 0.05, 0, 1);
+    transform: scale(0) rotate(0.001deg);
+    transform-origin: left;
+  }
+
+  .btn-bubble-arrow__arrow-svg {
+    transition: transform 0.735s cubic-bezier(0.625, 0.05, 0, 1);
+    transform: rotate(0.001deg);
+  }
+
+  .btn-bubble-arrow__arrow.is--duplicate {
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    transform: scale(1) rotate(0.001deg);
+    transform-origin: right;
+  }
+
+  /* Hover */
+
+  .btn-bubble-arrow:hover .btn-bubble-arrow__content {
+    transform: translateX(0em) rotate(0.001deg);
+  }
+
+  .btn-bubble-arrow:hover .btn-bubble-arrow__arrow-svg {
+    transform: rotate(-45deg);
+  }
+
+  .btn-bubble-arrow:hover .btn-bubble-arrow__arrow {
+    transform: scale(1) rotate(0.001deg);
+  }
+
+  .btn-bubble-arrow:hover .btn-bubble-arrow__arrow.is--duplicate {
+    transform: scale(0) rotate(0.001deg);
+  }
+    /*
+  ========================
+  ABOUT SCROLL
+  =========================
+  */
+  .mwg005 .word {
+      display: inline-block;
+      transform: translate(100vw, 0);
+  }
+
+  /*
+  ========================
+  PIXEL SCROLL REVEAL
+  =========================
+  */
+  .pixel-reveal-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: grid; /* On utilise une vraie grille */
+      z-index: 10;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .pixel-box {
+      width: 100%;
+      height: 100%;
+      background-color: var(--pixel-color, #5a32fa);
+      opacity: 1;
+      will-change: opacity;
+    }
+
+      /*
+  ========================
+  IMAGE TRAIL CURSOR
+  =========================
+  */
+
+    .mwg020 .created-img {
+      width: 10vw;
+      height: 10vw;
+      position: absolute;
+      object-fit: cover;
+      border-radius: 4%;
+      z-index: 5;
+  }
+
+    /*
+  ========================
+  INFINITE GRID EVENT
+  =========================
+  */
+
+  	html:has(.mwg026) {
+      		overscroll-behavior: none;
+      }
+      body:has(.mwg026) {
+      		overscroll-behavior-x: none; /* Prevent go to previous page */
+      		overflow: hidden;
+      }
+
+
+  /*
+  ========================
+  HIGHLIGHT MARKER REVEAL
+  =========================
+  */
+
+  [data-highlight-marker-reveal]{
+    visibility: hidden;
+  }
+
+  .wf-design-mode [data-highlight-marker-reveal]{
+    visibility: visible;
+  }
+
+  [data-highlight-marker-reveal] .highlight-marker-line{
+    width: auto;
+    display: inline-block !important;
+    margin: -0.055em 0px;
+  }
+
+  .highlight-marker-bar{
+    position: absolute;
+    inset: -0.055em 0px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /*
+  ========================
+  LENIS
+  =========================
+  */
+
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+
+  /*
+  ========================
+  ANIMATION RECTANGLE REVEAL
+  =========================
+  */
+
+
+    [data-effect="swipe-reveal"] {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+  /*
+  ========================
+  DRAGGABLE STICKER HOVER (SELECTED SQUARES)
+  =========================
+  */
+/* Empêcher la sélection / mise en focus visuelle sur mobile */
+[data-sticker="item"] {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+/* Garder les éléments cliquables réactifs */
+[data-sticker="item"] a,
+[data-sticker="item"] button,
+[data-sticker="item"] [data-clickable] {
+  touch-action: manipulation;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+  /* 1. BASE STICKER STYLING */
+  [data-sticker="item"] {
+    outline: 2px solid transparent;
+    outline-offset: 0;
+    transition: outline-color 0.18s ease;
+
+    /* Critical: allows handles to extend beyond the image borders */
+    overflow: visible !important;
+    will-change: transform;
+  }
+
+  /* 2. COLOR THEMES */
+  [data-sticker="item"].is-blue { --select-color: #350AFF; }
+  [data-sticker="item"].is-green { --select-color: #BCF015; }
+
+  /* 3. HOVER BORDER */
+  [data-sticker="item"]:hover {
+    outline-color: var(--select-color);
+  }
+
+  /* 4. CORNER HANDLES (PIXEL EFFECT) */
+  [data-sticker="item"]::before,
+  [data-sticker="item"]::after {
+    content: "";
+    position: absolute;
+    left: -6px;
+    right: -6px;
+    height: 11px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+    z-index: 10;
+
+    /* Draws pixelated squares using white/color gradients */
+    background-image:
+      linear-gradient(#fff, #fff),
+      linear-gradient(#fff, #fff),
+      linear-gradient(var(--select-color), var(--select-color)),
+      linear-gradient(var(--select-color), var(--select-color));
+
+    background-repeat: no-repeat;
+
+    /* Inner white square (7px) over color base (11px) */
+    background-size:
+      7px 7px,   7px 7px,
+      11px 11px, 11px 11px;
+
+    /* Positions handles at the far left and right */
+    background-position:
+      2px 2px,
+      calc(100% - 2px) 2px,
+      0 0,
+      100% 0;
+  }
+
+  [data-sticker="item"]::before { top: -6px; }
+  [data-sticker="item"]::after { bottom: -6px; }
+
+  /* Show handles on hover */
+  [data-sticker="item"]:hover::before,
+  [data-sticker="item"]:hover::after {
+    opacity: 1;
+  }
+
+  /* 5. SMOOTH TRANSITIONS */
+  [data-sticker="item"] {
+    transition: outline-color 0.18s ease, opacity 0.18s ease;
+  }
+
+
+  /*
+  ========================
+  SELECTION TEXTE SURLIGNAGE
+  =========================
+  */
+
+
+  /* Sélection de texte personnalisée */
+  ::selection {
+    background-color: #BCF015;
+    color: #1E1E1E;
+  }
+
+  /* Pour Firefox */
+  ::-moz-selection {
+    background-color: #BCF015;
+    color: #1E1E1E;
+  }
+
+
+
+
+
+  /*
+  ========================
+  MARQUEE HERO
+  =========================
+  */
+
+  /* CSS Keyframe Animation */
+  @keyframes translateX {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  [data-css-marquee-list] {
+    animation: translateX 30s linear;
+    animation-iteration-count: infinite;
+    animation-play-state: paused;
+  }
+
+
+
+
+  /*
+  ========================
+  TOP BAR MENU
+  =========================
+  */
+
+
+  [data-twostep-nav]{
+    --cubic-default: cubic-bezier(0.625, 0.05, 0, 1);
+    --animation-ease: 0.2s ease;
+
+    --duration-default: 0.5s;
+    --duration-default-long: 0.75s;
+    --duration-default-half: 0.25s;
+
+    --animation-default: var(--duration-default) var(--cubic-default);
+    --animation-default-long: var(--duration-default-long) var(--cubic-default);
+    --animation-default-half: var(--duration-default-half) var(--cubic-default);
+  }
+
+
+  /* Menu button */
+  .twostep-nav__toggle-bar{
+    transition: transform var(--animation-default);
+    transform: translateY(-0.25em) rotate(0.001deg);
+  }
+
+  .twostep-nav__toggle:hover .twostep-nav__toggle-bar {
+    transform: translateY(0.25em) rotate(0.001deg);
+  }
+
+  .twostep-nav__toggle .twostep-nav__toggle-bar:nth-child(2) {
+    transform: translateY(0.15em) rotate(0.001deg);
+  }
+
+  .twostep-nav__toggle:hover .twostep-nav__toggle-bar:nth-child(2) {
+    transform: translateY(-0.15em) rotate(0.001deg);
+  }
+
+  [data-nav-status="active"] .twostep-nav__toggle .twostep-nav__toggle-bar {
+    transform: translateY(0em) rotate(45deg);
+  }
+
+  [data-nav-status="active"] .twostep-nav__toggle .twostep-nav__toggle-bar:nth-child(2) {
+    transform: translateY(0em) rotate(-45deg);
+  }
+
+
+  /* Page dark overlay */
+  .twostep-nav__bg {
+    transition: opacity var(--animation-default), visibility var(--animation-default);
+  }
+
+  [data-nav-status="active"] .twostep-nav__bg {
+    opacity: 1;
+    visibility: visible;
+  }
+
+
+  /* Inner bar grow */
+  .twostep-nav__bar {
+    transition: max-width var(--animation-default-long) 0.2s;
+  }
+
+  [data-nav-status="active"] .twostep-nav__bar {
+    transition: max-width var(--animation-default) 0s;
+    max-width: 100%;
+  }
+
+
+  /* Thin line in nav bar */
+  .twostep-nav__top-line {
+    transition: all var(--animation-default) 0s;
+    opacity: 0;
+  }
+
+  [data-nav-status="active"] .twostep-nav__top-line {
+    transition: all var(--animation-default) 0.1s;
+    opacity: 1;
+  }
+
+  @media screen and (max-width: 767px) {
+
+    .twostep-nav__top-line {
+      inset: auto 1em -0.5em;
+    }
+
+    [data-nav-status="active"] .twostep-nav__top-line {
+      transition: all var(--animation-default) 0.2s;
+      inset: auto 0em -0.5em;
+    }
+  }
+
+
+  /* Nav bar background */
+  .twostep-nav__bar__bg,
+  [data-nav-status="active"] .twostep-nav__back-bg{
+    transition: background-color var(--animation-ease);
+  }
+
+  .twostep-nav__back{
+    transition: all var(--animation-default);
+    inset: 0em;
+  }
+
+  [data-nav-status="active"]  .twostep-nav__back {
+    inset: -0.25em;
+  }
+
+  @media screen and (max-width: 767px) {
+
+    [data-nav-status="active"]  .twostep-nav__back {
+      inset: -1.25em;
+    }
+
+  }
+
+
+
+  /* Nav bottom */
+  .twostep-nav__bottom {
+    transition: grid-template-rows var(--animation-default) 0s;
+  }
+
+  [data-nav-status="active"] .twostep-nav__bottom {
+    transition: grid-template-rows var(--animation-default-long) 0.25s;
+    grid-template-rows: 1fr;
+  }
+
+  @media screen and (max-width: 767px) {
+
+    .twostep-nav__bottom {
+      transition: grid-template-rows var(--animation-default) 0s, transform var(--animation-default) 0s;
+      transform: translateY(-0.625em);
+    }
+
+    [data-nav-status="active"] .twostep-nav__bottom {
+      transition: grid-template-rows var(--animation-default-long) 0.25s, transform var(--animation-default) 0.25s;
+      transform: translateY(0em);
+    }
+  }
+
+
+  /* Nav columns reveal */
+  .twostep-nav__bottom-row > * {
+    transition: all var(--animation-default) 0s;
+    transform: translateY(2em);
+    opacity: 0;
+  }
+
+  .twostep-nav__bottom-row > *:nth-child(2) {
+   transition-delay: 0.075s;
+  }
+
+  [data-nav-status="active"] .twostep-nav__bottom-row > * {
+    transition: all var(--animation-default-long) 0.5s;
+    transform: translateY(0em);
+    opacity: 1;
+  }
+
+  [data-nav-status="active"] .twostep-nav__bottom-row > *:nth-child(2) {
+    transition-delay: 0.575s;
+  }
+
+  /*
+  ========================
+  TEAM CAROUSEL
+  =========================
+  */
+
+      /* On cible toutes les images à l'intérieur de ton carrousel */
+    .mwg008-container img {
+      -webkit-user-drag: none !important; /* Empêche le drag natif de l'image (Safari/Chrome) */
+      user-select: none !important;       /* Empêche la sélection du texte/image */
+      pointer-events: auto;               /* Garde le hover actif ! */
+    }
+
+    /*
+  ========================
+  FOOTER DEFORMATION
+  =========================
+  */
+
+  .effet-deformation {
+      /* Indique au navigateur qu'on va animer ces propriétés, ça améliore les performances */
+      will-change: transform, filter;
+      /* On définit le point d'origine de la déformation au centre */
+      transform-origin: center center;
+    }
+
+    /*
+  ========================
+  LOADER
+  =========================
+  */
+
+  .wf-design-mode .loader{ display: none; }
+
+  [data-load-reset]{ opacity: 0; }
+
+    /*
+  ========================
+  EVENT PAGE - SCROLL PIXEL FADE
+  =========================
+  */
+
+  [data-pixelated-scroll-panel] {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
+
+  [data-pixelated-scroll-column] {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: stretch;
+    flex: 1 1 0%;
+    min-width: 0;
+  }
+
+  [data-pixelated-scroll-pixel] {
+    aspect-ratio: 1;
+    width: 100%;
+    background-color: currentColor;
+    backface-visibility: hidden;
+    will-change: opacity;
+  }
+
+  [data-pixelated-scroll-transition][data-mode="reveal"] {
+    inset: 0% 0% auto;
+  }
+
+  [data-pixelated-scroll-transition][data-pixel-ratio="2.5/1"] [data-pixelated-scroll-pixel] {
+    aspect-ratio: 2.5/1;
+  }
+  
+
+  /* -----------------------------
+  ANIMATION TEXT CUSTOM ATTRIBUTE
+  -------------------------------*/
+
+   [data-animate="title-reveal"] {
+    opacity: 0;
+  }
+  .line-mask {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.2em;
+    margin-bottom: -0.2em;
+  }
+  .line-inner {
+    display: block;
+    will-change: transform, opacity;
+    transform-origin: left bottom;
+    backface-visibility: hidden;
+  }
+
+
+ /* -----------------------------
+  email copy contact
+  -------------------------------*/
+ [data-copy-email] {
+    cursor: pointer;
+  }
+
+  .copy-snackbar {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #000;
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 8px;
+   font-family: Khinterferencetrial, Arial, sans-serif;
+    font-size: 14px;
+    z-index: 9999;
+    opacity: 0;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .copy-snackbar.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+ /* -----------------------------
+  carousel contact
+  -------------------------------*/
+
+  
+ /* Lock the page to 100vh — no real scroll */
+  body:has([data-pssst-page]) {
+    overflow: hidden;
+    height: 100vh;
+  }
+ 
+  [data-pssst-page] {
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+ 
+  /* Carousel container */
+  [data-pssst-carousel] {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+  }
+ 
+  /* The track is the moving strip */
+  [data-pssst-track] {
+    display: flex;
+    flex-wrap: nowrap;
+    width: max-content;
+    will-change: transform;
+  }
+ 
+  /* Each item */
+  [data-pssst-item] {
+    flex-shrink: 0;
+    will-change: transform;
+  }
+
+  /* === GRID STACKING SYSTEM === */
+.event-content-wrapper {
+  display: grid !important; 
+}
+
+.event-content {
+  grid-area: 1 / 1 / 2 / 2;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.event-content.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* === GALLERY SLOTS === */
+.gallery-slot {
+  position: relative;
+  overflow: hidden;
+  transition: flex-grow 0.6s cubic-bezier(0.7, 0, 0.3, 1), opacity 0.4s ease;
+  cursor: pointer;
+}
+
+/* 1. Inactive slots at 60% */
+.gallery-slot:not(.is-active) {
+  opacity: 0.6;
+}
+
+/* 2. Hover state at 100% */
+.gallery-slot:hover {
+  opacity: 1 !important;
+}
+
+/* === FIXED WIDTH === */
+/* === FIXED WIDTH & GAP FIX === */
+.description-container {
+  width: 340px !important;
+  flex: 0 1 auto !important; /* Permet au bloc de ne pas s'étirer inutilement */
+  display: flex !important;
+  flex-direction: column !important;
+  /* On force l'alignement en haut pour supprimer le vide */
+  justify-content: flex-start !important; 
+  /* Ajuste cette valeur pour coller plus ou moins au titre Hugo Douchet */
+  margin-top: 10px !important; 
+}
+
+/* Correctif Mobile : supprime l'espace forcé par le flex-end */
+@media screen and (max-width: 767px) {
+  .description-container {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    margin-top: 5px !important;
+  }
+  
+  .event-content {
+    /* Empêche la div de prendre 100% de la hauteur si le texte est court */
+    height: auto !important;
+    min-height: 0 !important;
+  }
+}
+
+/* === PROGRESS BAR === */
+.slot-progress-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.2);
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gallery-slot.is-active .slot-progress-container {
+  opacity: 1;
+}
+
+.slot-progress-fill {
+  height: 100%;
+  width: 0%;
+  background-color: #BCF015;
+  transform-origin: left center;
+}
+
+/* === SPLITTEXT LINE MASK === */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  /* Empêche de couper le bas des lettres comme j, p, g */
+  padding-bottom: 0.15em; 
+  margin-bottom: -0.15em;
+}
+
+.line-inner {
+  display: block;
+  will-change: transform;
+  /* Fix Anti-tremblement pour un mouvement fluide */
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+  /* === SPLITTEXT LINE MASK === */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.2em; /* Un peu plus d'espace pour la rotation */
+  margin-bottom: -0.2em;
+}
+
+.line-inner {
+  display: block;
+  will-change: transform;
+  transform-origin: left bottom; /* Le texte pivote depuis le bas gauche */
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+/*-----------------------------------------
+LIST CURSOR FOLLOW
+-----------------------------------------*/
+  .preview-follower__inner,
+.preview-follower__label{
+  transition: opacity 0.1s ease, transform 0.6s cubic-bezier(0.65, 0.1, 0, 1);
+}
+
+/* html:not(.wf-design-mode) */ .preview-follower__inner{
+  opacity: 0;
+  transform: scale(0);
+}
+
+/* html:not(.wf-design-mode) */ .preview-follower__label{
+  opacity: 0;
+  transform: translate(0px, 100%);
+}
+
+.preview-follower [data-follower-visual]{
+  display: block;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+@media screen and (min-width: 992px){
+  .preview-item:last-of-type{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  }
+}
+
+@media (hover: hover) and (min-width: 992px){
+  body:has( [data-follower-collection]:hover) .preview-follower__inner{
+    opacity: 1;
+    transform: scale(1);	
+  }
+
+  body:has( [data-follower-collection]:hover) .preview-follower__label{
+    opacity: 1;
+    transform: translate(0px, 0%);
+  }
+  body:has( .preview-item:hover) .preview-item:not(:hover){
+  	opacity: 0.5;
+  }
+}
