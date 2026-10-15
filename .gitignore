@@ -41,3 +41,9 @@ desktop.ini
 **/.vercel
 **/.netlify
 **/.turbo
+
+# FOCO cell-matrix verification skill & scratch reports
+.agents/skills/foco/
+foco/
+**/foco-reports/
+
