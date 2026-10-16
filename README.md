@@ -86,6 +86,16 @@ To guarantee **1:1 fidelity**—where every animation, spring easing, and cursor
 4. **Hardware Acceleration**: Explicit `transform: translate3d(...)` and `will-change` utilization for stutter-free 60fps renders.
 
 
+## 🚀 Next Milestone: Component Showcase & AI Prompt Platform
+
+We are building a unified showcase platform on top of this repository (inspired by React Bits, Aceternity UI, and 21st.dev):
+- **Theme-Based Segregation**: Categorize full sites and atomic components by aesthetic archetype (Brutalist, CAD Drafting, Glassmorphic Fintech, WebGL Fluid, Cinematic Serif, Compute Particles).
+- **Interactive Component Catalog**: Live embeds with 1-click code copying for drop-in usage.
+- **AI Agent Prompts**: Copy-paste prompts tailored for AI coding assistants (Antigravity, Cursor, Claude Code, Windsurf) to reproduce and adapt each component and animation.
+
+👉 See the full architectural specifications and task breakdown in [TODO.md](TODO.md).
+
+
 ## ⚖️ License
 
 MIT — see [LICENSE](LICENSE) for details.
