@@ -1,0 +1,1 @@
+import{z as a,k as s,l as t,p as o,a7 as n}from"./T7ii45zO.js";const r={},l={class:"prose-table","data-lenis-prevent-horizontal":""};function c(e,d){return s(),t("div",l,[o("table",null,[n(e.$slots,"default",{},void 0,!0)])])}const i=Object.assign(a(r,[["render",c],["__scopeId","data-v-823e396e"]]),{__name:"ProseTable"});export{i as default};
