@@ -9,7 +9,6 @@ import { ThemeBadge } from "../components/ThemeBadge";
 import { SectionHeading } from "../components/viewer/MotionSection";
 import { CATALOG, COMPONENT_BY_ID } from "../data/catalog";
 import { buildSitePrompt } from "../data/prompt";
-import { THEME_BY_ID } from "../data/themes";
 import type { WebsiteEntry } from "../data/types";
 import { useCopy } from "../hooks/toast";
 import { useServerStatus } from "../hooks/useServerStatus";
@@ -72,7 +71,6 @@ export function SitePage({ id }: { id: string }) {
 
   if (!site) return <NotFoundPage what="site" />;
 
-  const theme = THEME_BY_ID[site.theme];
   const port = new URL(site.localDevUrl).port;
   const components = site.components.map((c) => COMPONENT_BY_ID.get(c.id)!);
   const stackKey = `stack-${site.id}`;
@@ -97,7 +95,7 @@ export function SitePage({ id }: { id: string }) {
         <Poster site={site} key={site.id} />
 
         <div className="min-w-0 xl:pt-2">
-          <SiteTile title={site.title} color={theme.accent} size={52} />
+          <SiteTile palette={site.palette} size={52} />
           <h1 ref={headingRef} tabIndex={-1} className="type-display mt-5 text-[clamp(44px,5vw,72px)] leading-[0.93] focus:outline-none">
             {site.title}
           </h1>

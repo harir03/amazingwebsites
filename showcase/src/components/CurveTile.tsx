@@ -46,15 +46,13 @@ export function CurveTile({ curve, color, size = 36, trace = false, className = 
   );
 }
 
-/** Same tile shape for a site: its initial in the theme's pen colour. */
-export function SiteTile({ title, color, size = 36 }: { title: string; color: string; size?: number }) {
+/** Same tile shape for a site: its measured palette, as bands. */
+export function SiteTile({ palette, size = 36 }: { palette: string[]; size?: number }) {
   return (
-    <span
-      className="type-display inline-grid shrink-0 place-items-center rounded-[9px] leading-none text-white"
-      style={{ width: size, height: size, background: color, fontSize: size * 0.56 }}
-      aria-hidden="true"
-    >
-      {title.replace(/^The\s+/i, "")[0]}
+    <span className="inline-flex shrink-0 overflow-hidden rounded-[9px] outline -outline-offset-1 outline-ink/10" style={{ width: size, height: size }} aria-hidden="true">
+      {palette.map((c) => (
+        <span key={c} className="h-full flex-1" style={{ background: c }} />
+      ))}
     </span>
   );
 }

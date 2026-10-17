@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { forwardRef } from "react";
-import { THEME_BY_ID } from "../data/themes";
 import type { WebsiteEntry } from "../data/types";
 import { morphProps, paths } from "../lib/router";
 import { posterOf } from "../lib/source";
@@ -9,7 +8,6 @@ import { SiteTile } from "./CurveTile";
 import { LivePreview } from "./LivePreview";
 
 export const SiteCard = forwardRef<HTMLElement, { site: WebsiteEntry }>(function SiteCard({ site }, ref) {
-  const theme = THEME_BY_ID[site.theme];
   const key = `s:${site.id}`;
 
   return (
@@ -31,7 +29,7 @@ export const SiteCard = forwardRef<HTMLElement, { site: WebsiteEntry }>(function
         </div>
       </div>
       <div className="mt-3 flex items-start gap-3 px-0.5">
-        <SiteTile title={site.title} color={theme.accent} />
+        <SiteTile palette={site.palette} />
         <div className="min-w-0 flex-1">
           <h3 className="text-[16px] leading-snug font-semibold">
             <Link

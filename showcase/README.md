@@ -14,7 +14,7 @@ npm run lint
 
 The layout borrows from two references: Aceternity UI's components docs (a sidebar listing every page, one page per component) and Refero Styles (a search-first home, live work set in soft grey trays, and a split detail page with a sticky panel for everything you copy).
 
-- **Overview** (`/`): search by name, effect or engine, with suggested searches underneath. Below it, a gallery with **Components** and **Sites** tabs and category filters. Every card is the real component running.
+- **Overview** (`/`): search by name, effect or engine, with suggested searches underneath. On wide screens a featured component sits beside the headline, running live and labelled with its measured easing, timing and colours, with Copy AI prompt and Open (step through six with the arrows). Below it, a gallery with **Components** and **Sites** tabs and category filters. Every card is the real component running.
 - **Component pages** (`/components/<id>`):
   - **Left side**: a preview stage (Desktop / Tablet / Mobile, React or HTML source, restart, autoplay, dark stage, mute, open the HTML in a new tab). Then the component's motion: the plotted curve, a race of linear against the curve that plays once when you scroll to it, the timing breakdown and copyable easing snippets. Then colours, typography, materials and more from the same site.
   - **Right side**: a sticky panel with **AI prompt** (optionally with the React or HTML code attached), **React**, **HTML** and **CSS variables**. Each can be copied or downloaded.
