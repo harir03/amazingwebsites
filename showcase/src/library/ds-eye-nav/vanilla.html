@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Two-Step Eye Navigation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&family=Geist+Mono&display=swap" />
+<style>
+  :root { --blue: #350aff; --lime: #bcf015; --ease: cubic-bezier(0.625, 0.05, 0, 1); }
+  * { box-sizing: border-box; margin: 0; }
+  body { min-height: 100vh; background: #f2f2f2; font-family: "Geist Mono", monospace; }
+  .wrap { position: fixed; inset: 12px 12px auto; display: flex; justify-content: center; z-index: 50; }
+  .nav { width: min(360px, 100%); background: #fff; border: 2px solid #000; border-radius: 6px;
+         box-shadow: 4px 4px 0 #000; overflow: hidden; transition: width .5s var(--ease) .35s; }
+  .nav.open { width: min(560px, 100%); transition-delay: 0s; }
+  .bar { height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; }
+  .logo { width: 24px; height: 24px; display: grid; place-items: center; background: #000; color: var(--lime);
+          font: 10px "Silkscreen", monospace; text-decoration: none; }
+  .toggle { background: #000; color: #fff; border: 0; padding: 6px 12px; font: 11px "Geist Mono", monospace;
+            letter-spacing: .18em; text-transform: uppercase; cursor: pointer; }
+  .toggle:hover { background: var(--blue); }
+  .drawer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .55s var(--ease); }
+  .nav.open .drawer { grid-template-rows: 1fr; transition-delay: .35s; }
+  .drawer > div { min-height: 0; overflow: hidden; }
+  .links { border-top: 2px solid #000; padding: 8px 16px 16px; }
+  .links a { display: block; padding: 8px 0; border-bottom: 1px solid rgb(0 0 0 / .1); color: #000; text-decoration: none;
+             font: 400 clamp(22px, 4vw, 40px)/1 "Silkscreen", monospace; text-transform: uppercase; }
+  .links a:hover, .links a:focus-visible { color: var(--blue); outline: none; }
+  #lid { transform-origin: 0 -10px; transform: scaleY(0); transition: transform 70ms linear; }
+  #lid.shut { transform: scaleY(1); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav" aria-label="Main">
+      <div class="bar">
+        <a class="logo" href="#top" aria-label="Home">DS</a>
+        <svg id="eye" viewBox="-16 -10 32 20" width="40" height="24" aria-hidden="true" shape-rendering="crispEdges">
+          <path d="M-15 0 L-9 -6 H9 L15 0 L9 6 H-9 Z" fill="#fff" stroke="#000" stroke-width="2" />
+          <g id="pupil"><rect x="-4" y="-4" width="8" height="8" fill="#350aff" /><rect x="-2" y="-2" width="3" height="3" fill="#bcf015" /></g>
+          <rect id="lid" x="-16" y="-10" width="32" height="20" fill="#000" />
+        </svg>
+        <button class="toggle" aria-expanded="false" aria-controls="drawer">Menu</button>
+      </div>
+      <div class="drawer" id="drawer"><div inert>
+        <div class="links">
+          <a href="#events">Événements</a><a href="#about">À propos</a><a href="#team">Les membres</a><a href="#contact">Contact</a>
+        </div>
+      </div></div>
+    </nav>
+  </div>
+
+<script>
+  const nav = document.querySelector(".nav");
+  const btn = document.querySelector(".toggle");
+  const inner = document.querySelector(".drawer > div");
+  const setOpen = (open) => {
+    nav.classList.toggle("open", open);
+    btn.setAttribute("aria-expanded", open);
+    btn.textContent = open ? "Fermer" : "Menu";
+    inner.inert = !open;
+  };
+  btn.addEventListener("click", () => setOpen(!nav.classList.contains("open")));
+  addEventListener("keydown", (e) => e.key === "Escape" && setOpen(false));
+
+  // Eye: pupil lerps toward the cursor, clamped to a 5-unit radius.
+  const eye = document.getElementById("eye"), pupil = document.getElementById("pupil");
+  const target = { x: 0, y: 0 }, pos = { x: 0, y: 0 };
+  addEventListener("pointermove", (e) => {
+    const r = eye.getBoundingClientRect();
+    const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+    const d = Math.hypot(dx, dy) || 1, k = Math.min(d / 12, 5) / d;
+    target.x = dx * k; target.y = dy * k;
+  });
+  (function loop() {
+    pos.x += (target.x - pos.x) * 0.15; pos.y += (target.y - pos.y) * 0.15;
+    pupil.setAttribute("transform", `translate(${pos.x.toFixed(2)} ${pos.y.toFixed(2)})`);
+    requestAnimationFrame(loop);
+  })();
+  const lid = document.getElementById("lid");
+  setInterval(() => { lid.classList.add("shut"); setTimeout(() => lid.classList.remove("shut"), 140); }, 3800);
+
+  // Scramble each link's text on hover/focus, resolving left to right.
+  const GLYPHS = "!<>-_\\/[]{}=+*^?#█▓▒░";
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  document.querySelectorAll(".links a").forEach((a) => {
+    const label = a.textContent; let raf = 0;
+    a.setAttribute("aria-label", label);
+    const run = () => {
+      if (reduce) return;
+      cancelAnimationFrame(raf); let frame = 0;
+      const step = () => {
+        frame++;
+        a.textContent = [...label].map((c, i) => c === " " || i < frame / 1.6 ? c : GLYPHS[Math.random() * GLYPHS.length | 0]).join("");
+        if (frame < label.length * 1.6) raf = requestAnimationFrame(step); else a.textContent = label;
+      };
+      raf = requestAnimationFrame(step);
+    };
+    a.addEventListener("mouseenter", run); a.addEventListener("focus", run);
+  });
+</script>
+</body>
+</html>

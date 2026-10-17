@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wealth HUD &amp; Danger Meter</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@800;900&display=swap" />
+<style>
+  :root { --paper: #f4f3ef; --ink: #14140f; --red: #c0342a; --y2: #f2c31a; --convert: #9abeef; --follow: #2b5a9b; --pop: cubic-bezier(0.2, 1.5, 0.32, 1); }
+  * { box-sizing: border-box; margin: 0; }
+  body { min-height: 100vh; overflow: hidden; background: var(--paper); color: var(--ink); font-family: Nunito, system-ui, sans-serif; }
+  .display { font-family: "Luckiest Guy", cursive; font-weight: 400; }
+  .card { border: 2px solid var(--ink); border-radius: 12px; background: #fff; box-shadow: 2px 3px 0 var(--ink); }
+  .alarm { position: fixed; left: 12px; right: 12px; top: 0; z-index: 20; padding: 8px 16px; border: 2px solid var(--paper); border-top: 0; border-radius: 0 0 12px 12px;
+           background: #000; color: #fff; text-align: center; font-size: clamp(14px, 2.6vw, 20px); text-transform: uppercase; transform: translateY(-110%); transition: transform .5s var(--pop); }
+  .alarm.on { transform: none; animation: urgent 900ms ease-in-out infinite; }
+  @keyframes urgent { 0%, 100% { background: #000; border-color: var(--paper); } 50% { background: var(--red); border-color: #fff; } }
+  .hud { display: flex; flex-wrap: wrap; gap: 8px; padding: 48px 12px 12px; }
+  .hud > .card { display: flex; align-items: center; gap: 12px; padding: 8px 12px; }
+  .brand { font-size: 22px; color: var(--y2); -webkit-text-stroke: 1px var(--ink); }
+  .wealth { position: relative; flex: 1; }
+  .coin { width: 32px; height: 32px; display: grid; place-items: center; border: 2px solid var(--ink); border-radius: 50%; font-weight: 900;
+          background: radial-gradient(circle at 35% 35%, #f8e08a, #f2c31a 55%, #c98f06); }
+  .k { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; opacity: .6; }
+  .v { font-size: clamp(18px, 3.4vw, 28px); line-height: 1; font-variant-numeric: tabular-nums; }
+  .rate { position: absolute; top: -12px; right: 8px; padding: 2px 8px; border: 2px solid var(--ink); border-radius: 6px; background: var(--convert);
+          font-size: 11px; font-weight: 900; box-shadow: 2px 3px 0 var(--ink); animation: bob 2.3s ease-in-out infinite; }
+  @keyframes bob { 0%, 100% { transform: translateY(0) rotate(-1.1deg); } 50% { transform: translateY(-6px) rotate(-1.1deg); } }
+  .meter { margin: 0 12px; padding: 12px; }
+  .meter header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .track { height: 20px; overflow: hidden; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); }
+  .fill { height: 100%; border-right: 2px solid var(--ink); border-radius: 999px; background: var(--convert); transition: background .4s, width .3s ease-out; }
+  .actions { display: flex; justify-content: center; padding: 16px; }
+  .distract { padding: 10px 20px; border: 2px solid var(--ink); border-radius: 12px; background: var(--y2); box-shadow: 2px 3px 0 var(--ink); cursor: pointer;
+              font: 15px "Luckiest Guy", cursive; text-transform: uppercase; transition: transform .15s, box-shadow .15s; }
+  .distract:active { transform: translate(2px, 3px); box-shadow: none; }
+  .distract:disabled { opacity: .5; }
+  @media (prefers-reduced-motion: reduce) { .rate, .alarm.on { animation: none; } }
+</style>
+</head>
+<body>
+  <div class="alarm display" role="alert" aria-hidden="true">⚠ They're looking up! Distract them!</div>
+  <div class="hud">
+    <div class="card"><span class="brand display">DON'T LOOK UP</span></div>
+    <div class="card wealth"><span class="coin" aria-hidden="true">$</span><div><p class="k">Your wealth</p><p class="v display" id="wealth"></p></div><span class="rate">+$12,400/s</span></div>
+    <div class="card"><span class="display v" id="timer">2:59</span></div>
+  </div>
+  <section class="card meter">
+    <header><span>👀 Looking up</span><span id="status"></span></header>
+    <div class="track" role="meter" aria-label="Crowd looking up" aria-valuemin="0" aria-valuemax="100"><div class="fill"></div></div>
+  </section>
+  <div class="actions"><button class="distract">📺 Distract them · −$50,000</button></div>
+
+<script>
+  const RATE = 12400, COST = 50000;
+  let wealth = 1204550, danger = 22, seconds = 179, acc = 0, last = performance.now();
+  const $ = (s) => document.querySelector(s);
+  const money = (n) => "$" + Math.floor(n).toLocaleString("en-US");
+
+  function render() {
+    $("#wealth").textContent = money(wealth);
+    $("#timer").textContent = `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+    const warn = danger >= 40, alarm = danger >= 70;
+    $(".fill").style.width = danger + "%";
+    $(".fill").style.background = alarm ? "#c0342a" : warn ? "#f2c31a" : "#9abeef";
+    $(".track").setAttribute("aria-valuenow", Math.round(danger));
+    $("#status").textContent = alarm ? "They're organising!" : warn ? "Getting curious…" : "Nicely distracted";
+    $("#status").style.color = alarm ? "#c0342a" : warn ? "#8a5d02" : "#2b5a9b";
+    $(".alarm").classList.toggle("on", alarm);
+    $(".alarm").setAttribute("aria-hidden", !alarm);
+    $(".distract").disabled = wealth < COST;
+  }
+
+  (function tick(now) {
+    const dt = (now - last) / 1000; last = now;
+    wealth += RATE * dt;
+    danger = Math.min(100, danger + dt * 7.5);
+    if ((acc += dt) >= 1) { acc -= 1; seconds = seconds <= 0 ? 179 : seconds - 1; }
+    render();
+    requestAnimationFrame(tick);
+  })(last);
+
+  $(".distract").addEventListener("click", () => {
+    if (wealth < COST) return;
+    wealth -= COST; danger = Math.max(0, danger - 38);
+  });
+</script>
+</body>
+</html>

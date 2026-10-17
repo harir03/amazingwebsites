@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kinetic Scroll Manifesto</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&family=Geist+Mono&display=swap" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #0a0a0a; color: #fff; }
+  .spacer { height: 60vh; display: grid; place-items: center; font: 11px "Geist Mono", monospace; letter-spacing: .3em; opacity: .5; text-transform: uppercase; }
+  .manifesto { height: 320vh; }
+  .pin { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 6vw; }
+  .kicker { font: 11px "Geist Mono", monospace; letter-spacing: .3em; color: #bcf015; text-transform: uppercase; margin-bottom: 16px; }
+  .text { display: flex; flex-wrap: wrap; gap: .1em .35em; font: 400 clamp(20px, 4.4vw, 52px)/1.02 "Silkscreen", monospace; text-transform: uppercase; }
+  .w { position: relative; display: inline-block; will-change: transform, opacity; }
+  .w .mark { position: absolute; inset: .15em -.1em .1em; background: #bcf015; transform-origin: left; transform: scaleX(0);
+             transition: transform .5s cubic-bezier(0.625, 0.05, 0, 1); }
+  .w.lit .mark { transform: scaleX(1); }
+  .w > span:last-child { position: relative; }
+  .w.lit.marked > span:last-child { color: #000; }
+  .bar { margin-top: 24px; height: 1px; background: rgb(255 255 255 / .15); }
+  .bar div { height: 100%; background: #350aff; transform-origin: left; transform: scaleX(0); }
+</style>
+</head>
+<body>
+  <div class="spacer">Scroll ↓</div>
+  <section class="manifesto">
+    <div class="pin">
+      <span class="kicker">✦ Manifeste — 001</span>
+      <p class="text" data-marked="secret,society,kerning,beautiful">We are a secret society of designers from Lyon. We meet, we talk, we drink, we argue about kerning, and sometimes we make beautiful things together.</p>
+      <div class="bar"><div></div></div>
+    </div>
+  </section>
+  <div class="spacer">Fin</div>
+
+<script>
+  const SPREAD = 3;
+  const section = document.querySelector(".manifesto");
+  const textEl = document.querySelector(".text");
+  const bar = document.querySelector(".bar div");
+  const marked = textEl.dataset.marked.split(",");
+  const words = textEl.textContent.trim().split(/\s+/);
+
+  textEl.innerHTML = words.map((w) => {
+    const isMarked = marked.includes(w.toLowerCase().replace(/[^\p{L}]/gu, ""));
+    return `<span class="w${isMarked ? " marked" : ""}">${isMarked ? '<span class="mark" aria-hidden="true"></span>' : ""}<span>${w}</span></span>`;
+  }).join("");
+  const spans = [...textEl.querySelectorAll(".w")];
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function render() {
+    const r = section.getBoundingClientRect();
+    const progress = reduce ? 1 : Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
+    spans.forEach((s, i) => {
+      const p = Math.min(1, Math.max(0, (progress * (spans.length + SPREAD) - i) / SPREAD));
+      s.style.opacity = 0.12 + p * 0.88;
+      s.style.transform = `translate3d(${(1 - p) * 0.6}em,0,0)`;
+      s.classList.toggle("lit", p >= 1);
+    });
+    bar.style.transform = `scaleX(${progress})`;
+  }
+  addEventListener("scroll", () => requestAnimationFrame(render), { passive: true });
+  addEventListener("resize", render);
+  render();
+</script>
+</body>
+</html>

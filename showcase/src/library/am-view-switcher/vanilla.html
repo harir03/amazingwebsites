@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Strip / Grid Pill Switcher</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter&display=swap" />
+<style>
+  :root { --linen: #e7e5df; --ink: #1a1917; --ease: cubic-bezier(0.6, 0, 0.1, 1); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--linen); color: var(--ink); font-family: "Playfair Display", Georgia, serif; overflow: hidden; }
+  .head { display: flex; justify-content: space-between; align-items: baseline; padding: 16px 20px 0; }
+  .head h2 { font-size: clamp(22px, 4vw, 36px); font-style: italic; font-weight: 400; }
+  .head span { font: 11px Inter, sans-serif; letter-spacing: .2em; text-transform: uppercase; opacity: .6; }
+  #works { list-style: none; height: calc(100% - 118px); padding: 16px 20px 0; gap: 3px; display: flex; }
+  #works.grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+  @media (max-width: 600px) { #works.grid { grid-template-columns: repeat(3, 1fr); } }
+  #works li { position: relative; flex: 1; min-width: 0; min-height: 48px; overflow: hidden; border-radius: 3px; transform-origin: top left; color: rgb(255 255 255 / .9); }
+  #works li b { position: absolute; font-style: italic; font-weight: 400; font-size: 13px; left: 8px; bottom: 8px; }
+  #works:not(.grid) li b { left: 50%; bottom: 12px; font-size: 12px; writing-mode: vertical-rl; transform: translateX(-50%) rotate(180deg); white-space: nowrap; }
+  #works li small { position: absolute; top: 8px; left: 8px; font: 9px Inter, sans-serif; opacity: .6; }
+  .dock { position: fixed; left: 0; right: 0; bottom: 20px; display: flex; justify-content: center; }
+  .pill { position: relative; display: flex; padding: 4px; border-radius: 999px; background: var(--ink); box-shadow: 0 10px 30px -10px rgba(0,0,0,.5); }
+  .thumb { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: 999px; background: var(--linen); transition: transform .6s var(--ease); }
+  .pill.is-grid .thumb { transform: translateX(100%); }
+  .pill button { position: relative; z-index: 1; width: 96px; padding: 8px 0; border: 0; border-radius: 999px; background: none; cursor: pointer;
+                 font: 12px Inter, sans-serif; text-transform: capitalize; color: var(--linen); transition: color .5s; }
+  .pill button[aria-checked="true"] { color: var(--ink); }
+</style>
+</head>
+<body>
+  <div class="head"><h2>Selected works</h2><span>42 works</span></div>
+  <ul id="works" aria-label="Works"></ul>
+  <div class="dock">
+    <div class="pill" role="radiogroup" aria-label="View mode">
+      <span class="thumb" aria-hidden="true"></span>
+      <button role="radio" aria-checked="true" data-mode="strips">Strips</button>
+      <button role="radio" aria-checked="false" data-mode="grid">Grid</button>
+    </div>
+  </div>
+
+<script>
+  const TILES = [["Aladdin", "#2b2f8f"], ["Tangled", "#8a5a2c"], ["Hercules", "#c99a3b"], ["Newsies", "#6e675a"], ["Enchanted", "#b8668a"],
+                 ["Pocahontas", "#b5532e"], ["Hunchback", "#5a4475"], ["Mermaid", "#1f7f86"], ["Beauty & the Beast", "#8e5a2a"], ["Little Shop", "#2f6b3a"]];
+  const list = document.getElementById("works"), pill = document.querySelector(".pill");
+  list.innerHTML = TILES.map(([t, c], i) => `<li style="background:linear-gradient(160deg,${c},#120f0c)"><small>${String(i + 1).padStart(2, "0")}</small><b>${t}</b></li>`).join("");
+  const tiles = [...list.children];
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function setMode(mode) {
+    if (list.classList.contains("grid") === (mode === "grid")) return;
+    const first = tiles.map((el) => el.getBoundingClientRect());           // FIRST
+    list.classList.toggle("grid", mode === "grid");                          // change layout
+    pill.classList.toggle("is-grid", mode === "grid");
+    pill.querySelectorAll("button").forEach((b) => b.setAttribute("aria-checked", b.dataset.mode === mode));
+    if (reduce) return;
+    tiles.forEach((el, i) => {
+      const last = el.getBoundingClientRect();                               // LAST
+      const f = first[i];
+      el.animate([                                                           // INVERT + PLAY
+        { transform: `translate(${f.left - last.left}px, ${f.top - last.top}px) scale(${f.width / last.width}, ${f.height / last.height})` },
+        { transform: "none" },
+      ], { duration: 800, easing: "cubic-bezier(0.6, 0, 0.1, 1)" });
+    });
+  }
+  pill.addEventListener("click", (e) => { const b = e.target.closest("button"); if (b) setMode(b.dataset.mode); });
+</script>
+</body>
+</html>

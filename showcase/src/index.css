@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/* Vanilla demo files are shown as code and in iframes, not styled by the hub. */
+@source not "./library/**/*.html";
+
+/*
+ * Hub palette: white pages, soft grey trays that hold the live work, ballpoint ink for text and actions.
+ * The components keep their own colours; these only style the hub around them.
+ */
+@theme {
+  --font-sans: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Fragment Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --color-paper: #ffffff;
+  --color-sheet: #ffffff;
+  --color-tray: #f3f4f1;
+  --color-tray-2: #e9ebe6;
+  --color-ink: #1b2742;
+  --color-ink-2: #444e63;
+  --color-muted: #626a7c;
+  --color-rule: #e6e8e3;
+  --color-rule-strong: #cdd2cb;
+  --color-grid: #dfe6e0;
+  --color-grid-major: #b9cbbe;
+  --color-stage: #eceee9;
+  --color-ok: #23735a;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Condensed Archivo for headings and figures. */
+@utility type-display {
+  font-stretch: 72%;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+@utility type-narrow {
+  font-stretch: 85%;
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-paper font-sans text-ink;
+    min-height: 100dvh;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-sheet);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-rule-strong) transparent;
+  }
+  code, kbd, pre { font-variant-ligatures: none; }
+}
+
+/*
+ * Page changes use the View Transitions API: the page cross-fades, and the preview you
+ * clicked grows into the next page's preview (and back again on Back).
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.22s;
+}
+::view-transition-group(morph-preview) {
+  animation-duration: 0.5s;
+  animation-timing-function: var(--ease-out-expo);
+}
+::view-transition-old(morph-preview),
+::view-transition-new(morph-preview) {
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
