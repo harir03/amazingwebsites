@@ -95,6 +95,8 @@ We are building a unified showcase platform on top of this repository (inspired 
 
 👉 See the full architectural specifications and task breakdown in [TODO.md](TODO.md).
 
+**Status:** the hub is live in [`showcase/`](showcase/) — `cd showcase && npm install && npm run dev`, then open http://localhost:5000/.
+
 
 ## ⚖️ License
 

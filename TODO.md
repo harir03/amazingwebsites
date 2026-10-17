@@ -157,6 +157,8 @@ Code implementation: Provide a complete, self-contained, drop-in component code 
 
 - [x] Initial website forensic recreations completed (`recursive`, `thedesignsociety`, `heronai`, `hellomonday`, `alanmenken`, `dontlookup`, `emotionagency`).
 - [x] All 7 sites running on dedicated local ports (`:5173`, `:3000`, `:3001`, `:3002`, `:3003`, `:3004`).
-- [ ] Create `showcase/` application root.
-- [ ] Build theme taxonomy and catalog metadata.
-- [ ] Wire dynamic component code copy and AI prompt generator.
+- [x] Create `showcase/` application root (React 18 + Vite + Tailwind v4, port 5000).
+- [x] Build theme taxonomy and catalog metadata (`showcase/src/data/`).
+- [x] Wire dynamic component code copy and AI prompt generator.
+- [x] 23 components extracted (React + vanilla HTML each), see `showcase/README.md`.
+- [ ] Not yet extracted: Design Society team emblem gallery, Heron swiper showcase, Emotion planar water reflection and Lenis storytelling.
