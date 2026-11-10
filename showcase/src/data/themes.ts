@@ -59,6 +59,27 @@ export const THEMES: ThemeMeta[] = [
     accent: "#6a3beb",
     blurb: "Morphing particle fields, glass docks, audio-gated entrances.",
   },
+  {
+    id: "architectural-botanical",
+    name: "Architectural Botanical & Forest Editorial",
+    short: "Botanical Canopy",
+    accent: "#2f5c38",
+    blurb: "Organic tree facades, frosted forest pills, architectural CAD blueprints.",
+  },
+  {
+    id: "tactile-pop-ecommerce",
+    name: "Tactile Pop & Kinetic Tape E-Commerce",
+    short: "Tactile Pop Tape",
+    accent: "#d97706",
+    blurb: "Jagged adhesive strips, jaunty tilts, vibrant pop product carousels.",
+  },
+  {
+    id: "sonic-interactive",
+    name: "Interactive Sonic & Game Audio Architecture",
+    short: "Sonic Spectrum",
+    accent: "#65a30d",
+    blurb: "Web Audio harmonic visualizers, multi-stem mixing decks, studio noir.",
+  },
 ];
 
 export const THEME_BY_ID = Object.fromEntries(THEMES.map((t) => [t.id, t])) as Record<ThemeArchetype, ThemeMeta>;

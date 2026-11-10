@@ -102,21 +102,25 @@ export function SitePage({ id }: { id: string }) {
           <p className="mt-3 text-[19px] leading-snug text-ink">{site.tagline}</p>
           <p className="mt-3 max-w-[62ch] text-[16px] leading-relaxed text-ink-2">{site.description}</p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-2">
+          <div className="mt-6 flex flex-wrap items-center gap-2.5">
             <a
               href={site.localDevUrl}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg bg-ink px-3.5 py-2 text-[14px] font-medium text-white hover:bg-ink-2"
+              className="inline-flex items-center gap-2 rounded-xl bg-purple px-4 py-2.5 text-[14px] font-semibold text-white shadow-md shadow-purple/20 hover:brightness-110 transition-all"
               title={status === "online" ? undefined : `Not running. Start it with: cd ${site.repoPath} && npm run dev`}
             >
               <ExternalLink className="h-4 w-4" aria-hidden="true" /> View live demo
             </a>
-            <button type="button" onClick={copyStack} className="inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-[14px] text-ink shadow-[inset_0_0_0_1px_rgb(27_39_66_/_0.16)] hover:bg-tray">
-              {copiedKey === stackKey ? <Check className="h-4 w-4 text-ok" aria-hidden="true" /> : <ClipboardCopy className="h-4 w-4" aria-hidden="true" />}
-              {copiedKey === stackKey ? "Copied" : "Copy full site stack prompt"}
+            <button
+              type="button"
+              onClick={copyStack}
+              className="inline-flex items-center gap-2 rounded-xl border border-rule bg-surface px-4 py-2.5 text-[14px] font-medium text-ink hover:border-purple/40 hover:text-purple transition-all"
+            >
+              {copiedKey === stackKey ? <Check className="h-4 w-4 text-emerald-500" aria-hidden="true" /> : <ClipboardCopy className="h-4 w-4" aria-hidden="true" />}
+              {copiedKey === stackKey ? "Copied Prompt!" : "Copy Full Site Stack Prompt"}
             </button>
-            <a href={site.originalUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 px-2 py-2 text-[14px] text-ink-2 underline-offset-4 hover:text-ink hover:underline">
+            <a href={site.originalUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 px-2 py-2 text-[14px] text-muted underline-offset-4 hover:text-ink hover:underline">
               Original site <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
             </a>
           </div>

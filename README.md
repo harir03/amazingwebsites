@@ -63,6 +63,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 | Portfolio | [Alan Menken](portfolio/alanmenken/) | [https://www.alanmenken.com/](https://www.alanmenken.com/) | HTML5 + CSS3 + GSAP + Audio Sync | ✅ Complete ([Local Demo](http://localhost:3002/)) |
 | Media / App | [Don't Look Up](media/dontlookup/) | [https://www.dontlookup.app/](https://www.dontlookup.app/) | Interactive Canvas / WebGL (Three.js) | ✅ Complete ([Local Demo](http://localhost:3003/)) |
 | Portfolio | [Emotion Agency](portfolio/emotionagency/) | [https://emotion-agency.com/](https://emotion-agency.com/) | Nuxt / Vue + Three.js + GSAP + Lenis | ✅ Complete ([Local Demo](http://localhost:3004/)) |
+| Portfolio | [Belgrade Arbor](portfolio/belgradearbor/) | [https://belgradearbor.rs/en](https://belgradearbor.rs/en) | Next.js + GSAP + Lenis + CAD SVG | ✅ Complete ([Local Demo](http://localhost:3005/)) |
+| E-Commerce | [SweetTape](ecommerce/sweettape/) | [https://sweet-tape.com/](https://sweet-tape.com/) | Next.js + React + Tactile Physics | ✅ Complete ([Local Demo](http://localhost:3006/)) |
+| Media / Audio | [Overworld Audio](media/overworldaudio/) | [https://overworldaudio.com/](https://overworldaudio.com/) | Nuxt + Web Audio API + Canvas | ✅ Complete ([Local Demo](http://localhost:3007/)) |
 
 
 ---

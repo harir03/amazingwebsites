@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architectural Canopy Hero</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #FAF8F5; padding: 32px 16px; color: #1F261E; display: flex; justify-content: center; }
+    .hero-card {
+      width: 100%;
+      max-width: 800px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(31, 38, 30, 0.15);
+      background: #F5F2EB;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-family: monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #3E562E; }
+    h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(32px, 5vw, 60px);
+      line-height: 1.05;
+      font-weight: normal;
+      margin-top: 20px;
+      max-width: 680px;
+    }
+    h1 em { font-style: italic; color: #3E562E; }
+    p { font-size: 14px; opacity: 0.75; margin-top: 16px; max-width: 520px; line-height: 1.6; }
+    
+    .banner {
+      width: 100%;
+      margin-top: 32px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #1F261E, #2F3A26, #3E562E);
+      color: #FAF8F5;
+      padding: 32px;
+      box-shadow: 0 20px 40px rgba(31, 38, 30, 0.2);
+    }
+    .sub { font-size: 10px; font-family: monospace; text-transform: uppercase; letter-spacing: 1.5px; color: #C5A880; }
+    .banner h3 { font-family: Georgia, serif; font-size: 24px; font-weight: normal; margin-top: 6px; }
+    .stats { display: flex; justify-content: center; gap: 16px; font-size: 11px; font-family: monospace; opacity: 0.8; margin-top: 16px; flex-wrap: wrap; }
+  </style>
+</head>
+<body>
+
+  <div class="hero-card">
+    <div class="badge">
+      <div class="dot"></div>
+      <span>44°49'08.2"N 20°24'29.1"E · Novi Beograd</span>
+    </div>
+
+    <h1>Harmony of modern living and natural <em>greenery</em>.</h1>
+    <p>Belgrade Arbor is taking shape on Bulevar heroja sa Košara as a curated urban ecosystem that evolves with the rhythm of the city.</p>
+
+    <div class="banner">
+      <span class="sub">Living Canopy Architecture</span>
+      <h3>Inspired by Forest Trees</h3>
+      <div class="stats">
+        <span>18,500 m² RESIDENTIAL</span>
+        <span>·</span>
+        <span>140+ BESPOKE UNITS</span>
+        <span>·</span>
+        <span>48% GREEN RECOVERY</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

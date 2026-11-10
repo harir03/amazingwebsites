@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Harmonic Frequency Spectrum Hero</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #08080A; color: #E9ECEE; padding: 24px; display: flex; justify-content: center; }
+    .card {
+      width: 100%;
+      max-width: 760px;
+      background: #13151F;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    }
+    .top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 20px; gap: 16px; flex-wrap: wrap; }
+    .sub { font-size: 11px; font-family: monospace; color: #A3E635; text-transform: uppercase; letter-spacing: 1px; }
+    h2 { font-size: 24px; font-weight: 800; margin-top: 4px; }
+    
+    .sound-btn {
+      background: none;
+      border: 1px solid rgba(163, 230, 53, 0.5);
+      color: #A3E635;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-family: monospace;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .sound-btn.playing { background: #A3E635; color: #08080A; border-color: #A3E635; }
+    
+    .screen {
+      background: #08080A;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 20px;
+    }
+    .telemetry { display: flex; justify-content: space-between; font-size: 11px; font-family: monospace; color: #6E8799; margin-bottom: 12px; }
+    .telemetry strong { color: #A3E635; }
+    canvas { width: 100%; height: 140px; border-radius: 10px; background: #0c0d12; cursor: ew-resize; display: block; }
+    .scale { display: flex; justify-content: space-between; font-size: 10px; font-family: monospace; color: #6E8799; margin-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="top">
+      <div>
+        <span class="sub">● DSP HARMONIC SYNTHESIS</span>
+        <h2>Sonic Frequency Visualizer</h2>
+      </div>
+      <button class="sound-btn" id="soundBtn">
+        <span id="btnIcon">▶</span>
+        <span id="btnLabel">Synthesize Sound</span>
+      </button>
+    </div>
+
+    <div class="screen">
+      <div class="telemetry">
+        <span>REAL-TIME HARMONIC SPECTRUM</span>
+        <strong id="freqText">440.0 Hz · PURE SINE</strong>
+      </div>
+      <canvas id="canvas" width="800" height="180"></canvas>
+      <div class="scale">
+        <span>110 Hz (Sub Bass)</span>
+        <span>← Move cursor across waveform →</span>
+        <span>880 Hz (Air / Treble)</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let audioCtx = null;
+    let osc = null;
+    let gain = null;
+    let isPlaying = false;
+    let freq = 440;
+
+    const btn = document.getElementById('soundBtn');
+    const btnIcon = document.getElementById('btnIcon');
+    const btnLabel = document.getElementById('btnLabel');
+    const freqText = document.getElementById('freqText');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    function init() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0, audioCtx.currentTime);
+        gain.connect(audioCtx.destination);
+        osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.connect(gain);
+        osc.start();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    btn.addEventListener('click', () => {
+      init();
+      isPlaying = !isPlaying;
+      btn.classList.toggle('playing', isPlaying);
+      if (isPlaying) {
+        gain.gain.setTargetAtTime(0.08, audioCtx.currentTime, 0.05);
+        btnIcon.textContent = '◼';
+        btnLabel.textContent = 'Mute Sine Wave';
+      } else {
+        gain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);
+        btnIcon.textContent = '▶';
+        btnLabel.textContent = 'Synthesize Sound';
+      }
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      freq = Math.round(110 + x * 770);
+      freqText.textContent = `${freq}.0 Hz · PURE SINE`;
+      if (osc && audioCtx) {
+        osc.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.03);
+      }
+    });
+
+    let phase = 0;
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = canvas.width;
+      const h = canvas.height;
+      const cy = h / 2;
+
+      ctx.beginPath();
+      ctx.strokeStyle = isPlaying ? '#A3E635' : 'rgba(163, 230, 53, 0.4)';
+      ctx.lineWidth = 2.5;
+
+      const cycles = freq / 90;
+      for (let x = 0; x < w; x++) {
+        const t = x / w;
+        const amp = isPlaying ? 35 : 14;
+        const y = cy + Math.sin(t * Math.PI * 2 * cycles + phase) * amp * Math.sin(t * Math.PI);
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      phase += isPlaying ? 0.08 : 0.02;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>

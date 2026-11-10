@@ -5,7 +5,10 @@ export type ThemeArchetype =
   | "webgl-fluid"
   | "cinematic-serif"
   | "gamified-canvas"
-  | "compute-particles";
+  | "compute-particles"
+  | "architectural-botanical"
+  | "tactile-pop-ecommerce"
+  | "sonic-interactive";
 
 export type ComponentCategory =
   | "navbar"

@@ -6,7 +6,7 @@ import { googleFontsLink, primaryFamily } from "../../lib/fonts";
 import { cssVariables } from "../../lib/source";
 import { SectionHeading } from "./MotionSection";
 
-const quiet = "rounded-lg bg-white px-2.5 py-1 text-[13px] text-ink shadow-[0_0_0_1px_rgb(27_39_66_/_0.12)] hover:shadow-[0_0_0_1px_rgb(27_39_66_/_0.35)]";
+const quiet = "rounded-lg border border-rule bg-surface px-2.5 py-1 text-[13px] font-medium text-ink hover:border-purple/40 hover:text-purple transition-colors shadow-xs";
 
 export function TokensSection({ item }: { item: CatalogComponent }) {
   const { copy, copiedKey } = useCopy();

@@ -3,36 +3,148 @@
 /* Vanilla demo files are shown as code and in iframes, not styled by the hub. */
 @source not "./library/**/*.html";
 
-/*
- * Hub palette: white pages, soft grey trays that hold the live work, ballpoint ink for text and actions.
- * The components keep their own colours; these only style the hub around them.
- */
-@theme {
-  --font-sans: "Archivo", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "Fragment Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *, .dark, .dark *));
 
-  --color-paper: #ffffff;
-  --color-sheet: #ffffff;
-  --color-tray: #f3f4f1;
-  --color-tray-2: #e9ebe6;
-  --color-ink: #1b2742;
-  --color-ink-2: #444e63;
-  --color-muted: #626a7c;
-  --color-rule: #e6e8e3;
-  --color-rule-strong: #cdd2cb;
-  --color-grid: #dfe6e0;
-  --color-grid-major: #b9cbbe;
-  --color-stage: #eceee9;
-  --color-ok: #23735a;
+:root {
+  --font-sans: "Geist", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", "Newsreader", "Playfair Display", Georgia, serif;
+  --font-display: "Instrument Serif", "Newsreader", "Playfair Display", Georgia, serif;
+  --font-mono: "Geist Mono", "Fragment Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* LIGHT THEME TOKENS (V7 LABS WARM IVORY & OBSIDIAN SLATE) */
+  --bg-page: #fbfaf8;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #f4f3f0;
+  --bg-surface-hover: #ebe9e4;
+  --bg-tray: #f2f1ed;
+  --bg-tray-2: #e8e6e0;
+
+  --border-subtle: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.16);
+  --border-glow: rgba(255, 91, 36, 0.3);
+
+  --text-primary: #111111;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --text-dimmed: #9ca3af;
+
+  --accent-orange: #ff5b24;
+  --accent-orange-glow: rgba(255, 91, 36, 0.25);
+  --accent-orange-light: rgba(255, 91, 36, 0.08);
+
+  --accent-purple: #ff5b24;
+  --accent-purple-glow: rgba(255, 91, 36, 0.25);
+  --accent-purple-light: rgba(255, 91, 36, 0.08);
+
+  --accent-amber: #ff5b24;
+  --accent-amber-glow: rgba(255, 91, 36, 0.25);
+  --accent-amber-light: rgba(255, 91, 36, 0.08);
+  --accent-copper: #e04b16;
+
+  --stage-bg: #f4f3f0;
+  --navbar-bg: rgba(251, 250, 248, 0.88);
+  --navbar-border: rgba(0, 0, 0, 0.08);
+  --card-bg: #ffffff;
+  --card-border: rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+
+  --color-grid-line: rgba(0, 0, 0, 0.045);
+  --dot-grid: rgba(0, 0, 0, 0.06);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root[data-theme="dark"],
+.dark {
+  /* DARK THEME TOKENS (V7 LABS DARK NOIR OBSIDIAN) */
+  --bg-page: #0c0d0f;
+  --bg-surface: #131417;
+  --bg-surface-elevated: #1a1b20;
+  --bg-surface-hover: #222329;
+  --bg-tray: #16171b;
+  --bg-tray-2: #1e1f25;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --border-glow: rgba(255, 91, 36, 0.45);
+
+  --text-primary: #f4f4f5;
+  --text-secondary: rgba(244, 244, 245, 0.72);
+  --text-muted: rgba(244, 244, 245, 0.48);
+  --text-dimmed: rgba(244, 244, 245, 0.28);
+
+  --accent-orange: #ff5b24;
+  --accent-orange-glow: rgba(255, 91, 36, 0.35);
+  --accent-orange-light: rgba(255, 91, 36, 0.12);
+
+  --accent-purple: #ff5b24;
+  --accent-purple-glow: rgba(255, 91, 36, 0.35);
+  --accent-purple-light: rgba(255, 91, 36, 0.12);
+
+  --accent-amber: #ff5b24;
+  --accent-amber-glow: rgba(255, 91, 36, 0.35);
+  --accent-amber-light: rgba(255, 91, 36, 0.12);
+  --accent-copper: #ff6b35;
+
+  --stage-bg: #111215;
+  --navbar-bg: rgba(12, 13, 15, 0.88);
+  --navbar-border: rgba(255, 255, 255, 0.08);
+  --card-bg: #131417;
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-shadow: 0 10px 36px -4px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  --color-grid-line: rgba(255, 255, 255, 0.045);
+  --dot-grid: rgba(255, 255, 255, 0.07);
+}
+
+@theme {
+  --color-page: var(--bg-page);
+  --color-paper: var(--bg-page);
+  --color-sheet: var(--bg-surface-elevated);
+  --color-surface: var(--bg-surface);
+  --color-surface-elevated: var(--bg-surface-elevated);
+  --color-surface-hover: var(--bg-surface-hover);
+
+  --color-tray: var(--bg-tray);
+  --color-tray-2: var(--bg-tray-2);
+  --color-stage: var(--stage-bg);
+  --color-card: var(--card-bg);
+
+  --color-ink: var(--text-primary);
+  --color-ink-2: var(--text-secondary);
+  --color-muted: var(--text-muted);
+  --color-dimmed: var(--text-dimmed);
+
+  --color-rule: var(--border-subtle);
+  --color-rule-strong: var(--border-strong);
+  --color-rule-glow: var(--border-glow);
+
+  --color-orange: var(--accent-orange);
+  --color-orange-glow: var(--accent-orange-glow);
+  --color-orange-light: var(--accent-orange-light);
+
+  --color-purple: var(--accent-purple);
+  --color-purple-glow: var(--accent-purple-glow);
+  --color-purple-light: var(--accent-purple-light);
+
+  --color-amber: var(--accent-amber);
+  --color-amber-glow: var(--accent-amber-glow);
+  --color-amber-light: var(--accent-amber-light);
+  --color-copper: var(--accent-copper);
+  --color-grid: var(--color-grid-line);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Condensed Archivo for headings and figures. */
+/* V7 Labs Editorial Typography utilities */
 @utility type-display {
-  font-stretch: 72%;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+@utility type-serif {
+  font-family: var(--font-serif);
 }
 
 @utility type-narrow {
@@ -46,41 +158,101 @@
 
 @layer base {
   html {
-    color-scheme: light;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   body {
-    @apply bg-paper font-sans text-ink;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
     min-height: 100dvh;
-    font-size: 16px;
-    line-height: 1.5;
+    font-size: 15px;
+    line-height: 1.55;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
   ::selection {
-    background: var(--color-ink);
-    color: var(--color-sheet);
+    background: var(--accent-amber);
+    color: #ffffff;
   }
   :focus-visible {
-    outline: 2px solid var(--color-ink);
+    outline: 2px solid var(--accent-amber);
     outline-offset: 2px;
   }
   * {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-rule-strong) transparent;
+    scrollbar-color: var(--border-strong) transparent;
   }
   code, kbd, pre { font-variant-ligatures: none; }
 }
 
-/*
- * Page changes use the View Transitions API: the page cross-fades, and the preview you
- * clicked grows into the next page's preview (and back again on Back).
- */
+/* Simple Background Grid (linear-gradient) */
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, var(--color-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-grid-line) 1px, transparent 1px);
+}
+
+.bg-grid-mask {
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 35%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 35%, transparent 100%);
+}
+
+/* Radiant Horizon Beam Glow */
+.horizon-beam {
+  position: relative;
+  width: 100%;
+  height: 2px;
+}
+.horizon-beam::before {
+  content: "";
+  position: absolute;
+  inset: -60px 0;
+  background: radial-gradient(ellipse 65% 100% at 50% 50%, rgba(255, 107, 0, 0.45) 0%, rgba(255, 140, 50, 0.15) 45%, transparent 75%);
+  pointer-events: none;
+  filter: blur(28px);
+}
+.horizon-beam::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 140, 50, 0.3) 20%, rgba(255, 230, 200, 0.95) 50%, rgba(255, 140, 50, 0.3) 80%, transparent 100%);
+  box-shadow: 0 0 24px 2px rgba(255, 107, 0, 0.7);
+}
+
+/* Frosted Glass & Copper Rim styling */
+.card-copper {
+  background: var(--card-bg);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--card-shadow);
+  transition: all 0.25s ease;
+}
+.card-copper:hover {
+  border-color: rgba(255, 140, 50, 0.4);
+  box-shadow: 0 16px 40px -8px rgba(255, 107, 0, 0.15), inset 0 1px 0 rgba(255, 200, 150, 0.15);
+}
+
+/* React Bits Dot Pattern Background */
+.rb-dot-grid {
+  background-image: radial-gradient(circle, var(--dot-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Subtle Glassmorphism Blur */
+.glass-panel {
+  background: var(--navbar-bg);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid var(--navbar-border);
+}
+
+/* Page View Transitions */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 0.22s;
+  animation-duration: 0.2s;
 }
 ::view-transition-group(morph-preview) {
-  animation-duration: 0.5s;
+  animation-duration: 0.45s;
   animation-timing-function: var(--ease-out-expo);
 }
 ::view-transition-old(morph-preview),

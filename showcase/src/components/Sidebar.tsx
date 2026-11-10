@@ -10,12 +10,20 @@ const GROUPS = CATEGORIES.map((c) => ({ ...c, items: ALL_COMPONENTS.filter((x) =
 function Item({ to, active, children, layoutGroup }: { to: string; active: boolean; children: ReactNode; layoutGroup: string }) {
   return (
     <li className="relative">
-      {/* The marker slides to the current page, so you can see where you moved to */}
-      {active && <motion.span layoutId={`nav-active-${layoutGroup}`} className="absolute top-1 bottom-1 -left-px w-[2px] rounded-full bg-ink" transition={{ type: "spring", stiffness: 500, damping: 40 }} />}
+      {/* The marker slides to the current page with React Bits purple glow */}
+      {active && (
+        <motion.span
+          layoutId={`nav-active-${layoutGroup}`}
+          className="absolute top-1 bottom-1 -left-[1.5px] w-[2.5px] rounded-full bg-purple shadow-[0_0_8px_var(--color-purple)]"
+          transition={{ type: "spring", stiffness: 500, damping: 40 }}
+        />
+      )}
       <Link
         to={to}
         aria-current={active ? "page" : undefined}
-        className={`flex items-center gap-2 py-[5px] pr-2 pl-3.5 text-[14px] leading-snug transition-colors ${active ? "font-medium text-ink" : "text-ink-2 hover:text-ink"}`}
+        className={`flex items-center gap-2 rounded-lg py-[6px] pr-2.5 pl-3.5 text-[13.5px] leading-snug transition-colors ${
+          active ? "font-semibold text-ink bg-tray/60" : "text-muted hover:text-ink hover:bg-tray/40"
+        }`}
       >
         {children}
       </Link>

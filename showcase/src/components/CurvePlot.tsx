@@ -56,15 +56,15 @@ export function CurvePlot({ onOpen }: { onOpen: (id: string) => void }) {
         {/* Chart paper: fine cells every 0.05, heavier lines every 0.25 */}
         <g aria-hidden="true">
           {xs.map((x) => (
-            <line key={`x${x}`} x1={sx(x)} x2={sx(x)} y1={M.top} y2={M.top + PH} stroke={Math.round(x * 20) % 5 === 0 ? "#b9cbbe" : "#dfe6e0"} strokeWidth={Math.round(x * 20) % 5 === 0 ? 1 : 0.6} />
+            <line key={`x${x}`} x1={sx(x)} x2={sx(x)} y1={M.top} y2={M.top + PH} stroke="var(--color-rule)" strokeWidth={Math.round(x * 20) % 5 === 0 ? 1 : 0.6} />
           ))}
           {ys.map((y) => (
-            <line key={`y${y}`} x1={M.left} x2={M.left + PW} y1={sy(y)} y2={sy(y)} stroke={Math.round(y * 20) % 5 === 0 ? "#b9cbbe" : "#dfe6e0"} strokeWidth={Math.round(y * 20) % 5 === 0 ? 1 : 0.6} />
+            <line key={`y${y}`} x1={M.left} x2={M.left + PW} y1={sy(y)} y2={sy(y)} stroke="var(--color-rule)" strokeWidth={Math.round(y * 20) % 5 === 0 ? 1 : 0.6} />
           ))}
-          <line x1={M.left} x2={M.left + PW} y1={sy(0)} y2={sy(0)} stroke="#1b2742" strokeWidth="1.2" />
-          <line x1={M.left} x2={M.left} y1={M.top} y2={M.top + PH} stroke="#1b2742" strokeWidth="1.2" />
-          <line x1={M.left} x2={M.left + PW} y1={sy(1)} y2={sy(1)} stroke="#1b2742" strokeWidth="0.8" strokeDasharray="3 4" />
-          <g fill="#586174" fontSize="12" fontFamily="Archivo, sans-serif">
+          <line x1={M.left} x2={M.left + PW} y1={sy(0)} y2={sy(0)} stroke="var(--color-ink)" strokeWidth="1.2" />
+          <line x1={M.left} x2={M.left} y1={M.top} y2={M.top + PH} stroke="var(--color-ink)" strokeWidth="1.2" />
+          <line x1={M.left} x2={M.left + PW} y1={sy(1)} y2={sy(1)} stroke="var(--color-muted)" strokeWidth="0.8" strokeDasharray="3 4" />
+          <g fill="var(--color-muted)" fontSize="12" fontFamily="var(--font-sans)">
             {[0, 0.5, 1].map((t) => (
               <text key={`tx${t}`} x={sx(t)} y={M.top + PH + 16} textAnchor="middle">
                 {t}
@@ -86,11 +86,11 @@ export function CurvePlot({ onOpen }: { onOpen: (id: string) => void }) {
 
         {/* Active curve's control handles: the four numbers made visible */}
         {active && (
-          <g aria-hidden="true" stroke="#1b2742" strokeWidth="1">
+          <g aria-hidden="true" stroke="var(--color-purple)" strokeWidth="1.5">
             <line x1={sx(0)} y1={sy(0)} x2={sx(active.curve[0])} y2={sy(active.curve[1])} />
             <line x1={sx(1)} y1={sy(1)} x2={sx(active.curve[2])} y2={sy(active.curve[3])} />
-            <circle cx={sx(active.curve[0])} cy={sy(active.curve[1])} r="5" fill="#ffffff" />
-            <circle cx={sx(active.curve[2])} cy={sy(active.curve[3])} r="5" fill="#ffffff" />
+            <circle cx={sx(active.curve[0])} cy={sy(active.curve[1])} r="5" fill="var(--color-surface)" stroke="var(--color-purple)" strokeWidth="2" />
+            <circle cx={sx(active.curve[2])} cy={sy(active.curve[3])} r="5" fill="var(--color-surface)" stroke="var(--color-purple)" strokeWidth="2" />
           </g>
         )}
 
@@ -133,7 +133,7 @@ export function CurvePlot({ onOpen }: { onOpen: (id: string) => void }) {
         })}
       </svg>
 
-      <figcaption className="min-h-[9.5rem] border-t border-rule bg-white px-4 py-3.5 sm:px-5" aria-live="polite">
+      <figcaption className="min-h-[9.5rem] border-t border-rule bg-surface px-4 py-3.5 sm:px-5" aria-live="polite">
         {active ? (
           <div>
             <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">

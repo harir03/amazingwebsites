@@ -7,15 +7,31 @@
     <meta name="theme-color" content="#ffffff" />
     <meta name="description" content="Website recreations broken into drop-in components, with motion specs, design tokens and copy-ready AI prompts." />
     <title>Frontend Copied Hub</title>
+    <!-- Theme boot script to eliminate flash of light/dark theme -->
+    <script>
+      (() => {
+        try {
+          const stored = localStorage.getItem('theme');
+          const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          const theme = stored ? stored : (prefersDark ? 'dark' : 'dark');
+          document.documentElement.setAttribute('data-theme', theme);
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Hub fonts (Archivo, Fragment Mono) + open-source stand-ins for each recreated site's typography -->
+    <!-- V7 Labs editorial serif + React Bits display fonts + Hub typography -->
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..800&family=Fragment+Mono&family=Geist:wght@300..700&family=Geist+Mono:wght@400..600&family=Silkscreen:wght@400;700&family=Inter+Tight:wght@400..700&family=Space+Grotesk:wght@400..700&family=Outfit:wght@400..800&family=DM+Sans:opsz,wght@9..40,400..700&family=Bebas+Neue&family=Zilla+Slab:wght@300;400&family=Inter:wght@300..600&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Luckiest+Guy&family=Nunito:wght@400..800&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Geist:wght@300..800&family=Geist+Mono:wght@400..700&family=Archivo:wdth,wght@62..125,300..800&family=Fragment+Mono&family=Inter:wght@300..700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&display=swap"
     />
   </head>
-  <body>
+  <body class="transition-colors duration-200">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

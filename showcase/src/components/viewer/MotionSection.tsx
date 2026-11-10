@@ -88,11 +88,14 @@ export function MotionSection({ item }: { item: CatalogComponent }) {
       </div>
 
       {/* Same distance, same time: linear against this curve */}
-      {curve && (
-        <div ref={raceRef} className="mt-6 rounded-xl bg-tray p-4">
+        <div ref={raceRef} className="mt-6 rounded-xl border border-rule bg-tray p-4">
           <div className="mb-3 flex items-center justify-between">
-            <p className="text-[14px] text-ink-2">Same distance, same {DEMO_MS}ms</p>
-            <button type="button" onClick={replay} className="flex items-center gap-1.5 rounded-lg bg-white px-2.5 py-1 text-[13px] text-ink shadow-[0_0_0_1px_rgb(27_39_66_/_0.1)] hover:shadow-[0_0_0_1px_rgb(27_39_66_/_0.3)]">
+            <p className="text-[14px] text-muted">Same distance, same {DEMO_MS}ms</p>
+            <button
+              type="button"
+              onClick={replay}
+              className="flex items-center gap-1.5 rounded-lg border border-rule bg-surface px-2.5 py-1 text-[13px] font-medium text-ink hover:border-purple/40 hover:text-purple transition-colors"
+            >
               <Play className="h-3.5 w-3.5" aria-hidden="true" /> Replay
             </button>
           </div>
@@ -101,8 +104,8 @@ export function MotionSection({ item }: { item: CatalogComponent }) {
             { label: "This curve", ease: m.easingCurve, color: accent },
           ].map((row) => (
             <div key={row.label + tick} className="mb-2 flex items-center gap-3 last:mb-0">
-              <span className="w-20 shrink-0 text-[13px] text-ink-2">{row.label}</span>
-              <div className="relative h-7 flex-1 rounded-lg bg-white shadow-[inset_0_0_0_1px_rgb(27_39_66_/_0.06)]">
+              <span className="w-20 shrink-0 text-[13px] text-muted">{row.label}</span>
+              <div className="relative h-7 flex-1 rounded-lg border border-rule bg-surface">
                 <span
                   className="absolute top-1.5 h-4 w-4 rounded-full"
                   style={{
@@ -115,7 +118,6 @@ export function MotionSection({ item }: { item: CatalogComponent }) {
             </div>
           ))}
         </div>
-      )}
 
       <div className="mt-8 grid gap-8 lg:grid-cols-2">
         <div>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Tape Selector Carousel</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #FAF8F2; color: #111111; padding: 24px; display: flex; justify-content: center; }
+    .card {
+      width: 100%;
+      max-width: 760px;
+      background: #FFFFFF;
+      border: 2px solid #111111;
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 6px 6px 0px #111111;
+    }
+    .header { text-align: center; margin-bottom: 20px; }
+    .tag { font-size: 11px; font-family: monospace; font-weight: bold; text-transform: uppercase; color: #2E3EAC; }
+    h2 { font-size: 26px; font-weight: 900; text-transform: uppercase; margin-top: 4px; }
+    
+    .tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+    .tab-btn {
+      border: 2px solid #111111;
+      background: #FFFFFF;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px #111111;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: #111111;
+      color: white;
+    }
+    
+    .stage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      align-items: center;
+      background: #FAF8F2;
+      border: 2px solid #111111;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 4px 4px 0px #111111;
+    }
+    @media (max-width: 600px) { .stage { grid-template-columns: 1fr; } }
+    
+    .roll-wrap { display: flex; justify-content: center; align-items: center; min-height: 180px; position: relative; }
+    .roll {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 4px solid #111111;
+      background: #FF7B5F;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      transition: background-color 0.3s;
+    }
+    .core { width: 60px; height: 60px; border-radius: 50%; background: #FAF8F2; border: 2px solid #111111; display: flex; align-items: center; justify-content: center; font-size: 10px; font-family: monospace; font-weight: bold; }
+    .tagline { position: absolute; bottom: -8px; right: -16px; background: #111111; color: white; font-size: 9px; font-family: monospace; font-weight: bold; padding: 4px 8px; border-radius: 4px; transform: rotate(-6deg); }
+    
+    .meta h3 { font-size: 22px; font-weight: 900; text-transform: uppercase; margin-top: 4px; }
+    .desc { font-size: 12px; opacity: 0.8; margin-top: 6px; line-height: 1.5; }
+    .metrics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; border-top: 2px solid #111111; padding-top: 14px; margin-top: 14px; }
+    .m-item span { display: block; font-size: 10px; font-family: monospace; font-weight: bold; opacity: 0.6; text-transform: uppercase; }
+    .m-item strong { font-size: 16px; font-weight: 800; }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="header">
+      <span class="tag">Interactive Catalog</span>
+      <h2>Roll & Spec Selector</h2>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tape="cloth">Cloth Duct</button>
+      <button class="tab-btn" data-tape="masking">Crepe Masking</button>
+      <button class="tab-btn" data-tape="opp">BOPP Packaging</button>
+      <button class="tab-btn" data-tape="double">Double-Sided</button>
+    </div>
+
+    <div class="stage">
+      <div class="roll-wrap">
+        <div class="roll" id="rollCircle">
+          <div class="core">CORE</div>
+          <div class="tagline" id="rollTag">EXTRA STRONG</div>
+        </div>
+      </div>
+
+      <div class="meta">
+        <span class="tag" id="tapeSku">ST-CLOTH-50</span>
+        <h3 id="tapeTitle">Heavy-Duty Cloth Duct</h3>
+        <p class="desc" id="tapeDesc">Polyethylene-coated cloth mesh with natural rubber solvent adhesive. Tearable by hand both ways.</p>
+
+        <div class="metrics">
+          <div class="m-item">
+            <span>Adhesion</span>
+            <strong id="tapeAdh">9.8 N/cm</strong>
+          </div>
+          <div class="m-item">
+            <span>Tensile</span>
+            <strong id="tapeTen">75 N/cm</strong>
+          </div>
+          <div class="m-item">
+            <span>Thickness</span>
+            <strong id="tapeThk">0.26 mm</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const data = {
+      cloth: { sku: 'ST-CLOTH-50', title: 'Heavy-Duty Cloth Duct', desc: 'Polyethylene-coated cloth mesh with natural rubber solvent adhesive. Tearable by hand both ways.', adh: '9.8 N/cm', ten: '75 N/cm', thk: '0.26 mm', color: '#FF7B5F', tag: 'EXTRA STRONG' },
+      masking: { sku: 'ST-MASK-24', title: 'Precision Crepe Masking', desc: 'Natural crepe paper backing with synthetic rubber resin. Leaves zero gummy residues on removal.', adh: '6.2 N/cm', ten: '40 N/cm', thk: '0.14 mm', color: '#F7D000', tag: 'CLEAN REMOVAL' },
+      opp: { sku: 'ST-OPP-48', title: 'BOPP Packaging Film', desc: 'High-tensile polypropylene film coated with water-based acrylic. Weather-resistant seal.', adh: '7.5 N/cm', ten: '92 N/cm', thk: '0.05 mm', color: '#50CBFF', tag: 'CARTON LOCK' },
+      double: { sku: 'ST-DBL-12', title: 'Double-Sided Tissue', desc: 'Non-woven tissue carrier with aggressive solvent acrylic adhesive on both sides for seamless mounting.', adh: '8.4 N/cm', ten: '45 N/cm', thk: '0.10 mm', color: '#2E3EAC', tag: 'DUAL MOUNT' }
+    };
+
+    const tabs = document.querySelectorAll('.tab-btn');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        const d = data[btn.dataset.tape];
+        if (!d) return;
+        document.getElementById('tapeSku').textContent = d.sku;
+        document.getElementById('tapeTitle').textContent = d.title;
+        document.getElementById('tapeDesc').textContent = d.desc;
+        document.getElementById('tapeAdh').textContent = d.adh;
+        document.getElementById('tapeTen').textContent = d.ten;
+        document.getElementById('tapeThk').textContent = d.thk;
+        document.getElementById('rollCircle').style.backgroundColor = d.color;
+        document.getElementById('rollTag').textContent = d.tag;
+      });
+    });
+  </script>
+</body>
+</html>

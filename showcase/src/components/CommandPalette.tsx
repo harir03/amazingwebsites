@@ -73,7 +73,7 @@ export function CommandPalette({ onClose, onOpenComponent, onOpenSite }: Props) 
 
   return (
     <motion.div className="fixed inset-0 z-[60] flex items-start justify-center px-4 pt-[12vh]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
-      <div className="absolute inset-0 bg-ink/25 backdrop-blur-[2px]" onClick={onClose} aria-hidden="true" />
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-xs" onClick={onClose} aria-hidden="true" />
       <motion.div
         role="dialog"
         aria-modal="true"
@@ -82,7 +82,7 @@ export function CommandPalette({ onClose, onOpenComponent, onOpenSite }: Props) 
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -6, scale: 0.98 }}
         transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full max-w-xl overflow-hidden rounded-2xl bg-white shadow-[0_0_0_1px_rgb(27_39_66_/_0.08),0_30px_70px_-20px_rgb(27_39_66_/_0.45)]"
+        className="relative w-full max-w-xl overflow-hidden rounded-2xl border border-rule bg-surface shadow-2xl"
         onKeyDown={onKeyDown}
       >
         <div className="flex items-center gap-3 border-b border-rule px-4">
