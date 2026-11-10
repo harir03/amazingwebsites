@@ -8,7 +8,10 @@ export type ThemeArchetype =
   | "compute-particles"
   | "architectural-botanical"
   | "tactile-pop-ecommerce"
-  | "sonic-interactive";
+  | "sonic-interactive"
+  | "kinetic-video-editorial"
+  | "mediterranean-botanical-artisan"
+  | "tactical-aerospace-hud";
 
 export type ComponentCategory =
   | "navbar"

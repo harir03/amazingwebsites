@@ -80,6 +80,27 @@ export const THEMES: ThemeMeta[] = [
     accent: "#65a30d",
     blurb: "Web Audio harmonic visualizers, multi-stem mixing decks, studio noir.",
   },
+  {
+    id: "kinetic-video-editorial",
+    name: "Kinetic Video & Playful Motion Editorial",
+    short: "Kinetic Video",
+    accent: "#0038ff",
+    blurb: "Magnetic physics collages, 3D pinned card stack decks, inertia momentum hovers, cursor marquee tickers.",
+  },
+  {
+    id: "mediterranean-botanical-artisan",
+    name: "Mediterranean Botanical & Artisan Gastronomy",
+    short: "Mediterranean Artisan",
+    accent: "#df5c32",
+    blurb: "Warm linen parchment, Sicilian terracotta, Etna volcanic minerals, slow-cooked pantry jars.",
+  },
+  {
+    id: "tactical-aerospace-hud",
+    name: "Tactical Defense Aerospace & HUD Telemetry",
+    short: "Aerospace HUD",
+    accent: "#ff5500",
+    blurb: "Targeting crosshairs, live coordinate telemetry, radar sweep grids, military threat matrices.",
+  },
 ];
 
 export const THEME_BY_ID = Object.fromEntries(THEMES.map((t) => [t.id, t])) as Record<ThemeArchetype, ThemeMeta>;

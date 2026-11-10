@@ -1,13 +1,16 @@
+import { agrumeaFarm } from "./sites/agrumeafarm";
 import { alanMenken } from "./sites/alanmenken";
 import { belgradeArbor } from "./sites/belgradearbor";
 import { dontLookUp } from "./sites/dontlookup";
 import { emotionAgency } from "./sites/emotionagency";
+import { extrafazant } from "./sites/extrafazant";
 import { heronAi } from "./sites/heronai";
 import { helloMonday } from "./sites/hellomonday";
 import { overworldAudio } from "./sites/overworldaudio";
 import { recursive } from "./sites/recursive";
 import { sweetTape } from "./sites/sweettape";
 import { theDesignSociety } from "./sites/thedesignsociety";
+import { zrkTechnology } from "./sites/zrk";
 import type { ComponentItem, WebsiteEntry } from "./types";
 
 export type { ComponentCategory, ComponentItem, ThemeArchetype, WebsiteEntry } from "./types";
@@ -23,6 +26,9 @@ export const CATALOG: WebsiteEntry[] = [
   belgradeArbor,
   sweetTape,
   overworldAudio,
+  extrafazant,
+  agrumeaFarm,
+  zrkTechnology,
 ];
 
 export interface CatalogComponent extends ComponentItem {
