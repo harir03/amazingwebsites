@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimalist Editorial Strapline Hero — ViV MGMT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="bg-white text-black flex items-center justify-center min-h-screen p-6 font-['Inter']">
+
+  <div class="w-full max-w-4xl bg-white p-8 sm:p-12 rounded-3xl border border-zinc-200 select-none">
+    <div class="flex items-center justify-between pb-6 border-b border-zinc-200">
+      <div class="flex items-center gap-6">
+        <span class="font-['Cormorant_Garamond'] text-3xl">ViV</span>
+        <span class="text-[11px] font-mono tracking-widest text-zinc-400 uppercase hidden sm:inline">ARTIST MANAGEMENT + PRODUCTION</span>
+      </div>
+
+      <div class="flex items-center gap-4 font-mono text-[11px] text-zinc-500">
+        <div class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>NYC <strong id="nycTime" class="text-black font-semibold">12:00 PM</strong></span>
+        </div>
+        <div>LDN <strong id="ldnTime" class="text-black font-semibold">5:00 PM</strong></div>
+        <div>LA <strong id="laTime" class="text-black font-semibold">9:00 AM</strong></div>
+      </div>
+    </div>
+
+    <div class="my-10 max-w-3xl">
+      <div class="flex items-center gap-3 text-[10px] font-mono tracking-widest uppercase text-zinc-400 mb-4">
+        <span class="w-5 h-[1px] bg-black"></span>
+        <span>REPRESENTING VISIONARY DIRECTORS &amp; CREATIVES</span>
+      </div>
+
+      <h2 class="font-['Cormorant_Garamond'] text-4xl sm:text-6xl font-normal leading-[1.05] tracking-tight">
+        ViV is an artist management &amp; commercial <span class="italic font-light">photo production</span> company.
+      </h2>
+
+      <div class="mt-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-end pt-6 border-t border-zinc-100">
+        <p class="md:col-span-8 text-sm sm:text-base text-zinc-600 leading-relaxed">
+          Representing commercial photographers, directors, and creatives while providing full-service photo and video production for brands nationwide.
+        </p>
+        <div class="md:col-span-4 flex md:justify-end">
+          <a href="#" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-black text-white text-[11px] font-mono tracking-widest uppercase hover:bg-zinc-800 transition-colors">
+            <span>DISCOVER ROSTER</span>
+            <span>↓</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-6 border-t border-zinc-200 grid grid-cols-2 sm:grid-cols-4 gap-6 font-mono text-xs">
+      <div>
+        <div class="text-[10px] text-zinc-400 uppercase">REPRESENTATION</div>
+        <div class="text-lg font-bold text-black mt-0.5">8 ARTISTS</div>
+      </div>
+      <div>
+        <div class="text-[10px] text-zinc-400 uppercase">OFFICES</div>
+        <div class="text-lg font-bold text-black mt-0.5">NYC · LA · LDN</div>
+      </div>
+      <div>
+        <div class="text-[10px] text-zinc-400 uppercase">DISCIPLINES</div>
+        <div class="text-lg font-bold text-black mt-0.5">PHOTO &amp; MOTION</div>
+      </div>
+      <div>
+        <div class="text-[10px] text-zinc-400 uppercase">AWARD</div>
+        <div class="text-lg font-bold text-black mt-0.5">SOTD &amp; DEV</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function update() {
+      const now = new Date();
+      const opts = { hour: 'numeric', minute: '2-digit', hour12: true };
+      document.getElementById('nycTime').textContent = new Intl.DateTimeFormat('en-US', { ...opts, timeZone: 'America/New_York' }).format(now);
+      document.getElementById('ldnTime').textContent = new Intl.DateTimeFormat('en-GB', { ...opts, timeZone: 'Europe/London' }).format(now);
+      document.getElementById('laTime').textContent = new Intl.DateTimeFormat('en-US', { ...opts, timeZone: 'America/Los_Angeles' }).format(now);
+    }
+    update();
+    setInterval(update, 10000);
+  </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Staggered Chromatic Artist Gallery — ViV MGMT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .artist-img {
+      filter: grayscale(100%);
+      transition: filter 0.6s cubic-bezier(0.23, 1, 0.32, 1), transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .artist-card:hover .artist-img {
+      filter: grayscale(0%);
+      transform: scale(1.04);
+    }
+  </style>
+</head>
+<body class="bg-white text-black flex items-center justify-center min-h-screen p-6 font-['Inter']">
+
+  <div class="w-full max-w-5xl bg-white p-8 rounded-3xl border border-zinc-200 select-none">
+    <div class="flex items-center justify-between pb-6 border-b border-zinc-200 font-mono text-xs">
+      <div class="flex items-center gap-6">
+        <button id="btnAll" class="text-black font-bold border-b-2 border-black pb-1 uppercase tracking-wider">ALL (4)</button>
+        <button id="btnPhoto" class="text-zinc-400 hover:text-black pb-1 uppercase tracking-wider">PHOTOGRAPHERS</button>
+        <button id="btnDir" class="text-zinc-400 hover:text-black pb-1 uppercase tracking-wider">DIRECTORS</button>
+      </div>
+      <span class="text-zinc-400 text-[11px] hidden sm:inline">HOVER TO ENGAGE CHROMATIC BLOOM</span>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 my-10 items-start">
+      <div class="artist-card group cursor-pointer" data-cat="photo">
+        <div class="w-full aspect-[3/4] overflow-hidden rounded-sm bg-zinc-100 relative">
+          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop" class="artist-img w-full h-full object-cover">
+          <div class="absolute top-3 left-3 bg-white/90 px-2 py-0.5 text-[9px] font-mono tracking-wider uppercase">DIRECTOR · NYC</div>
+        </div>
+        <div class="mt-3.5 flex items-baseline justify-between">
+          <h4 class="font-['Cormorant_Garamond'] text-2xl font-normal group-hover:italic">Jonathan Mannion</h4>
+          <span class="text-[10px] font-mono text-zinc-400">NIKE · APPLE</span>
+        </div>
+      </div>
+
+      <div class="artist-card group cursor-pointer sm:translate-y-8" data-cat="photo">
+        <div class="w-full aspect-[4/5] overflow-hidden rounded-sm bg-zinc-100 relative">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop" class="artist-img w-full h-full object-cover">
+          <div class="absolute top-3 left-3 bg-white/90 px-2 py-0.5 text-[9px] font-mono tracking-wider uppercase">PHOTOGRAPHER · LA</div>
+        </div>
+        <div class="mt-3.5 flex items-baseline justify-between">
+          <h4 class="font-['Cormorant_Garamond'] text-2xl font-normal group-hover:italic">Arturo Torres</h4>
+          <span class="text-[10px] font-mono text-zinc-400">MARINE LAYER</span>
+        </div>
+      </div>
+
+      <div class="artist-card group cursor-pointer" data-cat="director">
+        <div class="w-full aspect-[3/4] overflow-hidden rounded-sm bg-zinc-100 relative">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop" class="artist-img w-full h-full object-cover">
+          <div class="absolute top-3 left-3 bg-white/90 px-2 py-0.5 text-[9px] font-mono tracking-wider uppercase">DIRECTOR · NYC</div>
+        </div>
+        <div class="mt-3.5 flex items-baseline justify-between">
+          <h4 class="font-['Cormorant_Garamond'] text-2xl font-normal group-hover:italic">Danielle Moore</h4>
+          <span class="text-[10px] font-mono text-zinc-400">OLD NAVY · GAP</span>
+        </div>
+      </div>
+
+      <div class="artist-card group cursor-pointer sm:translate-y-4" data-cat="photo">
+        <div class="w-full aspect-[4/5] overflow-hidden rounded-sm bg-zinc-100 relative">
+          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1000&auto=format&fit=crop" class="artist-img w-full h-full object-cover">
+          <div class="absolute top-3 left-3 bg-white/90 px-2 py-0.5 text-[9px] font-mono tracking-wider uppercase">BEAUTY &amp; STILL</div>
+        </div>
+        <div class="mt-3.5 flex items-baseline justify-between">
+          <h4 class="font-['Cormorant_Garamond'] text-2xl font-normal group-hover:italic">Jason Kent</h4>
+          <span class="text-[10px] font-mono text-zinc-400">MORPHE · SEPHORA</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="pt-4 border-t border-zinc-200 flex items-center justify-between font-mono text-xs text-zinc-400">
+      <span>ViV MGMT // ROSTER SPECIMEN</span>
+      <span class="text-black font-semibold">SAM DALLYN SOTD</span>
+    </div>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll('.artist-card');
+    const btns = [
+      { el: document.getElementById('btnAll'), cat: 'all' },
+      { el: document.getElementById('btnPhoto'), cat: 'photo' },
+      { el: document.getElementById('btnDir'), cat: 'director' }
+    ];
+
+    btns.forEach(({ el, cat }) => {
+      el.addEventListener('click', () => {
+        btns.forEach(b => {
+          b.el.className = 'text-zinc-400 hover:text-black pb-1 uppercase tracking-wider';
+        });
+        el.className = 'text-black font-bold border-b-2 border-black pb-1 uppercase tracking-wider';
+
+        cards.forEach(card => {
+          const c = card.getAttribute('data-cat');
+          card.style.display = (cat === 'all' || c === cat) ? 'block' : 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

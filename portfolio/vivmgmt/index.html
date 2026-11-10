@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ViV MGMT — Photographer Agency &amp; Commercial Photo Production</title>
+  <meta name="description" content="Representing commercial photographers, directors, and creatives while providing full-service photo and video production for brands nationwide. Recreated with 1:1 motion fidelity.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            page: {
+              bg: '#ffffff',
+              text: '#000000',
+              muted: '#71717a',
+              border: '#e4e4e7',
+              dark: '#09090b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --ease-viv: cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #000000;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* Custom Cursor Follower */
+    #cursorFollower {
+      pointer-events: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s var(--ease-viv), height 0.3s var(--ease-viv), background-color 0.3s ease, opacity 0.2s ease;
+    }
+
+    /* Smooth B&W to Color Image Transition */
+    .artist-img {
+      filter: grayscale(100%);
+      transition: filter 0.6s var(--ease-viv), transform 0.8s var(--ease-viv);
+    }
+    .artist-card:hover .artist-img {
+      filter: grayscale(0%);
+      transform: scale(1.03);
+    }
+
+    /* Subtle hairline borders */
+    .hairline-b {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .hairline-t {
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+    }
+  </style>
+</head>
+<body class="bg-white text-black antialiased selection:bg-black selection:text-white">
+
+  <!-- Floating Custom Cursor Tag -->
+  <div id="cursorFollower" class="opacity-0 hidden lg:flex items-center justify-center rounded-full bg-black text-white text-[10px] font-mono tracking-widest uppercase px-3 py-1.5 shadow-xl">
+    VIEW
+  </div>
+
+  <!-- Navigation Bar -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md hairline-b px-6 md:px-12 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-8">
+      <a href="#" class="font-serif text-3xl md:text-4xl tracking-tight font-normal hover:opacity-70 transition-opacity">
+        ViV
+      </a>
+      <span class="hidden sm:inline-block text-xs font-mono tracking-wider text-page-muted uppercase">
+        ARTIST MANAGEMENT + PRODUCTION
+      </span>
+    </div>
+
+    <!-- Live Clocks & Agency Cities -->
+    <div class="hidden lg:flex items-center gap-6 font-mono text-[11px] text-page-muted">
+      <div class="flex items-center gap-2">
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>NYC <span id="nycTime" class="text-black font-semibold">12:00 PM</span></span>
+      </div>
+      <div>
+        <span>LDN <span id="ldnTime" class="text-black font-semibold">5:00 PM</span></span>
+      </div>
+      <div>
+        <span>LA <span id="laTime" class="text-black font-semibold">9:00 AM</span></span>
+      </div>
+    </div>
+
+    <nav class="flex items-center gap-6 md:gap-8 text-xs font-mono tracking-widest uppercase">
+      <a href="#artists" class="hover:underline underline-offset-4">ARTISTS</a>
+      <a href="#news" class="hover:underline underline-offset-4">NEWS</a>
+      <a href="#production" class="hover:underline underline-offset-4">PRODUCTION</a>
+      <a href="#contact" class="hover:underline underline-offset-4">CONTACT</a>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="pt-36 pb-20 md:pt-48 md:pb-28 px-6 md:px-12 max-w-7xl mx-auto">
+    <div class="max-w-5xl">
+      <div class="text-xs font-mono uppercase tracking-widest text-page-muted mb-6 flex items-center gap-3">
+        <span class="w-6 h-[1px] bg-black"></span>
+        <span>REPRESENTING VISIONARY DIRECTORS &amp; PHOTOGRAPHERS</span>
+      </div>
+
+      <h1 class="font-serif text-5xl sm:text-7xl md:text-8xl lg:text-[7vw] font-normal leading-[0.95] tracking-tight">
+        ViV is an artist management &amp; commercial <span class="italic font-light">photo production</span> company.
+      </h1>
+
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-12 gap-8 items-end pt-8 hairline-t">
+        <p class="md:col-span-8 text-base md:text-lg text-zinc-600 leading-relaxed font-normal">
+          Representing commercial photographers, directors, and creatives while providing full-service photo and video production for brands worldwide. We champion distinctive visual language with uncompromising craft.
+        </p>
+        <div class="md:col-span-4 flex md:justify-end">
+          <a href="#artists" class="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-black text-white text-xs font-mono tracking-widest uppercase hover:bg-zinc-800 transition-colors">
+            <span>EXPLORE ROSTER</span>
+            <span>↓</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter / Tab Strip -->
+  <div class="sticky top-[69px] z-40 bg-white hairline-y px-6 md:px-12 py-3.5 flex items-center justify-between border-y border-black/10">
+    <div class="flex items-center gap-6 text-xs font-mono tracking-wider uppercase">
+      <button class="filter-btn text-black font-bold border-b border-black pb-0.5" data-filter="all">ALL (8)</button>
+      <button class="filter-btn text-page-muted hover:text-black transition-colors" data-filter="photographer">PHOTOGRAPHERS</button>
+      <button class="filter-btn text-page-muted hover:text-black transition-colors" data-filter="director">DIRECTORS</button>
+    </div>
+    <div class="hidden sm:block text-xs font-mono text-page-muted">
+      HOVER TO REVEAL FULL CHROMATIC SPECTRUM
+    </div>
+  </div>
+
+  <!-- Artists Gallery Grid (Staggered Aspect Ratios) -->
+  <section id="artists" class="px-6 md:px-12 py-16 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+
+      <!-- Artist 1: Jonathan Mannion -->
+      <article class="artist-card group cursor-pointer" data-category="photographer" data-cursor="JONATHAN MANNION">
+        <div class="overflow-hidden bg-zinc-100 aspect-[3/4] relative rounded-sm">
+          <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=1000&auto=format&fit=crop" alt="Jonathan Mannion" class="artist-img w-full h-full object-cover">
+          <div class="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-wider bg-white/90 backdrop-blur px-2 py-0.5 rounded-sm">
+            DIRECTOR · NYC
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline justify-between">
+          <h2 class="font-serif text-2xl md:text-3xl font-normal group-hover:italic transition-all">Jonathan Mannion</h2>
+          <span class="text-xs font-mono text-page-muted">NIKE · ROCAWEAR · APPLE</span>
+        </div>
+      </article>
+
+      <!-- Artist 2: Arturo Torres -->
+      <article class="artist-card group cursor-pointer sm:translate-y-12" data-category="photographer" data-cursor="ARTURO TORRES">
+        <div class="overflow-hidden bg-zinc-100 aspect-[4/5] relative rounded-sm">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop" alt="Arturo Torres" class="artist-img w-full h-full object-cover">
+          <div class="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-wider bg-white/90 backdrop-blur px-2 py-0.5 rounded-sm">
+            PHOTOGRAPHER · LA
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline justify-between">
+          <h2 class="font-serif text-2xl md:text-3xl font-normal group-hover:italic transition-all">Arturo Torres</h2>
+          <span class="text-xs font-mono text-page-muted">MARINE LAYER · TRAVIS MATHEW</span>
+        </div>
+      </article>
+
+      <!-- Artist 3: Danielle Moore -->
+      <article class="artist-card group cursor-pointer" data-category="director" data-cursor="DANIELLE MOORE">
+        <div class="overflow-hidden bg-zinc-100 aspect-[3/4] relative rounded-sm">
+          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1000&auto=format&fit=crop" alt="Danielle Moore" class="artist-img w-full h-full object-cover">
+          <div class="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-wider bg-white/90 backdrop-blur px-2 py-0.5 rounded-sm">
+            DIRECTOR · NYC
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline justify-between">
+          <h2 class="font-serif text-2xl md:text-3xl font-normal group-hover:italic transition-all">Danielle Moore</h2>
+          <span class="text-xs font-mono text-page-muted">OLD NAVY · QUAY · GAP</span>
+        </div>
+      </article>
+
+      <!-- Artist 4: Jason Kent -->
+      <article class="artist-card group cursor-pointer sm:translate-y-6" data-category="photographer" data-cursor="JASON KENT">
+        <div class="overflow-hidden bg-zinc-100 aspect-[4/5] relative rounded-sm">
+          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=1000&auto=format&fit=crop" alt="Jason Kent" class="artist-img w-full h-full object-cover">
+          <div class="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-wider bg-white/90 backdrop-blur px-2 py-0.5 rounded-sm">
+            BEAUTY &amp; STILL LIFE
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline justify-between">
+          <h2 class="font-serif text-2xl md:text-3xl font-normal group-hover:italic transition-all">Jason Kent</h2>
+          <span class="text-xs font-mono text-page-muted">MORPHE · SEPHORA · FENTY</span>
+        </div>
+      </article>
+
+      <!-- Artist 5: Beth Sternbaum -->
+      <article class="artist-card group cursor-pointer" data-category="photographer" data-cursor="BETH STERNBAUM">
+        <div class="overflow-hidden bg-zinc-100 aspect-[3/4] relative rounded-sm">
+          <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1000&auto=format&fit=crop" alt="Beth Sternbaum" class="artist-img w-full h-full object-cover">
+          <div class="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-wider bg-white/90 backdrop-blur px-2 py-0.5 rounded-sm">
+            FASHION &amp; EDITORIAL
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline justify-between">
+          <h2 class="font-serif text-2xl md:text-3xl font-normal group-hover:italic transition-all">Beth Sternbaum</h2>
+          <span class="text-xs font-mono text-page-muted">VOGUE · HARPER'S BAZAAR</span>
+        </div>
+      </article>
+
+      <!-- Artist 6: Quinn Gravier -->
+      <article class="artist-card group cursor-pointer sm:translate-y-12" data-category="photographer" data-cursor="QUINN GRAVIER">
+        <div class="overflow-hidden bg-zinc-100 aspect-[4/5] relative rounded-sm">
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=1000&auto=format&fit=crop" alt="Quinn Gravier" class="artist-img w-full h-full object-cover">
+          <div class="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-wider bg-white/90 backdrop-blur px-2 py-0.5 rounded-sm">
+            DOCUMENTARY &amp; ACTION
+          </div>
+        </div>
+        <div class="mt-4 flex items-baseline justify-between">
+          <h2 class="font-serif text-2xl md:text-3xl font-normal group-hover:italic transition-all">Quinn Gravier</h2>
+          <span class="text-xs font-mono text-page-muted">PATAGONIA · RED BULL</span>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- Editorial News & Campaigns -->
+  <section id="news" class="py-24 px-6 md:px-12 bg-zinc-50 hairline-t">
+    <div class="max-w-7xl mx-auto">
+      <div class="flex flex-col sm:flex-row items-baseline justify-between mb-12 gap-4">
+        <div>
+          <span class="font-mono text-xs uppercase tracking-widest text-page-muted">NEWS &amp; DISPATCHES</span>
+          <h2 class="font-serif text-4xl md:text-5xl font-normal mt-1">Recent Campaign Drops</h2>
+        </div>
+        <span class="font-mono text-xs text-page-muted">FALL / WINTER 2026 ARCHIVE</span>
+      </div>
+
+      <div class="divide-y divide-black/10">
+        <a href="#" class="group py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:px-4 transition-all duration-300">
+          <div class="flex items-center gap-6">
+            <span class="font-mono text-xs text-page-muted">01</span>
+            <span class="font-serif text-2xl md:text-3xl font-normal group-hover:italic transition-all">Arturo Torres × Marine Layer</span>
+          </div>
+          <div class="flex items-center gap-6 text-xs font-mono text-page-muted">
+            <span>CALIFORNIA COASTAL STILLS</span>
+            <span class="group-hover:translate-x-2 transition-transform">→</span>
+          </div>
+        </a>
+
+        <a href="#" class="group py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:px-4 transition-all duration-300">
+          <div class="flex items-center gap-6">
+            <span class="font-mono text-xs text-page-muted">02</span>
+            <span class="font-serif text-2xl md:text-3xl font-normal group-hover:italic transition-all">Danielle Moore × Old Navy BTS</span>
+          </div>
+          <div class="flex items-center gap-6 text-xs font-mono text-page-muted">
+            <span>COMMERCIAL BROADCAST &amp; DIGITAL</span>
+            <span class="group-hover:translate-x-2 transition-transform">→</span>
+          </div>
+        </a>
+
+        <a href="#" class="group py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:px-4 transition-all duration-300">
+          <div class="flex items-center gap-6">
+            <span class="font-mono text-xs text-page-muted">03</span>
+            <span class="font-serif text-2xl md:text-3xl font-normal group-hover:italic transition-all">Jonathan Mannion × Nike Basketball</span>
+          </div>
+          <div class="flex items-center gap-6 text-xs font-mono text-page-muted">
+            <span>GLOBAL BILLBOARD CAMPAIGN</span>
+            <span class="group-hover:translate-x-2 transition-transform">→</span>
+          </div>
+        </a>
+
+        <a href="#" class="group py-6 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:px-4 transition-all duration-300">
+          <div class="flex items-center gap-6">
+            <span class="font-mono text-xs text-page-muted">04</span>
+            <span class="font-serif text-2xl md:text-3xl font-normal group-hover:italic transition-all">Jason Kent × Morphe Cosmetics</span>
+          </div>
+          <div class="flex items-center gap-6 text-xs font-mono text-page-muted">
+            <span>PRODUCT LIGHTING &amp; PACKAGING</span>
+            <span class="group-hover:translate-x-2 transition-transform">→</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full-Service Production Section -->
+  <section id="production" class="py-24 px-6 md:px-12 bg-black text-white">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-7">
+          <span class="font-mono text-xs uppercase tracking-widest text-zinc-400">END-TO-END EXECUTION</span>
+          <h2 class="font-serif text-4xl sm:text-6xl md:text-7xl font-normal mt-3 leading-tight">
+            ViV is <span class="italic font-light">production</span>.
+          </h2>
+          <p class="text-zinc-400 text-base md:text-lg mt-6 leading-relaxed max-w-xl font-light">
+            We operate as an agile, executive-tier production arm. From bidding through wrap, we scale bespoke crews for commercial photo and video productions across North America and Europe.
+          </p>
+
+          <div class="grid grid-cols-2 gap-6 mt-10 pt-8 border-t border-zinc-800 font-mono text-xs">
+            <div>
+              <div class="text-white font-bold mb-2">SERVICES</div>
+              <ul class="space-y-1.5 text-zinc-400">
+                <li>• Art Buying &amp; Casting</li>
+                <li>• Location Scouting &amp; Permitting</li>
+                <li>• Budgeting &amp; Cost Control</li>
+              </ul>
+            </div>
+            <div>
+              <div class="text-white font-bold mb-2">POST-PRODUCTION</div>
+              <ul class="space-y-1.5 text-zinc-400">
+                <li>• High-End Color Grading</li>
+                <li>• Digital Tech &amp; Retouching</li>
+                <li>• Editorial &amp; Sound Design</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5">
+          <div class="aspect-square bg-zinc-900 border border-zinc-800 p-8 rounded-sm flex flex-col justify-between">
+            <span class="font-mono text-xs tracking-widest text-zinc-400 uppercase">CAPABILITIES STATEMENT</span>
+            <div class="font-serif text-3xl sm:text-4xl text-white font-normal leading-snug">
+              "We make beautiful work. Come create with us."
+            </div>
+            <a href="mailto:katie@vivmgmt.com" class="inline-flex items-center justify-between p-4 bg-white text-black font-mono text-xs uppercase tracking-wider hover:bg-zinc-200 transition-colors">
+              <span>COMMISSION A PRODUCTION</span>
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="py-20 px-6 md:px-12 bg-white hairline-t">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-16 hairline-b">
+        <div class="md:col-span-6">
+          <div class="font-serif text-5xl md:text-6xl font-normal mb-4">
+            ViV MGMT
+          </div>
+          <p class="text-zinc-600 text-sm max-w-sm">
+            Artist management &amp; commercial photo production. New York · Los Angeles · London.
+          </p>
+        </div>
+
+        <div class="md:col-span-3 font-mono text-xs space-y-3">
+          <div class="font-bold uppercase tracking-wider text-black">INQUIRIES</div>
+          <div><a href="mailto:katie@vivmgmt.com" class="text-zinc-600 hover:text-black">katie@vivmgmt.com</a></div>
+          <div><a href="tel:+12125550199" class="text-zinc-600 hover:text-black">+1 (212) 555-0199</a></div>
+          <div class="pt-2"><a href="https://instagram.com/vivmgmt_" target="_blank" rel="noopener" class="text-zinc-600 hover:text-black">@vivmgmt_ →</a></div>
+        </div>
+
+        <div class="md:col-span-3 font-mono text-xs space-y-3">
+          <div class="font-bold uppercase tracking-wider text-black">CREDITS</div>
+          <p class="text-zinc-500 leading-relaxed">
+            Recreated with 1:1 motion fidelity for the <span class="text-black font-semibold">Frontend Copied</span> archive. Original design &amp; development by Sam Dallyn.
+          </p>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-zinc-500 gap-4">
+        <div>© 2026 ViV MGMT · ALL RIGHTS RESERVED</div>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-black">PRIVACY</a>
+          <a href="#" class="hover:text-black">TERMS</a>
+          <a href="#" class="hover:text-black">BACK TO TOP ↑</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Scripts -->
+  <script>
+    // 1. Live Time Clocks for NYC, LDN, LA
+    function updateClocks() {
+      const now = new Date();
+      const opts = { hour: 'numeric', minute: '2-digit', hour12: true };
+      
+      const nyc = new Intl.DateTimeFormat('en-US', { ...opts, timeZone: 'America/New_York' }).format(now);
+      const ldn = new Intl.DateTimeFormat('en-GB', { ...opts, timeZone: 'Europe/London' }).format(now);
+      const la = new Intl.DateTimeFormat('en-US', { ...opts, timeZone: 'America/Los_Angeles' }).format(now);
+
+      const nycEl = document.getElementById('nycTime');
+      const ldnEl = document.getElementById('ldnTime');
+      const laEl = document.getElementById('laTime');
+
+      if (nycEl) nycEl.textContent = nyc;
+      if (ldnEl) ldnEl.textContent = ldn;
+      if (laEl) laEl.textContent = la;
+    }
+    updateClocks();
+    setInterval(updateClocks, 10000);
+
+    // 2. Custom Cursor Follower
+    const cursor = document.getElementById('cursorFollower');
+    const cards = document.querySelectorAll('.artist-card');
+
+    window.addEventListener('pointermove', (e) => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+
+    cards.forEach(card => {
+      card.addEventListener('pointerenter', () => {
+        const text = card.getAttribute('data-cursor') || 'VIEW';
+        cursor.textContent = text;
+        cursor.classList.remove('opacity-0');
+        cursor.classList.add('opacity-100');
+      });
+      card.addEventListener('pointerleave', () => {
+        cursor.classList.add('opacity-0');
+        cursor.classList.remove('opacity-100');
+      });
+    });
+
+    // 3. Category Filter Buttons
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('text-black', 'font-bold', 'border-b', 'border-black');
+          b.classList.add('text-page-muted');
+        });
+        btn.classList.add('text-black', 'font-bold', 'border-b', 'border-black');
+        btn.classList.remove('text-page-muted');
+
+        const filter = btn.getAttribute('data-filter');
+        cards.forEach(card => {
+          const cat = card.getAttribute('data-category');
+          if (filter === 'all' || cat === filter) {
+            card.style.display = 'block';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
