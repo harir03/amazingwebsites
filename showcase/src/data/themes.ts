@@ -101,6 +101,13 @@ export const THEMES: ThemeMeta[] = [
     accent: "#ff5500",
     blurb: "Targeting crosshairs, live coordinate telemetry, radar sweep grids, military threat matrices.",
   },
+  {
+    id: "athletic-fashion-editorial",
+    name: "Athletic High-Fashion Editorial & Signature Archive",
+    short: "Athletic Fashion",
+    accent: "#fde047",
+    blurb: "3D holographic collectible cards, yardline scrub rails, NFL gridiron power, haute couture streetwear.",
+  },
 ];
 
 export const THEME_BY_ID = Object.fromEntries(THEMES.map((t) => [t.id, t])) as Record<ThemeArchetype, ThemeMeta>;

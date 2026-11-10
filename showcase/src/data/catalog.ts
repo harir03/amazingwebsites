@@ -11,6 +11,7 @@ import { recursive } from "./sites/recursive";
 import { sweetTape } from "./sites/sweettape";
 import { theDesignSociety } from "./sites/thedesignsociety";
 import { zrkTechnology } from "./sites/zrk";
+import { justinJefferson } from "./sites/justinjefferson";
 import type { ComponentItem, WebsiteEntry } from "./types";
 
 export type { ComponentCategory, ComponentItem, ThemeArchetype, WebsiteEntry } from "./types";
@@ -29,6 +30,7 @@ export const CATALOG: WebsiteEntry[] = [
   extrafazant,
   agrumeaFarm,
   zrkTechnology,
+  justinJefferson,
 ];
 
 export interface CatalogComponent extends ComponentItem {

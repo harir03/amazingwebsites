@@ -69,6 +69,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 | Portfolio | [Extrafazant](portfolio/extrafazant/) | [https://www.extrafazant.nl/](https://www.extrafazant.nl/) | Webflow + GSAP + Lenis + Barba | ✅ Complete ([Local Demo](http://localhost:3008/)) |
 | E-Commerce | [Agrumea Farm](ecommerce/agrumeafarm/) | [https://www.agrumeafarm.it/en](https://www.agrumeafarm.it/en) | Nuxt 3 + Vue 3 + CSS Transitions | ✅ Complete ([Local Demo](http://localhost:3009/)) |
 | Devtools / Aero | [ZIRKA Interceptor](devtools/zrk/) | [https://www.zrk.technology/](https://www.zrk.technology/) | Webflow + GSAP + Observer + HUD | ✅ Complete ([Local Demo](http://localhost:3010/)) |
+| Portfolio | [Justin Jefferson](portfolio/justinjefferson/) | [https://jjettas.com/](https://jjettas.com/) | Next.js + 3D Holographic + Gyroscope + Web Audio | ✅ Complete ([Local Demo](http://localhost:3011/)) |
 
 ---
 
@@ -80,7 +81,7 @@ Tracked against [Awwwards Sites of the Day](https://www.awwwards.com/websites/si
 |---|---|---|---|---|
 | Nov 9, 2026 | **ZIRKA Interceptor (ZRK)** | [https://www.zrk.technology/](https://www.zrk.technology/) | Devtools / Defense Tech | ✅ Complete (`devtools/zrk`) |
 | Nov 8, 2026 | **Extrafazant** | [https://www.extrafazant.nl/](https://www.extrafazant.nl/) | Creative Studio Portfolio | ✅ Complete (`portfolio/extrafazant`) |
-| Nov 7, 2026 | **Justin Jefferson** | [https://www.justinjefferson.com/](https://www.justinjefferson.com/) | Athlete Editorial | ⏳ Queued |
+| Nov 7, 2026 | **Justin Jefferson** | [https://jjettas.com/](https://jjettas.com/) | Athlete Editorial | ✅ Complete (`portfolio/justinjefferson`) |
 | Nov 6, 2026 | **ViV** | [https://viv.network/](https://viv.network/) | Digital Platform | ⏳ Queued |
 | Nov 5, 2026 | **Agrumea Farm** | [https://www.agrumeafarm.it/en](https://www.agrumeafarm.it/en) | E-Commerce / Agriturismo | ✅ Complete (`ecommerce/agrumeafarm`) |
 | Nov 4, 2026 | **Grail** | [https://grail.denormalized.com/](https://grail.denormalized.com/) | Fintech / Web3 | ⏳ Queued |

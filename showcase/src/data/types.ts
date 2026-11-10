@@ -11,7 +11,8 @@ export type ThemeArchetype =
   | "sonic-interactive"
   | "kinetic-video-editorial"
   | "mediterranean-botanical-artisan"
-  | "tactical-aerospace-hud";
+  | "tactical-aerospace-hud"
+  | "athletic-fashion-editorial";
 
 export type ComponentCategory =
   | "navbar"
