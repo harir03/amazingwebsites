@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Justin Jefferson #18 — Athlete Editorial &amp; Signature Archive</title>
+  <meta name="description" content="Official editorial archive and signature moments of Justin Jefferson. NFL All-Pro, OPOY, and fashion icon. Recreated with 3D holographic cards and athletic luxury typography.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700;1,900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Barlow Condensed"', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            gold: {
+              300: '#FDE047',
+              400: '#FACC15',
+              500: '#EAB308',
+              600: '#CA8A04',
+            },
+            vikings: {
+              purple: '#4F2683',
+              deep: '#140c24',
+              night: '#0e0817',
+              gold: '#FFC62F'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-midnight: #0b0713;
+      --bg-surface: #140d21;
+      --card-bg: #1c142e;
+      --gold-primary: #f7d047;
+      --purple-accent: #7c3aed;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-jj: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    body {
+      background-color: var(--bg-midnight);
+      color: #f8f9fa;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+      selection-background-color: #f7d047;
+      selection-color: #0b0713;
+    }
+
+    /* Turf grain overlay */
+    .turf-overlay {
+      background-image: radial-gradient(rgba(247, 208, 71, 0.05) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+
+    /* Holographic Foil Gradients */
+    .holo-sheen {
+      background: linear-gradient(
+        105deg,
+        transparent 25%,
+        rgba(255, 255, 255, 0.05) 35%,
+        rgba(255, 255, 255, 0.45) 50%,
+        rgba(255, 255, 255, 0.05) 65%,
+        transparent 75%
+      );
+      background-size: 250% 100%;
+    }
+
+    .holo-rainbow {
+      background: linear-gradient(
+        115deg,
+        rgba(247, 208, 71, 0.3) 0%,
+        rgba(168, 85, 247, 0.35) 28%,
+        rgba(56, 189, 248, 0.3) 50%,
+        rgba(236, 72, 153, 0.3) 75%,
+        rgba(247, 208, 71, 0.3) 100%
+      );
+      background-size: 200% 200%;
+      mix-blend-mode: color-dodge;
+    }
+
+    /* 3D Transform Utilities */
+    .preserve-3d {
+      transform-style: preserve-3d;
+    }
+    .backface-hidden {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Infinite marquee */
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 32s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+
+    /* Yardline Dashes */
+    .yardlines-track {
+      background: repeating-linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.12) 0px,
+        rgba(255, 255, 255, 0.12) 2px,
+        transparent 2px,
+        transparent 80px
+      );
+    }
+  </style>
+</head>
+<body class="bg-[#0b0713] text-white antialiased">
+
+  <!-- Interactive Preloader -->
+  <div id="preloader" class="fixed inset-0 z-[100] flex flex-col justify-between bg-[#0b0713] px-8 py-10 transition-transform duration-700 ease-[cubic-bezier(0.85,0,0.15,1)]">
+    <div class="flex items-center justify-between text-xs tracking-widest text-zinc-400 font-mono">
+      <span>JUSTIN JEFFERSON // ARCHIVE</span>
+      <span>MINNEAPOLIS · NEW ORLEANS</span>
+    </div>
+    <div class="text-center">
+      <div class="font-display text-[22vw] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-200 to-zinc-600">
+        18
+      </div>
+      <p class="font-mono text-sm tracking-widest text-gold-400 mt-2">"MAKE A PLAY"</p>
+    </div>
+    <div class="flex items-end justify-between font-mono text-xs text-zinc-400">
+      <div>
+        <span class="text-zinc-600 block mb-1">RECORD VERIFICATION</span>
+        <span class="text-white">STATUS: 5,899 YDS · 4× ALL-PRO</span>
+      </div>
+      <div class="text-right">
+        <span id="loadProgress" class="font-display text-4xl text-white font-bold">00%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header / Navigation Bar -->
+  <header class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-5 md:px-12 backdrop-blur-md bg-[#0b0713]/70 border-b border-white/5">
+    <a href="#" class="flex items-center gap-3 group">
+      <span class="font-display text-2xl md:text-3xl font-black tracking-tight uppercase text-white group-hover:text-gold-400 transition-colors">
+        JUSTIN JEFFERSON
+      </span>
+      <span class="px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-gold-400 text-black">
+        #18
+      </span>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-8 text-xs font-mono tracking-widest text-zinc-300">
+      <a href="#hero" class="hover:text-gold-400 transition-colors">ON-FIELD</a>
+      <a href="#signature" class="hover:text-gold-400 transition-colors">SIGNATURE DECK</a>
+      <a href="#foundation" class="hover:text-gold-400 transition-colors">JJETS FOUNDATION</a>
+      <a href="#partnerships" class="hover:text-gold-400 transition-colors">PARTNERSHIPS</a>
+      <a href="#gallery" class="hover:text-gold-400 transition-colors">ARCHIVE</a>
+    </nav>
+
+    <div class="flex items-center gap-4">
+      <!-- Audio Toggle -->
+      <button id="soundToggle" class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 hover:border-gold-400 text-xs font-mono text-zinc-300 hover:text-white transition-all bg-white/5">
+        <span id="soundIcon" class="w-2 h-2 rounded-full bg-zinc-500"></span>
+        <span id="soundLabel">AUDIO OFF</span>
+      </button>
+
+      <a href="#signature" class="px-4 py-2 rounded bg-white text-black font-display font-bold text-sm tracking-wider uppercase hover:bg-gold-400 transition-colors">
+        VIEW CARDS
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section id="hero" class="relative min-h-screen flex flex-col justify-between pt-28 pb-12 px-6 md:px-12 overflow-hidden turf-overlay">
+    <!-- Stadium Ambient Glow -->
+    <div class="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[80vw] h-[50vh] rounded-full bg-gradient-to-b from-purple-900/30 via-gold-500/10 to-transparent blur-3xl"></div>
+
+    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-end my-auto">
+      <div class="lg:col-span-8">
+        <div class="flex items-center gap-3 font-mono text-xs tracking-widest text-gold-400 mb-4">
+          <span class="w-8 h-[1px] bg-gold-400"></span>
+          <span>NFL OFFENSIVE PLAYER OF THE YEAR · WIDE RECEIVER</span>
+        </div>
+        <h1 class="font-display text-6xl sm:text-8xl md:text-9xl lg:text-[11vw] font-black uppercase leading-[0.88] tracking-tighter text-white">
+          RECORDS ARE <br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-400 via-amber-200 to-white">MADE TO BE</span> <br>
+          BROKEN.
+        </h1>
+      </div>
+
+      <div class="lg:col-span-4 flex flex-col justify-end space-y-6">
+        <p class="text-sm md:text-base text-zinc-300 leading-relaxed font-light">
+          From St. Rose, Louisiana to the Met Gala runway. Every route carries intention, style, and a story written at the highest speed known to football.
+        </p>
+
+        <div class="grid grid-cols-3 gap-4 pt-4 border-t border-white/10 font-mono">
+          <div>
+            <div class="text-zinc-500 text-[10px] tracking-wider uppercase">REC YARDS</div>
+            <div class="text-2xl md:text-3xl font-display font-bold text-white">5,899</div>
+            <div class="text-gold-400 text-[10px]">HISTORIC 4-YR RECORD</div>
+          </div>
+          <div>
+            <div class="text-zinc-500 text-[10px] tracking-wider uppercase">AVG YDS/GM</div>
+            <div class="text-2xl md:text-3xl font-display font-bold text-white">98.3</div>
+            <div class="text-zinc-400 text-[10px]">#1 IN NFL HISTORY</div>
+          </div>
+          <div>
+            <div class="text-zinc-500 text-[10px] tracking-wider uppercase">HONORS</div>
+            <div class="text-2xl md:text-3xl font-display font-bold text-white">4×</div>
+            <div class="text-zinc-400 text-[10px]">ALL-PRO SELECTION</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Yardline Scrubber Rail -->
+    <div class="relative z-10 w-full pt-8">
+      <div class="flex items-center justify-between text-[11px] font-mono text-zinc-500 mb-2">
+        <span>G</span>
+        <span>10</span>
+        <span>20</span>
+        <span>30</span>
+        <span>40</span>
+        <span class="text-gold-400 font-bold">50</span>
+        <span>40</span>
+        <span>30</span>
+        <span>20</span>
+        <span>10</span>
+        <span>G</span>
+      </div>
+      <div class="w-full h-3 rounded-full bg-white/5 border border-white/10 p-0.5 yardlines-track relative overflow-hidden">
+        <div id="yardlineIndicator" class="h-full w-24 rounded-full bg-gradient-to-r from-gold-500 to-amber-300 shadow-[0_0_12px_rgba(247,208,71,0.8)] transition-transform duration-100 ease-out"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Signature Moments — 3D Holographic Trading Card Deck -->
+  <section id="signature" class="relative py-28 px-6 md:px-12 bg-gradient-to-b from-[#0b0713] via-[#140d21] to-[#0b0713]">
+    <div class="max-w-7xl mx-auto mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div>
+        <div class="flex items-center gap-2 font-mono text-xs text-gold-400 tracking-widest uppercase mb-2">
+          <span>02 // SIGNATURE DECK</span>
+          <span class="w-1.5 h-1.5 rounded-full bg-gold-400"></span>
+          <span>INTERACTIVE 3D HOLOGRAPHIC CARDS</span>
+        </div>
+        <h2 class="font-display text-5xl md:text-7xl font-black uppercase tracking-tight text-white">
+          SIGNATURE MOMENTS
+        </h2>
+      </div>
+      <p class="max-w-md text-xs md:text-sm text-zinc-400 font-mono">
+        HOVER OVER CARDS TO ENGAGE 3D PERSPECTIVE &amp; SPECULAR RAINBOW FOIL. CLICK TO FLIP AND INSPECT VERIFIED CAREER TELEMETRY.
+      </p>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
+
+      <!-- Card 1: Peach Bowl -->
+      <div class="card-container group relative cursor-pointer" style="perspective: 1400px;" data-card-idx="0">
+        <div class="card-inner relative w-full aspect-[1036/1519] rounded-2xl preserve-3d transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] shadow-2xl">
+          <!-- Front Face -->
+          <div class="card-face card-front absolute inset-0 rounded-2xl backface-hidden overflow-hidden bg-[#181126] border border-white/15 p-4 flex flex-col justify-between">
+            <img src="https://images.unsplash.com/photo-1566577739112-5180d4bf9390?q=80&w=800&auto=format&fit=crop" alt="The Peach Bowl" class="absolute inset-0 w-full h-full object-cover opacity-85 filter contrast-125 saturate-110">
+            <!-- Specular Foil Glare -->
+            <div class="holo-sheen pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <!-- Rainbow Hologram -->
+            <div class="holo-rainbow pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-75 transition-opacity duration-300"></div>
+            
+            <div class="relative z-10 flex items-center justify-between text-[10px] font-mono font-bold tracking-widest text-gold-300">
+              <span class="bg-black/60 backdrop-blur px-2 py-0.5 rounded">LSU #2</span>
+              <span class="bg-black/60 backdrop-blur px-2 py-0.5 rounded">2019 CFP</span>
+            </div>
+
+            <div class="relative z-10 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10">
+              <div class="text-[10px] font-mono text-gold-400 font-bold uppercase tracking-wider">THE PEACH BOWL</div>
+              <div class="font-display text-xl font-black text-white leading-tight uppercase">4 TOUCHDOWNS IN ONE HALF</div>
+              <div class="mt-2 text-[10px] font-mono text-zinc-300 flex justify-between border-t border-white/10 pt-1.5">
+                <span>14 REC</span>
+                <span>227 YDS</span>
+                <span class="text-gold-400 font-bold">4 TD</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Back Face -->
+          <div class="card-face card-back absolute inset-0 rounded-2xl backface-hidden overflow-hidden bg-[#110b1d] border-2 border-gold-400/50 p-5 flex flex-col justify-between [transform:rotateY(180deg)]">
+            <div>
+              <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                <span class="font-display text-lg font-black text-gold-400">OFFICIAL RECORD #01</span>
+                <span class="text-[10px] font-mono text-zinc-400">CFP SEMIFINAL</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold uppercase mt-3 text-white">COLLEGE RECORD ERASURE</h3>
+              <p class="text-xs text-zinc-300 mt-2 font-sans leading-relaxed">
+                Tied the all-time bowl record with four touchdown receptions—all scored in the first half of LSU's 63–28 victory over Oklahoma.
+              </p>
+            </div>
+            <div class="font-mono text-[10px] space-y-1.5 border-t border-white/10 pt-3 text-zinc-400">
+              <div class="flex justify-between"><span>DATE:</span> <span class="text-white">DEC 28, 2019</span></div>
+              <div class="flex justify-between"><span>LOCATION:</span> <span class="text-white">MERCEDES-BENZ STADIUM</span></div>
+              <div class="flex justify-between"><span>RESULT:</span> <span class="text-gold-400 font-bold">W 63-28 (CFP CHAMPION)</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Rookie Record -->
+      <div class="card-container group relative cursor-pointer" style="perspective: 1400px;" data-card-idx="1">
+        <div class="card-inner relative w-full aspect-[1036/1519] rounded-2xl preserve-3d transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] shadow-2xl">
+          <div class="card-face card-front absolute inset-0 rounded-2xl backface-hidden overflow-hidden bg-[#181126] border border-white/15 p-4 flex flex-col justify-between">
+            <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=800&auto=format&fit=crop" alt="Rookie Record" class="absolute inset-0 w-full h-full object-cover opacity-85 filter contrast-125 saturate-110">
+            <div class="holo-sheen pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="holo-rainbow pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-75 transition-opacity duration-300"></div>
+            
+            <div class="relative z-10 flex items-center justify-between text-[10px] font-mono font-bold tracking-widest text-gold-300">
+              <span class="bg-black/60 backdrop-blur px-2 py-0.5 rounded">ROOKIE #18</span>
+              <span class="bg-black/60 backdrop-blur px-2 py-0.5 rounded">2020 NFL</span>
+            </div>
+
+            <div class="relative z-10 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10">
+              <div class="text-[10px] font-mono text-gold-400 font-bold uppercase tracking-wider">SUPER BOWL ERA RECORD</div>
+              <div class="font-display text-xl font-black text-white leading-tight uppercase">HISTORIC ROOKIE CAMPAIGN</div>
+              <div class="mt-2 text-[10px] font-mono text-zinc-300 flex justify-between border-t border-white/10 pt-1.5">
+                <span>88 REC</span>
+                <span>1,400 YDS</span>
+                <span class="text-gold-400 font-bold">7 TD</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-face card-back absolute inset-0 rounded-2xl backface-hidden overflow-hidden bg-[#110b1d] border-2 border-gold-400/50 p-5 flex flex-col justify-between [transform:rotateY(180deg)]">
+            <div>
+              <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                <span class="font-display text-lg font-black text-gold-400">OFFICIAL RECORD #02</span>
+                <span class="text-[10px] font-mono text-zinc-400">2020 DEBUT</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold uppercase mt-3 text-white">THE 1,400-YARD MILESTONE</h3>
+              <p class="text-xs text-zinc-300 mt-2 font-sans leading-relaxed">
+                Broke Anquan Boldin's 17-year rookie receiving record by amassing 1,400 yards in 16 regular season appearances.
+              </p>
+            </div>
+            <div class="font-mono text-[10px] space-y-1.5 border-t border-white/10 pt-3 text-zinc-400">
+              <div class="flex justify-between"><span>DRAFT:</span> <span class="text-white">ROUND 1 · PICK 22</span></div>
+              <div class="flex justify-between"><span>PRO BOWL:</span> <span class="text-white">YEAR 1 SELECTION</span></div>
+              <div class="flex justify-between"><span>EFFICIENCY:</span> <span class="text-gold-400 font-bold">15.9 YDS/REC</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: The Catch (Buffalo Bills 4th & 18) -->
+      <div class="card-container group relative cursor-pointer" style="perspective: 1400px;" data-card-idx="2">
+        <div class="card-inner relative w-full aspect-[1036/1519] rounded-2xl preserve-3d transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] shadow-2xl ring-2 ring-gold-400/30">
+          <div class="card-face card-front absolute inset-0 rounded-2xl backface-hidden overflow-hidden bg-[#181126] border border-gold-400/40 p-4 flex flex-col justify-between">
+            <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=800&auto=format&fit=crop" alt="The Catch" class="absolute inset-0 w-full h-full object-cover opacity-85 filter contrast-125 saturate-110">
+            <div class="holo-sheen pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="holo-rainbow pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-85 transition-opacity duration-300"></div>
+            
+            <div class="relative z-10 flex items-center justify-between text-[10px] font-mono font-bold tracking-widest text-gold-300">
+              <span class="bg-gold-400 text-black px-2 py-0.5 rounded font-black">CROWN JEWEL</span>
+              <span class="bg-black/60 backdrop-blur px-2 py-0.5 rounded">4TH &amp; 18</span>
+            </div>
+
+            <div class="relative z-10 bg-black/85 backdrop-blur-md p-3 rounded-xl border border-gold-400/30">
+              <div class="text-[10px] font-mono text-gold-400 font-bold uppercase tracking-wider">NFL MOMENT OF THE YEAR</div>
+              <div class="font-display text-xl font-black text-white leading-tight uppercase">"THE CATCH" VS BUFFALO</div>
+              <div class="mt-2 text-[10px] font-mono text-zinc-300 flex justify-between border-t border-white/10 pt-1.5">
+                <span>32 YDS</span>
+                <span>1-HANDED</span>
+                <span class="text-gold-400 font-bold">GAME OF YEAR</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-face card-back absolute inset-0 rounded-2xl backface-hidden overflow-hidden bg-[#110b1d] border-2 border-gold-400 p-5 flex flex-col justify-between [transform:rotateY(180deg)]">
+            <div>
+              <div class="flex items-center justify-between border-b border-gold-400/30 pb-2">
+                <span class="font-display text-lg font-black text-gold-400">THE IMMORTAL PLAY</span>
+                <span class="text-[10px] font-mono text-gold-300">NOV 13, 2022</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold uppercase mt-3 text-white">4TH &amp; 18 WRESTLE GRAB</h3>
+              <p class="text-xs text-zinc-300 mt-2 font-sans leading-relaxed">
+                Trapped between defender Cam Lewis and the ground, Justin ripped the ball from the defender's arms with one right hand while horizontal in midair.
+              </p>
+            </div>
+            <div class="font-mono text-[10px] space-y-1.5 border-t border-white/10 pt-3 text-zinc-400">
+              <div class="flex justify-between"><span>SITUATION:</span> <span class="text-white">4TH &amp; 18 · 2:00 Q4</span></div>
+              <div class="flex justify-between"><span>DISTANCE:</span> <span class="text-white">32 YARDS TO FIRST DOWN</span></div>
+              <div class="flex justify-between"><span>HOF ARTIFACT:</span> <span class="text-gold-400 font-bold">CLEATS &amp; GLOVES IN CANTON</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Offensive Player of the Year -->
+      <div class="card-container group relative cursor-pointer" style="perspective: 1400px;" data-card-idx="3">
+        <div class="card-inner relative w-full aspect-[1036/1519] rounded-2xl preserve-3d transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] shadow-2xl">
+          <div class="card-face card-front absolute inset-0 rounded-2xl backface-hidden overflow-hidden bg-[#181126] border border-white/15 p-4 flex flex-col justify-between">
+            <img src="https://images.unsplash.com/photo-1587280501635-68a0e82cd5ff?q=80&w=800&auto=format&fit=crop" alt="OPOY" class="absolute inset-0 w-full h-full object-cover opacity-85 filter contrast-125 saturate-110">
+            <div class="holo-sheen pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="holo-rainbow pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-75 transition-opacity duration-300"></div>
+            
+            <div class="relative z-10 flex items-center justify-between text-[10px] font-mono font-bold tracking-widest text-gold-300">
+              <span class="bg-black/60 backdrop-blur px-2 py-0.5 rounded">NFL HONORS</span>
+              <span class="bg-black/60 backdrop-blur px-2 py-0.5 rounded">2022 OPOY</span>
+            </div>
+
+            <div class="relative z-10 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10">
+              <div class="text-[10px] font-mono text-gold-400 font-bold uppercase tracking-wider">UNANIMOUS ALL-PRO</div>
+              <div class="font-display text-xl font-black text-white leading-tight uppercase">OFFENSIVE PLAYER OF YEAR</div>
+              <div class="mt-2 text-[10px] font-mono text-zinc-300 flex justify-between border-t border-white/10 pt-1.5">
+                <span>128 REC</span>
+                <span>1,809 YDS</span>
+                <span class="text-gold-400 font-bold">8 TD</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-face card-back absolute inset-0 rounded-2xl backface-hidden overflow-hidden bg-[#110b1d] border-2 border-gold-400/50 p-5 flex flex-col justify-between [transform:rotateY(180deg)]">
+            <div>
+              <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                <span class="font-display text-lg font-black text-gold-400">AP AWARDS</span>
+                <span class="text-[10px] font-mono text-zinc-400">2022 SEASON</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold uppercase mt-3 text-white">RECEPTIONS &amp; YARDS LEADER</h3>
+              <p class="text-xs text-zinc-300 mt-2 font-sans leading-relaxed">
+                Led the entire National Football League in both catches (128) and receiving yards (1,809) on his path to winning AP OPOY.
+              </p>
+            </div>
+            <div class="font-mono text-[10px] space-y-1.5 border-t border-white/10 pt-3 text-zinc-400">
+              <div class="flex justify-between"><span>VOTES:</span> <span class="text-white">35 OF 50 FIRST-PLACE</span></div>
+              <div class="flex justify-between"><span>TRIPLE CROWN:</span> <span class="text-white">LEAD LEAGUE IN TARGETS &amp; YARDS</span></div>
+              <div class="flex justify-between"><span>100-YD GAMES:</span> <span class="text-gold-400 font-bold">10 IN A SINGLE SEASON</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5: Pro Bowl & Fashion Vanguard -->
+      <div class="card-container group relative cursor-pointer" style="perspective: 1400px;" data-card-idx="4">
+        <div class="card-inner relative w-full aspect-[1036/1519] rounded-2xl preserve-3d transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] shadow-2xl">
+          <div class="card-face card-front absolute inset-0 rounded-2xl backface-hidden overflow-hidden bg-[#181126] border border-white/15 p-4 flex flex-col justify-between">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop" alt="Fashion Vanguard" class="absolute inset-0 w-full h-full object-cover opacity-85 filter contrast-125 saturate-110">
+            <div class="holo-sheen pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div class="holo-rainbow pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-75 transition-opacity duration-300"></div>
+            
+            <div class="relative z-10 flex items-center justify-between text-[10px] font-mono font-bold tracking-widest text-gold-300">
+              <span class="bg-black/60 backdrop-blur px-2 py-0.5 rounded">STYLE ICON</span>
+              <span class="bg-black/60 backdrop-blur px-2 py-0.5 rounded">PARIS · NYC</span>
+            </div>
+
+            <div class="relative z-10 bg-black/80 backdrop-blur-md p-3 rounded-xl border border-white/10">
+              <div class="text-[10px] font-mono text-gold-400 font-bold uppercase tracking-wider">CULTURAL IMPACT</div>
+              <div class="font-display text-xl font-black text-white leading-tight uppercase">THE GRIDDY &amp; HIGH RUNWAY</div>
+              <div class="mt-2 text-[10px] font-mono text-zinc-300 flex justify-between border-t border-white/10 pt-1.5">
+                <span>VOGUE</span>
+                <span>MET GALA</span>
+                <span class="text-gold-400 font-bold">FORTNITE</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-face card-back absolute inset-0 rounded-2xl backface-hidden overflow-hidden bg-[#110b1d] border-2 border-gold-400/50 p-5 flex flex-col justify-between [transform:rotateY(180deg)]">
+            <div>
+              <div class="flex items-center justify-between border-b border-white/10 pb-2">
+                <span class="font-display text-lg font-black text-gold-400">GLOBAL PHENOMENON</span>
+                <span class="text-[10px] font-mono text-zinc-400">POP CULTURE</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold uppercase mt-3 text-white">CROSSOVER PHENOMENON</h3>
+              <p class="text-xs text-zinc-300 mt-2 font-sans leading-relaxed">
+                Turned a signature touchdown celebration into an international dance craze, licensed by Epic Games, and bridged the gap to luxury runway fashion.
+              </p>
+            </div>
+            <div class="font-mono text-[10px] space-y-1.5 border-t border-white/10 pt-3 text-zinc-400">
+              <div class="flex justify-between"><span>CELEBRATION:</span> <span class="text-white">THE GRIDDY DANCE</span></div>
+              <div class="flex justify-between"><span>FASHION WEEK:</span> <span class="text-white">PARIS FRONT ROW 2023–24</span></div>
+              <div class="flex justify-between"><span>EXT:</span> <span class="text-gold-400 font-bold">RECORD EXTENSION SIGNED</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- The JJets Foundation Section -->
+  <section id="foundation" class="relative py-28 px-6 md:px-12 bg-[#170e28] [clip-path:polygon(0_4vw,100%_0,100%_100%,0_100%)] overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div class="lg:col-span-7">
+          <div class="font-mono text-xs text-gold-400 tracking-widest uppercase mb-3 flex items-center gap-2">
+            <span>03 // COMMUNITY</span>
+            <span class="w-1.5 h-1.5 rounded-full bg-gold-400"></span>
+            <span>GIVING BACK WITH PURPOSE</span>
+          </div>
+          <h2 class="font-display text-5xl md:text-7xl font-black uppercase tracking-tight text-white leading-none">
+            BUILDING SOMETHING <br>
+            <span class="text-gold-400">THAT LASTS.</span>
+          </h2>
+          <p class="text-base text-zinc-300 mt-6 leading-relaxed max-w-xl">
+            "I want people to remember me for more than football. The game gave me the platform, but giving kids the confidence and resources to chase their impossible dream is what really matters."
+          </p>
+
+          <div class="grid grid-cols-3 gap-6 mt-10 pt-8 border-t border-white/10">
+            <div>
+              <div class="font-display text-4xl md:text-5xl font-black text-white">15,000+</div>
+              <div class="font-mono text-xs text-zinc-400 mt-1">YOUTH SERVED</div>
+            </div>
+            <div>
+              <div class="font-display text-4xl md:text-5xl font-black text-gold-400">$1.2M+</div>
+              <div class="font-mono text-xs text-zinc-400 mt-1">DIRECT GRANTS</div>
+            </div>
+            <div>
+              <div class="font-display text-4xl md:text-5xl font-black text-white">3</div>
+              <div class="font-mono text-xs text-zinc-400 mt-1">ACTIVE HUBS</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 relative">
+          <div class="relative rounded-2xl overflow-hidden border border-white/20 aspect-square shadow-2xl">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="JJets Foundation" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0713] via-transparent to-transparent"></div>
+            <div class="absolute bottom-6 left-6 right-6">
+              <span class="font-mono text-xs text-gold-400 tracking-widest uppercase">PHILANTHROPY SPOTLIGHT</span>
+              <div class="font-display text-2xl font-bold uppercase text-white mt-1">ANNUAL JJETS YOUTH CAMP</div>
+              <p class="text-xs text-zinc-300 mt-1">Full-ride athletic and academic kits distributed annually across Louisiana and Minnesota.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partnerships Section & Animated Marquee -->
+  <section id="partnerships" class="relative py-24 bg-[#0b0713] border-t border-white/5 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 md:px-12 mb-12">
+      <div class="font-mono text-xs text-gold-400 tracking-widest uppercase mb-2">04 // COLLABORATORS</div>
+      <h2 class="font-display text-5xl md:text-6xl font-black uppercase tracking-tight text-white">
+        SIGNATURE PARTNERSHIPS
+      </h2>
+    </div>
+
+    <!-- Infinite Scrolling Marquee -->
+    <div class="relative w-full overflow-hidden border-y border-white/10 py-6 bg-white/[0.02]">
+      <div class="animate-marquee whitespace-nowrap flex items-center gap-12 font-display text-4xl md:text-6xl font-black tracking-wider uppercase text-zinc-600">
+        <span class="hover:text-white transition-colors">UNDER ARMOUR</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">OAKLEY</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">BEATS BY DRE</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">PEPSI</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">GATORADE</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">GENERAL MILLS</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">TIFFANY &amp; CO.</span>
+        <span class="text-gold-400">★</span>
+        <!-- Repeated for seamless loop -->
+        <span class="hover:text-white transition-colors">UNDER ARMOUR</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">OAKLEY</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">BEATS BY DRE</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">PEPSI</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">GATORADE</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">GENERAL MILLS</span>
+        <span class="text-gold-400">★</span>
+        <span class="hover:text-white transition-colors">TIFFANY &amp; CO.</span>
+        <span class="text-gold-400">★</span>
+      </div>
+    </div>
+
+    <!-- Partnership Feature Cards -->
+    <div class="max-w-7xl mx-auto px-6 md:px-12 mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 font-mono">
+      <div class="p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-gold-400/50 transition-colors">
+        <div class="text-xs text-gold-400 font-bold mb-2">FOOTWEAR &amp; APPAREL</div>
+        <h3 class="font-display text-2xl font-bold text-white mb-2">UNDER ARMOUR</h3>
+        <p class="text-xs text-zinc-400 font-sans leading-relaxed">
+          The signature footwear partnership. Justin is the premier face of UA Football—custom game-day cleats, design sessions in Baltimore, and footwear innovation.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-gold-400/50 transition-colors">
+        <div class="text-xs text-gold-400 font-bold mb-2">EYEWEAR ARCHIVE</div>
+        <h3 class="font-display text-2xl font-bold text-white mb-2">OAKLEY</h3>
+        <p class="text-xs text-zinc-400 font-sans leading-relaxed">
+          High-performance game visors engineered with Prizm lens technology and off-field luxury sunglasses worn through tunnel arrivals.
+        </p>
+      </div>
+
+      <div class="p-6 rounded-2xl bg-white/[0.03] border border-white/10 hover:border-gold-400/50 transition-colors">
+        <div class="text-xs text-gold-400 font-bold mb-2">SPATIAL AUDIO</div>
+        <h3 class="font-display text-2xl font-bold text-white mb-2">BEATS BY DRE</h3>
+        <p class="text-xs text-zinc-400 font-sans leading-relaxed">
+          Tunnel walk soundtrack. Custom diamond iced-out Beats Studio Pros and pre-game focus playlist campaigns.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Editorial Archive / Gallery -->
+  <section id="gallery" class="py-24 px-6 md:px-12 bg-[#0e0817] border-t border-white/5">
+    <div class="max-w-7xl mx-auto mb-12 flex items-end justify-between">
+      <div>
+        <div class="font-mono text-xs text-gold-400 tracking-widest uppercase mb-2">05 // VISUAL VAULT</div>
+        <h2 class="font-display text-5xl md:text-6xl font-black uppercase text-white">THE ARCHIVE</h2>
+      </div>
+      <span class="font-mono text-xs text-zinc-500">18 SHOTS // PARIS · MINNESOTA · NEW ORLEANS</span>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-7xl mx-auto">
+      <div class="relative aspect-[3/4] rounded-xl overflow-hidden group">
+        <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Paris Fashion Week">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+          <span class="font-mono text-[11px] text-white">PARIS RUNWAY // 2024</span>
+        </div>
+      </div>
+
+      <div class="relative aspect-[3/4] rounded-xl overflow-hidden group">
+        <img src="https://images.unsplash.com/photo-1566577739112-5180d4bf9390?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Tunnel Arrival">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+          <span class="font-mono text-[11px] text-white">U.S. BANK STADIUM // GAME DAY</span>
+        </div>
+      </div>
+
+      <div class="relative aspect-[3/4] rounded-xl overflow-hidden group">
+        <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Training">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+          <span class="font-mono text-[11px] text-white">OFF-SEASON INTENSITY // TPA</span>
+        </div>
+      </div>
+
+      <div class="relative aspect-[3/4] rounded-xl overflow-hidden group">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="Editorial Portrait">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-4">
+          <span class="font-mono text-[11px] text-white">GQ EDITORIAL // MET GALA</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="relative bg-[#07040d] border-t border-white/10 pt-20 pb-12 px-6 md:px-12 overflow-hidden">
+    <!-- Massive Watermark #18 -->
+    <div class="pointer-events-none absolute bottom-0 right-4 font-display text-[25vw] font-black leading-none text-white/[0.02] select-none">
+      18
+    </div>
+
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-10 pb-16 border-b border-white/10">
+        <div class="md:col-span-6">
+          <div class="font-display text-4xl font-black uppercase text-white mb-3">
+            JUSTIN JEFFERSON #18
+          </div>
+          <p class="text-sm text-zinc-400 max-w-sm font-sans">
+            Athletic excellence, cultural innovation, and enduring community commitment.
+          </p>
+        </div>
+
+        <div class="md:col-span-3 font-mono text-xs space-y-3">
+          <div class="text-gold-400 font-bold uppercase tracking-wider">NAVIGATION</div>
+          <div><a href="#hero" class="hover:text-white text-zinc-400 transition-colors">ON-FIELD</a></div>
+          <div><a href="#signature" class="hover:text-white text-zinc-400 transition-colors">SIGNATURE DECK</a></div>
+          <div><a href="#foundation" class="hover:text-white text-zinc-400 transition-colors">FOUNDATION</a></div>
+          <div><a href="#partnerships" class="hover:text-white text-zinc-400 transition-colors">PARTNERSHIPS</a></div>
+        </div>
+
+        <div class="md:col-span-3 font-mono text-xs space-y-3">
+          <div class="text-gold-400 font-bold uppercase tracking-wider">CREDITS &amp; RECREATION</div>
+          <p class="text-zinc-500 leading-relaxed">
+            Recreated with 1:1 motion fidelity for the <span class="text-zinc-300">Frontend Copied</span> collection. Original site commissioned by Assemble / LayerTwo.
+          </p>
+          <div class="pt-2">
+            <a href="https://github.com/harir03/amazingwebsites" target="_blank" rel="noopener" class="text-gold-400 hover:underline">
+              VIEW GITHUB REPO →
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-between pt-8 text-[11px] font-mono text-zinc-600 gap-4">
+        <div>© 2026 JUSTIN JEFFERSON ARCHIVE · ALL RIGHTS RESERVED</div>
+        <div class="flex items-center gap-6">
+          <a href="#" class="hover:text-zinc-300">PRIVACY</a>
+          <a href="#" class="hover:text-zinc-300">TERMS</a>
+          <a href="#hero" class="hover:text-gold-400">BACK TO TOP ↑</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Logic -->
+  <script>
+    // 1. Preloader simulation
+    let progress = 0;
+    const progressEl = document.getElementById('loadProgress');
+    const preloader = document.getElementById('preloader');
+    
+    const interval = setInterval(() => {
+      progress += Math.floor(Math.random() * 15) + 5;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        progressEl.textContent = '100%';
+        setTimeout(() => {
+          preloader.style.transform = 'translateY(-100%)';
+        }, 300);
+      } else {
+        progressEl.textContent = (progress < 10 ? '0' : '') + progress + '%';
+      }
+    }, 45);
+
+    // 2. 3D Holographic Trading Card Mouse Physics & Tilt
+    const cards = document.querySelectorAll('.card-container');
+    
+    cards.forEach(card => {
+      const inner = card.querySelector('.card-inner');
+      const sheen = card.querySelector('.holo-sheen');
+      const rainbow = card.querySelector('.holo-rainbow');
+      let isFlipped = false;
+
+      // Mouse Move Tracking
+      card.addEventListener('mousemove', (e) => {
+        if (isFlipped) return; // keep back level
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        // Tilt calculations (-15deg to +15deg)
+        const rotateY = ((x - centerX) / centerX) * 16;
+        const rotateX = -((y - centerY) / centerY) * 16;
+        
+        inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.04, 1.04, 1.04)`;
+        
+        // Glare gradient position
+        const posX = (x / rect.width) * 100;
+        const posY = (y / rect.height) * 100;
+        if (sheen) sheen.style.backgroundPosition = `${posX}% ${posY}%`;
+        if (rainbow) rainbow.style.backgroundPosition = `${posX * 1.5}% ${posY * 1.5}%`;
+      });
+
+      // Mouse Leave: Reset smooth return
+      card.addEventListener('mouseleave', () => {
+        if (!isFlipped) {
+          inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        }
+      });
+
+      // Click to flip
+      card.addEventListener('click', () => {
+        isFlipped = !isFlipped;
+        playCardSound();
+        if (isFlipped) {
+          inner.style.transform = 'rotateY(180deg) scale3d(1.05, 1.05, 1.05)';
+        } else {
+          inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+        }
+      });
+    });
+
+    // 3. Yardline indicator tracks scroll progress
+    const yardlineIndicator = document.getElementById('yardlineIndicator');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollFraction = Math.min(Math.max(scrollTop / docHeight, 0), 1);
+      if (yardlineIndicator) {
+        const offset = scrollFraction * (yardlineIndicator.parentElement.clientWidth - yardlineIndicator.clientWidth);
+        yardlineIndicator.style.transform = `translateX(${offset}px)`;
+      }
+    });
+
+    // 4. Web Audio Synthesizer for tactile feedback
+    let audioCtx = null;
+    let isSoundOn = false;
+    const soundToggle = document.getElementById('soundToggle');
+    const soundIcon = document.getElementById('soundIcon');
+    const soundLabel = document.getElementById('soundLabel');
+
+    soundToggle.addEventListener('click', () => {
+      isSoundOn = !isSoundOn;
+      if (isSoundOn) {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        soundIcon.classList.remove('bg-zinc-500');
+        soundIcon.classList.add('bg-gold-400', 'animate-pulse');
+        soundLabel.textContent = 'AUDIO ON';
+        playTone(440, 0.1);
+      } else {
+        soundIcon.classList.remove('bg-gold-400', 'animate-pulse');
+        soundIcon.classList.add('bg-zinc-500');
+        soundLabel.textContent = 'AUDIO OFF';
+      }
+    });
+
+    function playTone(freq, duration) {
+      if (!isSoundOn || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.frequency.value = freq;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playCardSound() {
+      if (!isSoundOn || !audioCtx) return;
+      playTone(587.33, 0.15); // D5 chime
+    }
+  </script>
+</body>
+</html>

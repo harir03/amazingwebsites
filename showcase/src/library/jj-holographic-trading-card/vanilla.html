@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Holographic 3D Trading Card — Justin Jefferson</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    .holo-sheen {
+      background: linear-gradient(
+        105deg,
+        transparent 25%,
+        rgba(255, 255, 255, 0.05) 35%,
+        rgba(255, 255, 255, 0.5) 50%,
+        rgba(255, 255, 255, 0.05) 65%,
+        transparent 75%
+      );
+      background-size: 250% 100%;
+    }
+    .holo-rainbow {
+      background: linear-gradient(
+        115deg,
+        rgba(253, 224, 71, 0.35) 0%,
+        rgba(168, 85, 247, 0.4) 28%,
+        rgba(56, 189, 248, 0.35) 50%,
+        rgba(236, 72, 153, 0.35) 75%,
+        rgba(253, 224, 71, 0.35) 100%
+      );
+      background-size: 200% 200%;
+      mix-blend-mode: color-dodge;
+    }
+  </style>
+</head>
+<body class="bg-[#0B0713] text-white flex items-center justify-center min-h-screen p-6 font-['Inter']">
+
+  <div class="w-full max-w-sm flex flex-col items-center">
+    <div class="w-full flex items-center justify-between font-mono text-xs text-zinc-400 mb-6">
+      <span class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-[#FDE047] animate-pulse"></span>
+        CARD SPECIMEN #03
+      </span>
+      <span class="text-[#FDE047]">CLICK TO FLIP</span>
+    </div>
+
+    <!-- 3D Card Stage -->
+    <div id="cardStage" class="w-full aspect-[1036/1519] cursor-pointer" style="perspective: 1400px;">
+      <div id="cardInner" class="relative w-full h-full rounded-2xl shadow-2xl transition-transform duration-200 ease-out" style="transform-style: preserve-3d;">
+        
+        <!-- FRONT FACE -->
+        <div class="absolute inset-0 rounded-2xl overflow-hidden bg-[#160E26] border-2 border-[#FDE047]/40 p-4 flex flex-col justify-between shadow-[0_20px_50px_rgba(0,0,0,0.8)]" style="backface-visibility: hidden; -webkit-backface-visibility: hidden;">
+          <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?q=80&w=800&auto=format&fit=crop" alt="The Catch" class="absolute inset-0 w-full h-full object-cover opacity-80 filter contrast-125 saturate-110">
+          
+          <div id="holoSheen" class="holo-sheen pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200"></div>
+          <div id="holoRainbow" class="holo-rainbow pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200"></div>
+
+          <div class="relative z-10 flex items-center justify-between text-[10px] font-mono font-bold tracking-widest text-[#FDE047]">
+            <span class="bg-black/70 backdrop-blur px-2.5 py-1 rounded">MIN #18</span>
+            <span class="bg-black/70 backdrop-blur px-2.5 py-1 rounded">CROWN JEWEL</span>
+          </div>
+
+          <div class="relative z-10 bg-black/85 backdrop-blur-md p-3.5 rounded-xl border border-white/10">
+            <div class="text-[10px] font-mono text-[#FDE047] font-bold uppercase tracking-wider">MOMENT OF THE YEAR</div>
+            <div class="font-extrabold text-xl text-white leading-tight uppercase tracking-tight mt-0.5">"THE CATCH" VS BUFFALO</div>
+            <div class="mt-2.5 text-[11px] font-mono text-zinc-300 flex justify-between border-t border-white/10 pt-2">
+              <span>4TH &amp; 18</span>
+              <span>32 YDS</span>
+              <span class="text-[#FDE047] font-bold">1-HANDED</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- BACK FACE -->
+        <div class="absolute inset-0 rounded-2xl overflow-hidden bg-[#10091B] border-2 border-[#FDE047] p-5 flex flex-col justify-between shadow-2xl" style="backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: rotateY(180deg);">
+          <div>
+            <div class="flex items-center justify-between border-b border-white/10 pb-2">
+              <span class="font-black text-[#FDE047] tracking-wider text-sm">RECORD ARTIFACT</span>
+              <span class="text-[10px] font-mono text-zinc-400">NOV 13, 2022</span>
+            </div>
+
+            <h4 class="text-xl font-bold uppercase mt-4 text-white">4TH &amp; 18 WRESTLE GRAB</h4>
+            <p class="text-xs text-zinc-300 mt-2 font-sans leading-relaxed">
+              Trailing late in Buffalo, Justin ripped the ball from defender Cam Lewis with one right hand while horizontal in midair. Selected as the NFL Moment of the Year.
+            </p>
+          </div>
+
+          <div class="font-mono text-[10px] space-y-2 border-t border-white/10 pt-3 text-zinc-400">
+            <div class="flex justify-between"><span>GAME:</span> <span class="text-white">MIN 33, BUF 30 (OT)</span></div>
+            <div class="flex justify-between"><span>TARGETS:</span> <span class="text-white">10 REC · 193 YDS · 1 TD</span></div>
+            <div class="flex justify-between"><span>HALL OF FAME:</span> <span class="text-[#FDE047] font-bold">CANTON, OH</span></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="readout" class="font-mono text-xs text-zinc-500 mt-6">
+      TILT: X: 0.0° · Y: 0.0°
+    </div>
+  </div>
+
+  <script>
+    const stage = document.getElementById('cardStage');
+    const inner = document.getElementById('cardInner');
+    const sheen = document.getElementById('holoSheen');
+    const rainbow = document.getElementById('holoRainbow');
+    const readout = document.getElementById('readout');
+    let isFlipped = false;
+
+    stage.addEventListener('mousemove', (e) => {
+      if (isFlipped) return;
+      const rect = stage.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotY = ((x - centerX) / centerX) * 18;
+      const rotX = -((y - centerY) / centerY) * 18;
+
+      inner.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) scale(1.04)`;
+      sheen.style.opacity = '1';
+      rainbow.style.opacity = '0.8';
+
+      const posX = (x / rect.width) * 100;
+      const posY = (y / rect.height) * 100;
+      sheen.style.backgroundPosition = `${posX}% ${posY}%`;
+      rainbow.style.backgroundPosition = `${posX * 1.5}% ${posY * 1.5}%`;
+
+      readout.textContent = `TILT: X: ${rotX.toFixed(1)}° · Y: ${rotY.toFixed(1)}°`;
+    });
+
+    stage.addEventListener('mouseleave', () => {
+      if (!isFlipped) {
+        inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+        sheen.style.opacity = '0';
+        rainbow.style.opacity = '0';
+        readout.textContent = 'TILT: X: 0.0° · Y: 0.0°';
+      }
+    });
+
+    stage.addEventListener('click', () => {
+      isFlipped = !isFlipped;
+      if (isFlipped) {
+        inner.style.transform = 'rotateY(180deg) scale(1.03)';
+        sheen.style.opacity = '0';
+        rainbow.style.opacity = '0';
+        readout.textContent = 'BACK VIEW: STATISTICAL TELEMETRY';
+      } else {
+        inner.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
+        readout.textContent = 'FRONT VIEW: HOLOGRAPHIC SPECIMEN';
+      }
+    });
+  </script>
+</body>
+</html>

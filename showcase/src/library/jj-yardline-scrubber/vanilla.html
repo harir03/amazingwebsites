@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yardline Scrubber Rail & Field Telemetry</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-[#0B0713] text-white flex items-center justify-center min-h-screen p-6 font-['Inter']">
+
+  <div class="w-full max-w-2xl bg-[#0B0713] p-8 rounded-3xl border border-white/10 select-none">
+    <div class="flex items-center justify-between pb-6 border-b border-white/10 font-mono text-xs">
+      <div class="flex items-center gap-3">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#FDE047] animate-pulse"></span>
+        <span class="font-bold tracking-widest text-white">FIELD POSITION TELEMETRY // JJETS #18</span>
+      </div>
+      <span class="text-[#FDE047] font-bold">4TH &amp; 18</span>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 my-8 items-end">
+      <div>
+        <div class="font-mono text-[10px] tracking-wider text-zinc-400 uppercase">BALL ON</div>
+        <div id="ballOn" class="text-4xl font-extrabold text-[#FDE047] tracking-tight mt-1">OPP 32</div>
+      </div>
+      <div>
+        <div class="font-mono text-[10px] tracking-wider text-zinc-400 uppercase">TO END ZONE</div>
+        <div class="text-4xl font-extrabold text-white tracking-tight mt-1">
+          <span id="ydsToGoal">32</span> <span class="text-lg font-normal text-zinc-400">YDS</span>
+        </div>
+      </div>
+      <div class="col-span-2 sm:col-span-1 flex sm:justify-end">
+        <button id="simBtn" class="px-5 py-2.5 rounded-xl bg-white text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-[#FDE047] transition-colors">
+          SIMULATE DRIVE ▶
+        </button>
+      </div>
+    </div>
+
+    <!-- Turf Track -->
+    <div class="relative pt-4">
+      <div class="flex justify-between font-mono text-[11px] text-zinc-400 px-1 mb-2">
+        <span>G</span>
+        <span>10</span>
+        <span>20</span>
+        <span>30</span>
+        <span>40</span>
+        <span class="text-[#FDE047] font-bold">50</span>
+        <span>40</span>
+        <span>30</span>
+        <span>20</span>
+        <span>10</span>
+        <span>G</span>
+      </div>
+
+      <div class="relative w-full h-8 rounded-xl bg-[#140D21] border border-white/15 p-1 overflow-hidden flex items-center">
+        <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: repeating-linear-gradient(to right, #FFFFFF 0px, #FFFFFF 1px, transparent 1px, transparent 20px);"></div>
+        <div id="ballMarker" class="absolute top-1 bottom-1 w-3 rounded-full bg-gradient-to-r from-amber-400 to-[#FDE047] shadow-[0_0_15px_rgba(253,224,71,0.9)] transition-all duration-75" style="left: calc(68% - 6px);"></div>
+      </div>
+
+      <input id="slider" type="range" min="0" max="100" value="68" class="w-full mt-4 accent-[#FDE047] cursor-pointer">
+    </div>
+
+    <div class="mt-6 pt-4 border-t border-white/10 flex items-center justify-between font-mono text-xs text-zinc-400">
+      <div>TARGET: <span class="text-white">DEEP OVER ROUTE</span></div>
+      <div id="prob" class="text-[#FDE047]">CATCH PROBABILITY: 74%</div>
+    </div>
+  </div>
+
+  <script>
+    let yard = 68;
+    let isPlaying = false;
+    let timer = null;
+
+    const ballOn = document.getElementById('ballOn');
+    const ydsToGoal = document.getElementById('ydsToGoal');
+    const ballMarker = document.getElementById('ballMarker');
+    const slider = document.getElementById('slider');
+    const simBtn = document.getElementById('simBtn');
+    const prob = document.getElementById('prob');
+
+    function update() {
+      slider.value = yard;
+      ballMarker.style.left = `calc(${yard}% - 6px)`;
+      
+      const toGoal = 100 - yard;
+      ydsToGoal.textContent = toGoal;
+
+      if (yard === 0) ballOn.textContent = 'OWN GOAL (0)';
+      else if (yard === 50) ballOn.textContent = 'MIDFIELD (50)';
+      else if (yard === 100) ballOn.textContent = 'TOUCHDOWN (100)';
+      else if (yard < 50) ballOn.textContent = `OWN ${yard}`;
+      else ballOn.textContent = `OPP ${100 - yard}`;
+
+      const p = Math.min(99, Math.max(12, Math.round(100 - toGoal * 0.8)));
+      prob.textContent = `CATCH PROBABILITY: ${p}%`;
+    }
+
+    slider.addEventListener('input', (e) => {
+      stopSim();
+      yard = Number(e.target.value);
+      update();
+    });
+
+    simBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        stopSim();
+      } else {
+        isPlaying = true;
+        simBtn.textContent = 'PAUSE SIMULATION';
+        timer = setInterval(() => {
+          yard = (yard >= 100) ? 0 : yard + 1;
+          update();
+        }, 70);
+      }
+    });
+
+    function stopSim() {
+      isPlaying = false;
+      simBtn.textContent = 'SIMULATE DRIVE ▶';
+      if (timer) clearInterval(timer);
+    }
+  </script>
+</body>
+</html>
