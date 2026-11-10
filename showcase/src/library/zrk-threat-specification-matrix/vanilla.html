@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threat Specification Matrix — ZIRKA</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #060708;
+      font-family: 'Inter', sans-serif;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #FFF;
+    }
+    .matrix-box {
+      width: 100%;
+      max-width: 900px;
+      background: #0A0C0E;
+      border: 1px solid #1C242C;
+      border-radius: 24px;
+      padding: 2.25rem;
+    }
+    .eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #00F0FF;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+    .title {
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin: 0.25rem 0 1.5rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    .card {
+      background: #11151A;
+      border: 1px solid #1C242C;
+      border-radius: 16px;
+      padding: 1.75rem;
+    }
+    .card.threat { border-top: 3px solid #E53E3E; }
+    .card.interceptor { border-top: 3px solid #FF5500; }
+    .badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .card.threat .badge { background: rgba(229, 62, 62, 0.15); color: #FC8181; }
+    .card.interceptor .badge { background: rgba(255, 85, 0, 0.15); color: #FF5500; }
+    .card-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 1.25rem; }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(28, 36, 44, 0.6);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+    .label { color: #7B8B9B; }
+    .val { font-weight: 700; color: #FFF; }
+    @media (max-width: 700px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="matrix-box">
+    <div class="eyebrow">Comparative Defense Dynamics</div>
+    <h2 class="title">Written by the threat itself</h2>
+
+    <div class="grid">
+      <div class="card threat">
+        <span class="badge">THREAT // SHAHED-136</span>
+        <h3 class="card-title">Geran-2 Platform</h3>
+        <div class="row"><span class="label">Cruise Speed</span><span class="val">185 km/h</span></div>
+        <div class="row"><span class="label">Warhead</span><span class="val">50 kg HE</span></div>
+        <div class="row"><span class="label">Ceiling</span><span class="val">3,500 m</span></div>
+        <div class="row"><span class="label">Guidance</span><span class="val">Inertial / GNSS</span></div>
+        <div class="row" style="border: none;"><span class="label">Target</span><span class="val" style="color: #FC8181;">Infrastructure</span></div>
+      </div>
+
+      <div class="card interceptor">
+        <span class="badge">COUNTERMEASURE // ZIRKA</span>
+        <h3 class="card-title">Zirka Interceptor</h3>
+        <div class="row"><span class="label">Overmatch Speed</span><span class="val" style="color: #FF5500;">240+ km/h</span></div>
+        <div class="row"><span class="label">Terminal Seeker</span><span class="val" style="color: #00F0FF;">AI Optical</span></div>
+        <div class="row"><span class="label">Reaction Window</span><span class="val">&lt; 45s</span></div>
+        <div class="row"><span class="label">Swarm Mesh</span><span class="val">Autonomous</span></div>
+        <div class="row" style="border: none;"><span class="label">Cost Ratio</span><span class="val" style="color: #00FF66;">&lt; 5% missile</span></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

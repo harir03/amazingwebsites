@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shahed interceptor with auto-guidance | Zirka (ZRK)</title>
+  <meta name="description" content="All Ukrainian interception experience in one system. Fight efficiently: destroy drones using drones.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0A0C0E;
+      --bg-surface: #11151A;
+      --border-hud: #1C242C;
+      --text-white: #FFFFFF;
+      --text-dim: #7B8B9B;
+      --alert-amber: #FF5500;
+      --radar-cyan: #00F0FF;
+      --radar-green: #00FF66;
+
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-sans: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Radar Grid Background Overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(28, 36, 44, 0.4) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(28, 36, 44, 0.4) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Header Nav */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.25rem 2rem;
+      background: rgba(10, 12, 14, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-hud);
+    }
+
+    .nav-bar {
+      max-width: 1380px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: #FFF;
+    }
+
+    .brand-reticle {
+      width: 22px;
+      height: 22px;
+      border: 1.5px solid var(--alert-amber);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .brand-reticle::after {
+      content: '';
+      width: 4px;
+      height: 4px;
+      background: var(--alert-amber);
+      border-radius: 50%;
+    }
+
+    .brand-name {
+      font-family: var(--font-mono);
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      font-size: 1.1rem;
+    }
+
+    .nav-telemetry {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--radar-cyan);
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--radar-green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--radar-green);
+      display: inline-block;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 8rem;
+      padding-bottom: 4rem;
+      position: relative;
+    }
+
+    .hud-tag {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--alert-amber);
+      margin-bottom: 1.5rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 6.5vw, 6.2rem);
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -0.04em;
+      max-width: 16ch;
+      margin-bottom: 2rem;
+    }
+
+    .hero-title span {
+      color: var(--alert-amber);
+      text-shadow: 0 0 30px rgba(255, 85, 0, 0.4);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+      max-width: 44ch;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Interactive Radar Targeting Box */
+    .radar-canvas-box {
+      position: relative;
+      height: 480px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hud);
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: crosshair;
+      box-shadow: inset 0 0 60px rgba(0, 240, 255, 0.04);
+    }
+
+    .radar-sweep {
+      position: absolute;
+      inset: -50%;
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 240, 255, 0.12) 60deg, transparent 61deg);
+      border-radius: 50%;
+      animation: radar-spin 6s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes radar-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .radar-rings {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .ring {
+      position: absolute;
+      border: 1px dashed rgba(28, 36, 44, 0.9);
+      border-radius: 50%;
+    }
+
+    .ring-1 { width: 140px; height: 140px; }
+    .ring-2 { width: 260px; height: 260px; }
+    .ring-3 { width: 380px; height: 380px; }
+
+    /* Interactive Crosshair Reticle */
+    .crosshair-reticle {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid var(--radar-cyan);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.2s;
+    }
+
+    .crosshair-reticle::before, .crosshair-reticle::after {
+      content: '';
+      position: absolute;
+      background: var(--radar-cyan);
+    }
+
+    .crosshair-reticle::before {
+      top: 50%; left: -8px; right: -8px; height: 1px; transform: translateY(-50%);
+    }
+
+    .crosshair-reticle::after {
+      left: 50%; top: -8px; bottom: -8px; width: 1px; transform: translateX(-50%);
+    }
+
+    .reticle-telemetry {
+      position: absolute;
+      left: 32px;
+      top: -12px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      white-space: nowrap;
+      color: var(--radar-cyan);
+      background: rgba(10, 12, 14, 0.85);
+      padding: 2px 6px;
+      border-radius: 4px;
+      border: 1px solid var(--border-hud);
+    }
+
+    /* Telemetry Bar */
+    .telemetry-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin: 4rem 0;
+      border-top: 1px solid var(--border-hud);
+      border-bottom: 1px solid var(--border-hud);
+      padding: 2.5rem 0;
+    }
+
+    .telemetry-cell h4 {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.5rem;
+    }
+
+    .telemetry-value {
+      font-family: var(--font-mono);
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #FFF;
+      line-height: 1;
+    }
+
+    .telemetry-sub {
+      font-size: 0.8rem;
+      color: var(--radar-cyan);
+      font-family: var(--font-mono);
+      margin-top: 0.4rem;
+    }
+
+    /* Specification Comparison Matrix */
+    .section-spec {
+      padding: 6rem 0;
+    }
+
+    .spec-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .spec-header h2 {
+      font-size: clamp(2.4rem, 4.5vw, 4rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .spec-matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .spec-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hud);
+      border-radius: 20px;
+      padding: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spec-card.threat {
+      border-top: 3px solid #E53E3E;
+    }
+
+    .spec-card.interceptor {
+      border-top: 3px solid var(--alert-amber);
+      box-shadow: 0 0 40px rgba(255, 85, 0, 0.08);
+    }
+
+    .spec-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+    }
+
+    .spec-card.threat .spec-badge {
+      background: rgba(229, 62, 62, 0.15);
+      color: #FC8181;
+    }
+
+    .spec-card.interceptor .spec-badge {
+      background: rgba(255, 85, 0, 0.15);
+      color: var(--alert-amber);
+    }
+
+    .spec-card h3 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 2rem;
+    }
+
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(28, 36, 44, 0.6);
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+    }
+
+    .spec-label {
+      color: var(--text-dim);
+    }
+
+    .spec-val {
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    /* System Flow Columns */
+    .flow-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .flow-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hud);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      position: relative;
+    }
+
+    .flow-step {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--alert-amber);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .flow-card h4 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 0.75rem;
+    }
+
+    .flow-card p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid var(--border-hud);
+      padding: 4rem 0 2rem;
+      background: #080A0C;
+    }
+
+    .footer-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-mono {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid, .spec-matrix, .flow-grid {
+        grid-template-columns: 1fr;
+      }
+      .telemetry-row {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <header class="nav">
+    <div class="nav-bar">
+      <a href="#" class="brand-wrap">
+        <div class="brand-reticle"></div>
+        <span class="brand-name">ZIRKA // ZRK</span>
+      </a>
+
+      <div class="nav-telemetry">
+        <span><i class="status-dot"></i> TELEMETRY LINK ACTIVE</span>
+        <span style="opacity: 0.6;">FREQ: 433.92 MHz</span>
+        <span style="color: var(--alert-amber);">SYS_ARMED</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hud-tag">
+            <span>[ SYSTEM SPECIFICATION ]</span>
+            <span>✦</span>
+            <span>SHAHED-CLASS THREAT RESPONSE</span>
+          </div>
+
+          <h1 class="hero-title">
+            Destroy drones using <span>drones</span>
+          </h1>
+
+          <p class="hero-desc">
+            All Ukrainian combat interception experience engineered into one autonomous counter-UAS platform. High-velocity auto-guidance designed against nightly mass terror saturation attacks.
+          </p>
+
+          <div style="display: flex; gap: 1rem; align-items: center;">
+            <div style="background: var(--alert-amber); color: #000; font-family: var(--font-mono); font-weight: 800; font-size: 0.85rem; padding: 0.75rem 1.6rem; border-radius: 6px; letter-spacing: 0.05em;">
+              INITIATE RADAR LOCK
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">
+              COORDINATES: 48.4647°N, 35.0462°E
+            </div>
+          </div>
+        </div>
+
+        <!-- Radar Canvas -->
+        <div class="radar-canvas-box" id="radarBox">
+          <div class="radar-sweep"></div>
+          <div class="radar-rings">
+            <div class="ring ring-1"></div>
+            <div class="ring ring-2"></div>
+            <div class="ring ring-3"></div>
+          </div>
+
+          <div class="crosshair-reticle" id="reticle" style="top: 50%; left: 50%;">
+            <div class="reticle-telemetry" id="reticleCoords">
+              AZM: 142° · RNG: 3.2KM · LOCK 99.2%
+            </div>
+          </div>
+
+          <!-- Radar blip target -->
+          <div style="position: absolute; top: 38%; left: 62%; width: 6px; height: 6px; background: #FF5500; border-radius: 50%; box-shadow: 0 0 10px #FF5500;">
+            <div style="position: absolute; left: 10px; top: -6px; font-family: var(--font-mono); font-size: 9px; color: #FF5500;">
+              TARGET #04
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Telemetry Strip -->
+      <div class="telemetry-row">
+        <div class="telemetry-cell">
+          <h4>Max Intercept Speed</h4>
+          <div class="telemetry-value">240+</div>
+          <div class="telemetry-sub">km/h terminal dive</div>
+        </div>
+        <div class="telemetry-cell">
+          <h4>Interception Altitude</h4>
+          <div class="telemetry-value">4,000</div>
+          <div class="telemetry-sub">meters operational ceiling</div>
+        </div>
+        <div class="telemetry-cell">
+          <h4>Guidance Seeker</h4>
+          <div class="telemetry-value">AI Optic</div>
+          <div class="telemetry-sub">thermal + contrast tracking</div>
+        </div>
+        <div class="telemetry-cell">
+          <h4>Engagement Cost</h4>
+          <div class="telemetry-value">&lt; 5%</div>
+          <div class="telemetry-sub">of traditional surface missile</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Specification Matrix -->
+  <section class="section-spec">
+    <div class="container">
+      <div class="spec-header">
+        <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--radar-cyan); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem;">
+          Comparative Threat Dynamics
+        </div>
+        <h2>Written by the threat itself</h2>
+        <p style="color: var(--text-dim); max-width: 58ch; margin-top: 0.75rem;">
+          None of these parameters are arbitrary. They represent the exacting physical conditions Zirka is built to neutralize night after night.
+        </p>
+      </div>
+
+      <div class="spec-matrix">
+        <!-- Threat Card -->
+        <div class="spec-card threat">
+          <span class="spec-badge">THREAT PROFILE // UAS SHAHED-136</span>
+          <h3>Geran-2 Platform</h3>
+          <div class="spec-row">
+            <span class="spec-label">Cruise Velocity</span>
+            <span class="spec-val">180 – 195 km/h</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Payload Warhead</span>
+            <span class="spec-val">50 kg high explosive</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Operating Ceiling</span>
+            <span class="spec-val">50m to 3,500m</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Navigation System</span>
+            <span class="spec-val">Inertial + multi-band GNSS spoof resistance</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Tactical Danger</span>
+            <span class="spec-val" style="color: #FC8181;">Infrastructure attrition</span>
+          </div>
+        </div>
+
+        <!-- Interceptor Card -->
+        <div class="spec-card interceptor">
+          <span class="spec-badge">COUNTERMEASURE // ZIRKA SYSTEM</span>
+          <h3>Zirka Auto-Interceptor</h3>
+          <div class="spec-row">
+            <span class="spec-label">Kinetic Overmatch</span>
+            <span class="spec-val" style="color: var(--alert-amber);">240+ km/h (superiority margin)</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Terminal Guidance</span>
+            <span class="spec-val">Optical auto-tracker + thermal</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Reaction Window</span>
+            <span class="spec-val">&lt; 45 seconds from detection</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Swarm Scalability</span>
+            <span class="spec-val">Simultaneous multi-target mesh</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-label">Cost Efficiency</span>
+            <span class="spec-val" style="color: var(--radar-green);">100% sustainable economic defense</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- System Architecture Flow -->
+      <div class="flow-grid">
+        <div class="flow-card">
+          <div class="flow-step">01 // DETECTION</div>
+          <h4>Acoustic &amp; Radar Grid</h4>
+          <p>Multi-sensor early identification of engine harmonic signatures and flight vector trajectory.</p>
+        </div>
+        <div class="flow-card">
+          <div class="flow-step">02 // DISPATCH</div>
+          <h4>Automated Launch Command</h4>
+          <p>Instantaneous flight solution compute and rapid-launch catapult deployment.</p>
+        </div>
+        <div class="flow-card">
+          <div class="flow-step">03 // INGRESS</div>
+          <h4>High-Speed Intercept Climb</h4>
+          <p>Autonomous navigation closing the positional gap with altitude and speed advantage.</p>
+        </div>
+        <div class="flow-card">
+          <div class="flow-step">04 // TERMINAL</div>
+          <h4>Optical Lock &amp; Neutralize</h4>
+          <p>Thermal optical terminal lock and kinetic neutralization without surface ammunition collateral.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-bar">
+        <div class="brand-wrap">
+          <div class="brand-reticle"></div>
+          <span class="brand-name">ZIRKA DEFENSE SYSTEMS</span>
+        </div>
+        <div class="footer-mono">
+          SECURE PROTOCOL · AERO DYNAMICS · MADE IN UKRAINE
+        </div>
+        <div class="footer-mono" style="color: var(--radar-cyan);">
+          STATUS: OPERATIONAL
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const box = document.getElementById('radarBox');
+    const reticle = document.getElementById('reticle');
+    const coords = document.getElementById('reticleCoords');
+
+    box.addEventListener('pointermove', (e) => {
+      const rect = box.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      reticle.style.left = `${x}px`;
+      reticle.style.top = `${y}px`;
+
+      const azm = Math.round((x / rect.width) * 360);
+      const rng = ((1 - y / rect.height) * 8).toFixed(1);
+      coords.textContent = `AZM: ${azm}° · RNG: ${rng}KM · TRK_ACTIVE`;
+    });
+  </script>
+</body>
+</html>
+

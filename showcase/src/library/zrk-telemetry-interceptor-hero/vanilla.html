@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telemetry Interceptor Hero — ZIRKA</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #050607;
+      font-family: 'Inter', sans-serif;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #FFF;
+    }
+    .hud-box {
+      width: 100%;
+      max-width: 960px;
+      background: #0A0C0E;
+      border: 1px solid #1C242C;
+      border-radius: 24px;
+      padding: 2.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hud-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid #1C242C;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+    }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 2rem;
+      align-items: center;
+      margin: 2rem 0;
+    }
+    .tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: #FF5500;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    .title {
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+    .title span { color: #FF5500; }
+    .desc {
+      font-size: 0.95rem;
+      color: #7B8B9B;
+      line-height: 1.5;
+      margin: 1.25rem 0 1.5rem;
+    }
+    .radar-frame {
+      position: relative;
+      height: 280px;
+      background: #11151A;
+      border: 1px solid #1C242C;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: crosshair;
+    }
+    .radar-sweep {
+      position: absolute;
+      inset: -50%;
+      background: conic-gradient(from 0deg, transparent 0deg, rgba(0, 240, 255, 0.15) 60deg, transparent 61deg);
+      border-radius: 50%;
+      animation: spin 6s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .reticle {
+      position: absolute;
+      width: 36px;
+      height: 36px;
+      border: 1px solid #00F0FF;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+    }
+    .reticle::before { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: #00F0FF; }
+    .reticle::after { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: #00F0FF; }
+    .telemetry-readout {
+      position: absolute;
+      left: 28px;
+      top: -12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: #00F0FF;
+      background: rgba(10, 12, 14, 0.9);
+      padding: 2px 6px;
+      border: 1px solid #1C242C;
+      white-space: nowrap;
+    }
+    .telemetry-footer {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid #1C242C;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .stat-label { font-size: 10px; color: #7B8B9B; }
+    .stat-val { font-size: 1.4rem; font-weight: 800; color: #FFF; margin-top: 2px; }
+  </style>
+</head>
+<body>
+  <div class="hud-box">
+    <div class="hud-header">
+      <div>ZIRKA // ZRK TECH</div>
+      <div style="color: #00F0FF;">TELEMETRY LINK ACTIVE · ARMED</div>
+    </div>
+
+    <div class="main-grid">
+      <div>
+        <div class="tag">[ SHAHED-CLASS THREAT RESPONSE ]</div>
+        <h1 class="title">Destroy drones using <span>drones</span></h1>
+        <p class="desc">
+          All Ukrainian combat interception experience in one autonomous platform. High-velocity auto-guidance engineered against nightly mass saturation attacks.
+        </p>
+      </div>
+
+      <div class="radar-frame" id="radar">
+        <div class="radar-sweep"></div>
+        <div class="reticle" id="crosshair" style="left: 50%; top: 50%;">
+          <div class="telemetry-readout" id="coords">AZM: 142° · RNG: 3.2KM · LOCK 99%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="telemetry-footer">
+      <div><div class="stat-label">INTERCEPT SPEED</div><div class="stat-val">240+ km/h</div></div>
+      <div><div class="stat-label">CEILING ALTITUDE</div><div class="stat-val">4,000 m</div></div>
+      <div><div class="stat-label">TERMINAL SEEKER</div><div class="stat-val" style="color: #00F0FF;">AI OPTICAL</div></div>
+      <div><div class="stat-label">ENGAGEMENT COST</div><div class="stat-val" style="color: #00FF66;">&lt; 5%</div></div>
+    </div>
+  </div>
+
+  <script>
+    const radar = document.getElementById('radar');
+    const crosshair = document.getElementById('crosshair');
+    const coords = document.getElementById('coords');
+
+    radar.onpointermove = (e) => {
+      const rect = radar.getBoundingClientRect();
+      const x = Math.max(10, Math.min(rect.width - 10, e.clientX - rect.left));
+      const y = Math.max(10, Math.min(rect.height - 10, e.clientY - rect.top));
+
+      crosshair.style.left = `${x}px`;
+      crosshair.style.top = `${y}px`;
+
+      const azm = Math.round((x / rect.width) * 360);
+      const rng = ((1 - y / rect.height) * 8).toFixed(1);
+      coords.textContent = `AZM: ${azm}° · RNG: ${rng}KM · LOCK 99%`;
+    };
+  </script>
+</body>
+</html>
+
