@@ -66,6 +66,29 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 | Portfolio | [Belgrade Arbor](portfolio/belgradearbor/) | [https://belgradearbor.rs/en](https://belgradearbor.rs/en) | Next.js + GSAP + Lenis + CAD SVG | ✅ Complete ([Local Demo](http://localhost:3005/)) |
 | E-Commerce | [SweetTape](ecommerce/sweettape/) | [https://sweet-tape.com/](https://sweet-tape.com/) | Next.js + React + Tactile Physics | ✅ Complete ([Local Demo](http://localhost:3006/)) |
 | Media / Audio | [Overworld Audio](media/overworldaudio/) | [https://overworldaudio.com/](https://overworldaudio.com/) | Nuxt + Web Audio API + Canvas | ✅ Complete ([Local Demo](http://localhost:3007/)) |
+| Portfolio | [Extrafazant](portfolio/extrafazant/) | [https://www.extrafazant.nl/](https://www.extrafazant.nl/) | Webflow + GSAP + Lenis + Barba | ✅ Complete ([Local Demo](http://localhost:3008/)) |
+| E-Commerce | [Agrumea Farm](ecommerce/agrumeafarm/) | [https://www.agrumeafarm.it/en](https://www.agrumeafarm.it/en) | Nuxt 3 + Vue 3 + CSS Transitions | ✅ Complete ([Local Demo](http://localhost:3009/)) |
+| Devtools / Aero | [ZIRKA Interceptor](devtools/zrk/) | [https://www.zrk.technology/](https://www.zrk.technology/) | Webflow + GSAP + Observer + HUD | ✅ Complete ([Local Demo](http://localhost:3010/)) |
+
+---
+
+## 🏆 Awwwards Sites of the Day Roster & Parity Tracker
+
+Tracked against [Awwwards Sites of the Day](https://www.awwwards.com/websites/sites_of_the_day/):
+
+| Award Date | Site | Original URL | Category | Collection Status |
+|---|---|---|---|---|
+| Nov 9, 2026 | **ZIRKA Interceptor (ZRK)** | [https://www.zrk.technology/](https://www.zrk.technology/) | Devtools / Defense Tech | ✅ Complete (`devtools/zrk`) |
+| Nov 8, 2026 | **Extrafazant** | [https://www.extrafazant.nl/](https://www.extrafazant.nl/) | Creative Studio Portfolio | ✅ Complete (`portfolio/extrafazant`) |
+| Nov 7, 2026 | **Justin Jefferson** | [https://www.justinjefferson.com/](https://www.justinjefferson.com/) | Athlete Editorial | ⏳ Queued |
+| Nov 6, 2026 | **ViV** | [https://viv.network/](https://viv.network/) | Digital Platform | ⏳ Queued |
+| Nov 5, 2026 | **Agrumea Farm** | [https://www.agrumeafarm.it/en](https://www.agrumeafarm.it/en) | E-Commerce / Agriturismo | ✅ Complete (`ecommerce/agrumeafarm`) |
+| Nov 4, 2026 | **Grail** | [https://grail.denormalized.com/](https://grail.denormalized.com/) | Fintech / Web3 | ⏳ Queued |
+| Nov 3, 2026 | **DeepBook** | [https://deepbook.tech/](https://deepbook.tech/) | Web3 DEX Platform | ⏳ Queued |
+| Nov 2, 2026 | **Grids (by Obys)** | [https://grids.obys.agency/](https://grids.obys.agency/) | Typography & Grid Education | ⏳ Queued |
+| Nov 1, 2026 | **Don't Look Up** | [https://www.dontlookup.app/](https://www.dontlookup.app/) | Gamified Three.js Satire | ✅ Complete (`media/dontlookup`) |
+| Oct 17, 2026 | **Belgrade Arbor** | [https://belgradearbor.rs/en](https://belgradearbor.rs/en) | Architecture & Botanical | ✅ Complete (`portfolio/belgradearbor`) |
+| Oct 16, 2026 | **SweetTape** | [https://sweet-tape.com/](https://sweet-tape.com/) | Tactile Pop E-Commerce | ✅ Complete (`ecommerce/sweettape`) |
 
 
 ---
