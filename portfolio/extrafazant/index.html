@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+<html lang="nl-NL">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extrafazant | Social Content, Video's &amp; Animatie</title>
+  <meta name="description" content="Creatives die je merk in beweging brengen. Animatie, film en social content die blijft hangen. Snel schakelen, meedenken, geen lang bureauproces.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --theme-bg: #F4F4F4;
+      --theme-text: #101010;
+      --theme-dark: #101010;
+      --theme-dark-text: #F4F4F4;
+      --brand-blue: #0038FF;
+      --brand-pink: #FF77CD;
+      --brand-orange: #FF5F04;
+      --brand-yellow: #FEE897;
+      --brand-crimson: #D82234;
+      
+      --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-alt: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background-color: var(--theme-bg);
+      color: var(--theme-text);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.4;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Headings & Alt Font */
+    h1, h2, h3, h4 {
+      font-family: var(--font-heading);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 0.92;
+    }
+
+    .heading-alt {
+      font-family: var(--font-alt);
+      font-style: italic;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      padding: 0 0.08em;
+    }
+
+    /* Layout Containers */
+    .container {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-padding {
+      padding: 7rem 0;
+    }
+
+    /* Custom Cursor with Marquee Pill */
+    #custom-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .cursor-pill {
+      background: var(--brand-blue);
+      color: #FFF;
+      padding: 0.45rem 1rem;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: 0 8px 24px rgba(0, 56, 255, 0.35);
+      transform: scale(0.6);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
+    }
+
+    #custom-cursor.active {
+      opacity: 1;
+    }
+
+    #custom-cursor.active .cursor-pill {
+      transform: scale(1);
+    }
+
+    .cursor-marquee-track {
+      display: flex;
+      gap: 1rem;
+      animation: cursor-ticker 4s linear infinite;
+    }
+
+    @keyframes cursor-ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* Navigation */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 1.5rem 2rem;
+      transition: padding 0.3s ease, background-color 0.3s ease;
+    }
+
+    .nav-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      text-decoration: none;
+      color: var(--theme-text);
+      font-weight: 900;
+      font-size: 1.35rem;
+      letter-spacing: -0.04em;
+    }
+
+    .brand-logo-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--brand-blue);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      font-size: 0.85rem;
+      font-weight: 900;
+      transform: rotate(-4deg);
+    }
+
+    .nav-menu {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      background: rgba(244, 244, 244, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(16, 16, 16, 0.08);
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--theme-text);
+      font-size: 0.95rem;
+      font-weight: 600;
+      position: relative;
+      padding: 0.2rem 0;
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--brand-blue);
+      transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    .btn-contact {
+      background: var(--brand-blue);
+      color: #FFF;
+      text-decoration: none;
+      padding: 0.65rem 1.4rem;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s, box-shadow 0.25s;
+    }
+
+    .btn-contact:hover {
+      background: #002ecc;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 56, 255, 0.28);
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      min-height: 94vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 8rem;
+      padding-bottom: 3rem;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      font-size: clamp(3.2rem, 8.5vw, 7.8rem);
+      line-height: 0.88;
+      max-width: 14ch;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.15rem;
+      max-width: 42ch;
+      font-weight: 500;
+      color: rgba(16, 16, 16, 0.78);
+    }
+
+    .hero-explore {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: var(--theme-text);
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .arrow-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid var(--theme-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s, color 0.2s;
+    }
+
+    .hero-explore:hover .arrow-circle {
+      transform: translateY(4px);
+      background: var(--brand-blue);
+      border-color: var(--brand-blue);
+      color: #FFF;
+    }
+
+    /* Floating Cursor Card in Hero */
+    .hero-cursor-card {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 380px;
+      border-radius: 20px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 10;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, -50%);
+    }
+
+    .hero-cursor-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .hero-cursor-card-badge {
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      background: rgba(16, 16, 16, 0.8);
+      backdrop-filter: blur(8px);
+      color: #FFF;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.3rem 0.75rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Client Logos Marquee */
+    .hero-clients {
+      margin-top: 5rem;
+      border-top: 1px solid rgba(16, 16, 16, 0.08);
+      padding-top: 2.5rem;
+      overflow: hidden;
+    }
+
+    .clients-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 700;
+      opacity: 0.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .clients-marquee {
+      display: flex;
+      width: fit-content;
+      gap: 4rem;
+      animation: marquee-scroll 24s linear infinite;
+    }
+
+    @keyframes marquee-scroll {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .client-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      opacity: 0.65;
+      white-space: nowrap;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .client-item:hover {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    /* Section Intro & Interactive Collage */
+    .intro-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .collage-wrapper {
+      position: relative;
+      height: 520px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .collage-card {
+      position: absolute;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+      transition: transform 0.6s cubic-bezier(0.3, 0.075, 0, 1), box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .collage-card:hover {
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.2);
+      z-index: 10 !important;
+    }
+
+    .collage-card-l {
+      width: 290px;
+      height: 380px;
+      left: 10%;
+      top: 12%;
+      z-index: 2;
+      transform: rotate(-3deg);
+    }
+
+    .collage-card-m {
+      width: 250px;
+      height: 330px;
+      right: 12%;
+      top: 24%;
+      z-index: 3;
+      transform: rotate(4deg);
+    }
+
+    .collage-card-s {
+      width: 170px;
+      height: 170px;
+      left: 36%;
+      bottom: 8%;
+      background: var(--brand-pink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #101010;
+      z-index: 4;
+      transform: rotate(-6deg);
+      border: 3px solid #101010;
+      font-weight: 900;
+      text-align: center;
+      padding: 1rem;
+      font-size: 1.1rem;
+    }
+
+    .collage-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .intro-text h2 {
+      font-size: clamp(2.4rem, 4.5vw, 4.2rem);
+      margin-bottom: 1.75rem;
+    }
+
+    .intro-text p {
+      font-size: 1.15rem;
+      line-height: 1.6;
+      color: rgba(16, 16, 16, 0.8);
+      margin-bottom: 2rem;
+    }
+
+    /* Section Featured (3D Pinned Stack Deck) */
+    .section-featured {
+      background: var(--theme-dark);
+      color: var(--theme-dark-text);
+      padding: 8rem 0;
+      position: relative;
+    }
+
+    .featured-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+
+    .featured-header h2 {
+      font-size: clamp(3rem, 6.5vw, 6rem);
+    }
+
+    .featured-header p {
+      font-size: 1.1rem;
+      color: rgba(244, 244, 244, 0.7);
+      max-width: 32ch;
+    }
+
+    /* Rotating Sticker Badge */
+    .rotating-badge {
+      width: 110px;
+      height: 110px;
+      animation: rotate-badge 16s linear infinite;
+    }
+
+    @keyframes rotate-badge {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .featured-stack-container {
+      position: relative;
+      height: 600px;
+      perspective: 1200px;
+    }
+
+    .featured-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      padding: 3rem;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 3rem;
+      align-items: center;
+      text-decoration: none;
+      color: inherit;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+      cursor: pointer;
+    }
+
+    .featured-card-1 {
+      background-color: var(--brand-yellow);
+      color: #101010;
+      z-index: 3;
+      transform: translateZ(0px) translateY(0px);
+    }
+
+    .featured-card-2 {
+      background-color: var(--brand-blue);
+      color: #FFF;
+      z-index: 2;
+      transform: translateZ(-80px) translateY(40px);
+      opacity: 0.92;
+    }
+
+    .featured-card-3 {
+      background-color: var(--brand-crimson);
+      color: #FFF;
+      z-index: 1;
+      transform: translateZ(-160px) translateY(80px);
+      opacity: 0.85;
+    }
+
+    .featured-card-info .eyebrow {
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.75;
+      margin-bottom: 1rem;
+    }
+
+    .featured-card-info h3 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      margin-bottom: 1rem;
+    }
+
+    .featured-card-info p {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      opacity: 0.85;
+      max-width: 36ch;
+      margin-bottom: 2rem;
+    }
+
+    .featured-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tag-pill {
+      background: rgba(16, 16, 16, 0.12);
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .featured-card-2 .tag-pill,
+    .featured-card-3 .tag-pill {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .featured-card-media {
+      height: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .featured-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .featured-card:hover .featured-card-media img {
+      transform: scale(1.04);
+    }
+
+    /* Stack Controls / Stepper */
+    .stack-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 3rem;
+    }
+
+    .stack-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #FFF;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+
+    .stack-btn:hover {
+      background: #FFF;
+      color: #101010;
+      transform: scale(1.08);
+    }
+
+    /* Section Services ("Wat we Doen") */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .service-card {
+      background: #FFF;
+      border: 1.5px solid rgba(16, 16, 16, 0.08);
+      border-radius: 24px;
+      padding: 2.75rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 440px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s;
+      cursor: pointer;
+    }
+
+    .service-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.1);
+      border-color: var(--brand-blue);
+    }
+
+    .service-num {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--brand-blue);
+      margin-bottom: 1.5rem;
+    }
+
+    .service-card h3 {
+      font-size: 2.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .service-card p {
+      font-size: 1.05rem;
+      line-height: 1.6;
+      color: rgba(16, 16, 16, 0.75);
+    }
+
+    .service-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--brand-blue);
+      margin-top: 2rem;
+    }
+
+    /* Section Team ("ABCDEF-Team" Momentum Physics) */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .team-card {
+      background: #FFF;
+      border-radius: 20px;
+      overflow: hidden;
+      border: 1.5px solid rgba(16, 16, 16, 0.08);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+      transform-origin: center center;
+      transition: box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .team-card:hover {
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.14);
+    }
+
+    .team-photo {
+      height: 280px;
+      background: #ECECEC;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .team-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .team-card:hover .team-photo img {
+      transform: scale(1.06);
+    }
+
+    .team-info {
+      padding: 1.5rem;
+    }
+
+    .team-info h4 {
+      font-size: 1.4rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .team-info span {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: rgba(16, 16, 16, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--theme-dark);
+      color: var(--theme-dark-text);
+      padding: 8rem 0 3rem;
+      position: relative;
+    }
+
+    .footer-cta {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 6rem;
+    }
+
+    .footer-cta h2 {
+      font-size: clamp(3.2rem, 7vw, 6.5rem);
+      margin-bottom: 2.5rem;
+    }
+
+    .footer-big-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--brand-pink);
+      color: #101010;
+      text-decoration: none;
+      padding: 1.25rem 2.8rem;
+      border-radius: 999px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s;
+    }
+
+    .footer-big-btn:hover {
+      transform: scale(1.05) translateY(-3px);
+      box-shadow: 0 16px 40px rgba(255, 119, 205, 0.4);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding-top: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .footer-col h5 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.5;
+      margin-bottom: 1.25rem;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .footer-links a {
+      color: var(--theme-dark-text);
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 600;
+      position: relative;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .footer-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0%;
+      height: 1.5px;
+      background: var(--brand-pink);
+      transition: width 0.25s ease;
+    }
+
+    .footer-links a:hover::after {
+      width: 100%;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 991px) {
+      .intro-grid {
+        grid-template-columns: 1fr;
+      }
+      .featured-card {
+        grid-template-columns: 1fr;
+        height: auto;
+        min-height: 520px;
+      }
+      .featured-stack-container {
+        height: 640px;
+      }
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+      .team-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-menu {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor with Marquee Ticker -->
+  <div id="custom-cursor">
+    <div class="cursor-pill">
+      <div class="cursor-marquee-track">
+        <span class="cursor-text">Bekijk case →</span>
+        <span class="cursor-text">Bekijk case →</span>
+        <span class="cursor-text">Bekijk case →</span>
+        <span class="cursor-text">Bekijk case →</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Cursor Floating Preview Card -->
+  <div class="hero-cursor-card" id="heroFollower">
+    <span class="hero-cursor-card-badge" id="heroCardBadge">Odido</span>
+    <img id="heroCardImg" src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80" alt="Work Preview">
+  </div>
+
+  <!-- Navigation -->
+  <header class="nav">
+    <div class="nav-inner">
+      <a href="#" class="brand-logo">
+        <div class="brand-logo-icon">E</div>
+        <span>Extrafazant</span>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="#werk" class="nav-link">Werk</a>
+        <a href="#wat-we-doen" class="nav-link">Wat we doen</a>
+        <a href="#over" class="nav-link">Over</a>
+        <a href="#team" class="nav-link">Team</a>
+      </nav>
+
+      <a href="#contact" class="btn-contact">
+        <span>Start een project</span>
+        <span>→</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title" id="heroHeadline">
+          Brengt je merk in <span class="heading-alt">beweging</span>
+        </h1>
+
+        <div class="hero-bottom">
+          <p class="hero-subtitle">
+            Creatives die je merk in beweging brengen. Animatie, film en social content die blijft hangen. Snel schakelen, meedenken, geen bureaurompslomp.
+          </p>
+
+          <a href="#werk" class="hero-explore">
+            <span>Bekijk geselecteerd werk</span>
+            <div class="arrow-circle">↓</div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Client Marquee -->
+      <div class="hero-clients">
+        <div class="clients-label">Vertrouwd door merken &amp; pioniers</div>
+        <div class="clients-marquee">
+          <div class="client-item">✦ JUMBO</div>
+          <div class="client-item">✦ ODIDO</div>
+          <div class="client-item">✦ FONTYS</div>
+          <div class="client-item">✦ WILLEM II</div>
+          <div class="client-item">✦ CORDAID</div>
+          <div class="client-item">✦ NATIONAAL ARCHIEF</div>
+          <div class="client-item">✦ JANZEN</div>
+          <div class="client-item">✦ SOURCE</div>
+          <!-- Repeat for infinite marquee loop -->
+          <div class="client-item">✦ JUMBO</div>
+          <div class="client-item">✦ ODIDO</div>
+          <div class="client-item">✦ FONTYS</div>
+          <div class="client-item">✦ WILLEM II</div>
+          <div class="client-item">✦ CORDAID</div>
+          <div class="client-item">✦ NATIONAAL ARCHIEF</div>
+          <div class="client-item">✦ JANZEN</div>
+          <div class="client-item">✦ SOURCE</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Intro / Interactive Collage -->
+  <section class="section-padding" id="over">
+    <div class="container">
+      <div class="intro-grid">
+        <div class="collage-wrapper" id="collageContainer">
+          <div class="collage-card collage-card-l" data-parallax="-15">
+            <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=800&q=80" alt="Video Shoot">
+          </div>
+          <div class="collage-card collage-card-m" data-parallax="20">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80" alt="Creative Lab">
+          </div>
+          <div class="collage-card collage-card-s" data-parallax="-30">
+            <div>EXTRA<br>FAZANT<br>CLUB ✦</div>
+          </div>
+        </div>
+
+        <div class="intro-text">
+          <div style="text-transform: uppercase; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.1em; color: var(--brand-blue); margin-bottom: 1rem;">
+            Over ons bureau
+          </div>
+          <h2>De creatives van <span class="heading-alt">Extrafazant</span></h2>
+          <p>
+            Wij zijn een studio van visuele denkers, regisseurs en motion designers. We geloven dat hedendaagse merken geen saaie corporate video's nodig hebben, maar verhalen met ritme, scherpe humor en onmiskenbare esthetiek.
+          </p>
+          <a href="#wat-we-doen" class="btn-contact">
+            <span>Onze aanpak</span>
+            <span>→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Featured Recent Werk (3D Pinned Stack Deck) -->
+  <section class="section-featured" id="werk">
+    <div class="container">
+      <div class="featured-header">
+        <div>
+          <div style="text-transform: uppercase; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.1em; color: var(--brand-pink); margin-bottom: 1rem;">
+            Geselecteerd Portfolio
+          </div>
+          <h2>Recent <span class="heading-alt">Werk</span></h2>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 2rem;">
+          <p>Niet te missen, wel te delen. Hier een greep uit wat we maken.</p>
+          <!-- SVG Rotating Sticker Badge -->
+          <svg class="rotating-badge" viewBox="0 0 100 100">
+            <path id="badge-path" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none" />
+            <text font-size="9.5" font-weight="800" fill="#FEE897" letter-spacing="2">
+              <textPath href="#badge-path">✦ RECENT WERK ✦ EXTRAFAZANT</textPath>
+            </text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 3D Card Stack -->
+      <div class="featured-stack-container" id="featuredStack">
+        <!-- Card 1 -->
+        <div class="featured-card featured-card-1" data-index="0" data-marquee="Bekijk P. van der Niet →">
+          <div class="featured-card-info">
+            <div class="eyebrow">01 · Animatie &amp; Campagne</div>
+            <h3>P. van der Niet</h3>
+            <p>
+              Een speelse, ritmische animatiereeks waarin complexe installatietechniek wordt vertaald naar herkenbare, heldere verhalen voor de nieuwe generatie vakmensen.
+            </p>
+            <div class="featured-tags">
+              <span class="tag-pill">2D Motion</span>
+              <span class="tag-pill">Karakteranimatie</span>
+              <span class="tag-pill">Campagne</span>
+            </div>
+          </div>
+          <div class="featured-card-media">
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1000&q=80" alt="P. van der Niet Visual">
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="featured-card featured-card-2" data-index="1" data-marquee="Bekijk Odido Case →">
+          <div class="featured-card-info">
+            <div class="eyebrow">02 · Brand Film &amp; Social</div>
+            <h3>Odido</h3>
+            <p>
+              Snelle, dynamische content formats voor landelijke introductiecampagnes. Geoptimaliseerd voor TikTok, Instagram Reels en digital out-of-home schermen.
+            </p>
+            <div class="featured-tags">
+              <span class="tag-pill">Social Video</span>
+              <span class="tag-pill">Brand Story</span>
+              <span class="tag-pill">Sound Design</span>
+            </div>
+          </div>
+          <div class="featured-card-media">
+            <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1000&q=80" alt="Odido Visual">
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="featured-card featured-card-3" data-index="2" data-marquee="Bekijk Willem II →">
+          <div class="featured-card-info">
+            <div class="eyebrow">03 · Stadium Visuals &amp; Film</div>
+            <h3>Willem II</h3>
+            <p>
+              Clubtrots in pure cinematografie. Stadionscherm animaties, matchday teasers en opzwepende seizoenkaart video's met kippenvelgarantie.
+            </p>
+            <div class="featured-tags">
+              <span class="tag-pill">Cinematografie</span>
+              <span class="tag-pill">Motion Graphics</span>
+              <span class="tag-pill">Stadion Visuals</span>
+            </div>
+          </div>
+          <div class="featured-card-media">
+            <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1000&q=80" alt="Willem II Visual">
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="stack-controls">
+        <button class="stack-btn" id="prevCard" aria-label="Vorige Case">←</button>
+        <button class="stack-btn" id="nextCard" aria-label="Volgende Case">→</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Services ("Wat we Doen") -->
+  <section class="section-padding" id="wat-we-doen">
+    <div class="container">
+      <div style="text-align: center; max-width: 650px; margin: 0 auto 3rem;">
+        <div style="text-transform: uppercase; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.1em; color: var(--brand-blue); margin-bottom: 1rem;">
+          Onze Diensten
+        </div>
+        <h2 style="font-size: clamp(2.8rem, 5.5vw, 4.8rem);">Wat we <span class="heading-alt">Doen</span></h2>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card" style="transform: rotate(-1.5deg);">
+          <div>
+            <div class="service-num">01 / ANIMATIE</div>
+            <h3>Animatie &amp; Motion</h3>
+            <p>
+              Van strakke 2D motion graphics tot complete 3D karakters en geanimeerde brand identity systemen. We brengen statische logo's en verhalen tot leven.
+            </p>
+          </div>
+          <div class="service-badge">
+            <span>Bekijk animaties</span>
+            <span>→</span>
+          </div>
+        </div>
+
+        <div class="service-card" style="transform: rotate(1deg);">
+          <div>
+            <div class="service-num">02 / VIDEO</div>
+            <h3>Film &amp; Commercials</h3>
+            <p>
+              Krachtige commercials, manifestofilms en employer branding video's. Met eigen regie, camera en post-productie voor een authentieke merkuitstraling.
+            </p>
+          </div>
+          <div class="service-badge">
+            <span>Bekijk films</span>
+            <span>→</span>
+          </div>
+        </div>
+
+        <div class="service-card" style="transform: rotate(-0.8deg);">
+          <div>
+            <div class="service-num">03 / SOCIAL</div>
+            <h3>Social First Content</h3>
+            <p>
+              Content die gebouwd is voor de feed. Snelle hooks, visuele punchlines en formats die scrollend publiek binnen 2 seconden laten stoppen.
+            </p>
+          </div>
+          <div class="service-badge">
+            <span>Bekijk formats</span>
+            <span>→</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section Team ("ABCDEF-Team" Momentum Inertia) -->
+  <section class="section-padding" id="team" style="background: #EFEFEF;">
+    <div class="container">
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
+        <div>
+          <div style="text-transform: uppercase; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.1em; color: var(--brand-blue); margin-bottom: 0.75rem;">
+            Het Creatieve Team
+          </div>
+          <h2 style="font-size: clamp(2.6rem, 5vw, 4.4rem);">ABCDEF-<span class="heading-alt">Team</span></h2>
+        </div>
+        <p style="max-width: 38ch; font-weight: 500; color: rgba(16, 16, 16, 0.7);">
+          Makers, denkers en vakidioten met een passie voor beeld. Beweeg je muis over de kaarten voor kinetische physics.
+        </p>
+      </div>
+
+      <div class="team-grid" id="teamGrid">
+        <div class="team-card" data-momentum="true">
+          <div class="team-photo">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="Tom">
+          </div>
+          <div class="team-info">
+            <h4>Tom</h4>
+            <span>Creative Director &amp; Regie</span>
+          </div>
+        </div>
+
+        <div class="team-card" data-momentum="true">
+          <div class="team-photo">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80" alt="Willem">
+          </div>
+          <div class="team-info">
+            <h4>Willem</h4>
+            <span>Lead Motion Designer</span>
+          </div>
+        </div>
+
+        <div class="team-card" data-momentum="true">
+          <div class="team-photo">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80" alt="Daan">
+          </div>
+          <div class="team-info">
+            <h4>Daan</h4>
+            <span>Video Producer &amp; DOP</span>
+          </div>
+        </div>
+
+        <div class="team-card" data-momentum="true">
+          <div class="team-photo">
+            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80" alt="Fleur">
+          </div>
+          <div class="team-info">
+            <h4>Fleur</h4>
+            <span>Animation &amp; 3D Artist</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer-cta">
+        <h2>Ook iets in <span class="heading-alt">Beweging brengen?</span></h2>
+        <a href="mailto:hallo@extrafazant.nl" class="footer-big-btn">
+          <span>Stuur een berichtje</span>
+          <span>→</span>
+        </a>
+      </div>
+
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="brand-logo" style="color: #FFF; margin-bottom: 1.25rem;">
+            <div class="brand-logo-icon">E</div>
+            <span>Extrafazant</span>
+          </div>
+          <p style="opacity: 0.65; max-width: 32ch; line-height: 1.6;">
+            Creatief bureau voor animatie, film en social first video's. Gevestigd in Nederland, actief in heel Europa.
+          </p>
+        </div>
+
+        <div class="footer-col">
+          <h5>Navigatie</h5>
+          <ul class="footer-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#werk">Recent Werk</a></li>
+            <li><a href="#wat-we-doen">Wat we doen</a></li>
+            <li><a href="#over">Over ons</a></li>
+            <li><a href="#team">Team</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Contact</h5>
+          <ul class="footer-links">
+            <li><a href="mailto:hallo@extrafazant.nl">hallo@extrafazant.nl</a></li>
+            <li><a href="tel:+31612345678">+31 (0)6 12 34 56 78</a></li>
+            <li><span style="opacity: 0.7;">Breda / Amsterdam</span></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h5>Socials</h5>
+          <ul class="footer-links">
+            <li><a href="https://instagram.com" target="_blank" rel="noopener">Instagram ↗</a></li>
+            <li><a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+            <li><a href="https://vimeo.com" target="_blank" rel="noopener">Vimeo ↗</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Extrafazant. Alle rechten voorbehouden.</div>
+        <div style="display: flex; gap: 2rem;">
+          <a href="#" style="color: inherit; text-decoration: none;">Privacyverklaring</a>
+          <a href="#" style="color: inherit; text-decoration: none;">Algemene Voorwaarden</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- GSAP & Lenis Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <script>
+    // 1. Initialize Lenis Smooth Scroll
+    const lenis = new Lenis({
+      lerp: 0.165,
+      wheelMultiplier: 1.25,
+      smoothWheel: true
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    // 2. Custom Cursor with Marquee Ticker
+    const cursor = document.getElementById('custom-cursor');
+    const cursorTexts = cursor.querySelectorAll('.cursor-text');
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    const quickCursorX = gsap.quickTo(cursor, 'x', { duration: 0.35, ease: 'power3' });
+    const quickCursorY = gsap.quickTo(cursor, 'y', { duration: 0.35, ease: 'power3' });
+
+    window.addEventListener('pointermove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      quickCursorX(mouseX);
+      quickCursorY(mouseY);
+    });
+
+    // Hover triggers for cursor marquee
+    document.querySelectorAll('[data-marquee]').forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        const text = el.getAttribute('data-marquee') || 'Bekijk case →';
+        cursorTexts.forEach(t => t.textContent = text);
+        cursor.classList.add('active');
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.classList.remove('active');
+      });
+    });
+
+    // 3. Hero Interactive Cursor Follower Media Card
+    const heroSection = document.querySelector('.hero');
+    const heroFollower = document.getElementById('heroFollower');
+    const heroCardBadge = document.getElementById('heroCardBadge');
+    const heroCardImg = document.getElementById('heroCardImg');
+
+    const heroCases = [
+      { client: 'Odido', img: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80' },
+      { client: 'Willem II', img: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80' },
+      { client: 'P. van der Niet', img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80' },
+      { client: 'Fontys', img: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=800&q=80' }
+    ];
+
+    let currentHeroIndex = 0;
+    let lastSwitchDistance = 0;
+    let prevX = 0;
+    let prevY = 0;
+
+    const quickHeroX = gsap.quickTo(heroFollower, 'x', { duration: 0.8, ease: 'power4' });
+    const quickHeroY = gsap.quickTo(heroFollower, 'y', { duration: 0.8, ease: 'power4' });
+    const quickHeroRot = gsap.quickTo(heroFollower, 'rotation', { duration: 0.8, ease: 'power4' });
+
+    heroSection.addEventListener('pointerenter', () => {
+      gsap.to(heroFollower, { autoAlpha: 1, duration: 0.3, ease: 'power2.out' });
+    });
+
+    heroSection.addEventListener('pointerleave', () => {
+      gsap.to(heroFollower, { autoAlpha: 0, duration: 0.3, ease: 'power2.out' });
+    });
+
+    heroSection.addEventListener('pointermove', (e) => {
+      const rect = heroSection.getBoundingClientRect();
+      const vx = e.clientX - prevX;
+      const vy = e.clientY - prevY;
+      const speed = Math.hypot(vx, vy);
+      
+      prevX = e.clientX;
+      prevY = e.clientY;
+
+      quickHeroX(e.clientX);
+      quickHeroY(e.clientY);
+      quickHeroRot(Math.max(-14, Math.min(14, vx * 0.4)));
+
+      lastSwitchDistance += speed;
+      if (lastSwitchDistance > 240) {
+        lastSwitchDistance = 0;
+        currentHeroIndex = (currentHeroIndex + 1) % heroCases.length;
+        const nextCase = heroCases[currentHeroIndex];
+        heroCardBadge.textContent = nextCase.client;
+        heroCardImg.src = nextCase.img;
+      }
+    });
+
+    // 4. Interactive Collage with Momentum Repulsion
+    const collageContainer = document.getElementById('collageContainer');
+    const collageCards = collageContainer.querySelectorAll('.collage-card');
+
+    collageContainer.addEventListener('pointermove', (e) => {
+      const rect = collageContainer.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const deltaX = (e.clientX - centerX) / (rect.width / 2);
+      const deltaY = (e.clientY - centerY) / (rect.height / 2);
+
+      collageCards.forEach((card) => {
+        const factor = parseFloat(card.getAttribute('data-parallax') || '10');
+        gsap.to(card, {
+          x: deltaX * factor,
+          y: deltaY * factor,
+          duration: 0.6,
+          ease: 'power3.out'
+        });
+      });
+    });
+
+    collageContainer.addEventListener('pointerleave', () => {
+      collageCards.forEach((card) => {
+        gsap.to(card, { x: 0, y: 0, duration: 0.8, ease: 'power3.out' });
+      });
+    });
+
+    // 5. 3D Featured Stack Deck Interaction
+    const stackCards = document.querySelectorAll('.featured-card');
+    let activeCardIndex = 0;
+
+    function updateStack(newIndex) {
+      activeCardIndex = (newIndex + stackCards.length) % stackCards.length;
+      stackCards.forEach((card, idx) => {
+        const diff = (idx - activeCardIndex + stackCards.length) % stackCards.length;
+        if (diff === 0) {
+          // Front Card
+          gsap.to(card, {
+            z: 0,
+            y: 0,
+            opacity: 1,
+            zIndex: 10,
+            duration: 0.6,
+            ease: 'power3.out'
+          });
+        } else if (diff === 1) {
+          // Second Card
+          gsap.to(card, {
+            z: -80,
+            y: 40,
+            opacity: 0.9,
+            zIndex: 5,
+            duration: 0.6,
+            ease: 'power3.out'
+          });
+        } else {
+          // Third / Back Card
+          gsap.to(card, {
+            z: -160,
+            y: 80,
+            opacity: 0.8,
+            zIndex: 1,
+            duration: 0.6,
+            ease: 'power3.out'
+          });
+        }
+      });
+    }
+
+    document.getElementById('nextCard').addEventListener('click', () => updateStack(activeCardIndex + 1));
+    document.getElementById('prevCard').addEventListener('click', () => updateStack(activeCardIndex - 1));
+    stackCards.forEach((card, idx) => {
+      card.addEventListener('click', (e) => {
+        if (idx !== activeCardIndex) {
+          e.preventDefault();
+          updateStack(idx);
+        }
+      });
+    });
+
+    // 6. Momentum Hover on Team Cards
+    const teamCards = document.querySelectorAll('.team-card');
+    teamCards.forEach((card) => {
+      let enterX = 0;
+      let enterY = 0;
+
+      card.addEventListener('pointerenter', (e) => {
+        enterX = e.clientX;
+        enterY = e.clientY;
+      });
+
+      card.addEventListener('pointermove', (e) => {
+        const vx = e.clientX - enterX;
+        const vy = e.clientY - enterY;
+        enterX = e.clientX;
+        enterY = e.clientY;
+
+        const tiltX = Math.max(-10, Math.min(10, vy * 0.5));
+        const tiltY = Math.max(-10, Math.min(10, -vx * 0.5));
+        const rot = Math.max(-8, Math.min(8, vx * 0.3));
+
+        gsap.to(card, {
+          rotateX: tiltX,
+          rotateY: tiltY,
+          rotateZ: rot,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
+
+      card.addEventListener('pointerleave', () => {
+        gsap.to(card, {
+          rotateX: 0,
+          rotateY: 0,
+          rotateZ: 0,
+          duration: 0.7,
+          ease: 'elastic.out(1, 0.4)'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
+

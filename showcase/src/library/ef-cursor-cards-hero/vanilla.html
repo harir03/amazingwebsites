@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursor Cards Hero — Extrafazant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #EAEAEA;
+      font-family: 'Inter', sans-serif;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .hero-box {
+      position: relative;
+      width: 100%;
+      max-width: 960px;
+      min-height: 520px;
+      background: #F4F4F4;
+      color: #101010;
+      border-radius: 24px;
+      padding: 2.5rem;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(16, 16, 16, 0.1);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+      user-select: none;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 5;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 900;
+      font-size: 1.25rem;
+    }
+    .logo-badge {
+      width: 26px;
+      height: 26px;
+      background: #0038FF;
+      color: #fff;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 900;
+      transform: rotate(-3deg);
+    }
+    .pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(0, 56, 255, 0.1);
+      color: #0038FF;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+    }
+    .hero-body {
+      z-index: 5;
+      margin: auto 0;
+      max-width: 680px;
+    }
+    .hero-title {
+      font-size: clamp(2.5rem, 5.5vw, 4.8rem);
+      font-weight: 900;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+    }
+    .alt-italic {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      font-weight: 400;
+      color: #0038FF;
+    }
+    .hero-desc {
+      margin-top: 1.25rem;
+      font-size: 1.1rem;
+      color: rgba(16, 16, 16, 0.75);
+      line-height: 1.5;
+    }
+    .bottom-strip {
+      z-index: 5;
+      border-top: 1px solid rgba(16, 16, 16, 0.1);
+      padding-top: 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.7;
+    }
+    .follower-card {
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 290px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.22);
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      transform: translate(-50%, -50%);
+    }
+    .follower-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .badge-client {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(16, 16, 16, 0.8);
+      color: #FFF;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+  <div class="hero-box" id="heroBox">
+    <div class="follower-card" id="follower">
+      <span class="badge-client" id="badgeClient">Odido</span>
+      <img id="caseImg" src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80" alt="Preview">
+    </div>
+
+    <div class="header-bar">
+      <div class="logo">
+        <div class="logo-badge">E</div>
+        <span>Extrafazant</span>
+      </div>
+      <div class="pill">Creative Video &amp; Animation</div>
+    </div>
+
+    <div class="hero-body">
+      <h1 class="hero-title">
+        Brengt je merk in <span class="alt-italic">beweging</span>
+      </h1>
+      <p class="hero-desc">
+        Animatie, film en social first video formats die blijven hangen. Beweeg je cursor over het canvas om recente cases te ontdekken.
+      </p>
+    </div>
+
+    <div class="bottom-strip">
+      <div style="display: flex; gap: 1.5rem;">
+        <span>✦ JUMBO</span>
+        <span>✦ ODIDO</span>
+        <span>✦ FONTYS</span>
+        <span>✦ WILLEM II</span>
+      </div>
+      <div id="statusLabel" style="color: #0038FF;">[ PREVIEW ACTIVE ]</div>
+    </div>
+  </div>
+
+  <script>
+    const cases = [
+      { client: "Odido", img: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80" },
+      { client: "Willem II", img: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80" },
+      { client: "P. van der Niet", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80" },
+      { client: "Fontys", img: "https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&w=800&q=80" }
+    ];
+
+    const box = document.getElementById('heroBox');
+    const follower = document.getElementById('follower');
+    const badge = document.getElementById('badgeClient');
+    const img = document.getElementById('caseImg');
+
+    let currentIdx = 0;
+    let distance = 0;
+    let prevX = 0;
+    let prevY = 0;
+
+    box.addEventListener('pointerenter', () => follower.style.opacity = '1');
+    box.addEventListener('pointerleave', () => follower.style.opacity = '0');
+
+    box.addEventListener('pointermove', (e) => {
+      const rect = box.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const vx = e.clientX - prevX;
+      const vy = e.clientY - prevY;
+      const speed = Math.hypot(vx, vy);
+
+      prevX = e.clientX;
+      prevY = e.clientY;
+      distance += speed;
+
+      const rot = Math.max(-12, Math.min(12, vx * 0.35));
+      follower.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) rotate(${rot}deg)`;
+
+      if (distance > 200) {
+        distance = 0;
+        currentIdx = (currentIdx + 1) % cases.length;
+        badge.textContent = cases[currentIdx].client;
+        img.src = cases[currentIdx].img;
+      }
+    });
+  </script>
+</body>
+</html>
+

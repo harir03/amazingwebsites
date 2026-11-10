@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pinned Stack Deck — Extrafazant</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #1C1C1C;
+      font-family: 'Inter', sans-serif;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #F4F4F4;
+    }
+    .deck-container {
+      width: 100%;
+      max-width: 920px;
+      background: #101010;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+      user-select: none;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #FF77CD;
+    }
+    .heading {
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1;
+      margin-top: 0.25rem;
+    }
+    .alt-font {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-style: italic;
+      color: #FEE897;
+      font-weight: 400;
+    }
+    .badge-spin {
+      width: 72px;
+      height: 72px;
+      animation: spin 14s linear infinite;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .stack-viewport {
+      position: relative;
+      height: 420px;
+      perspective: 1000px;
+    }
+    .stack-card {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 2.25rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+      box-shadow: 0 20px 48px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    }
+    .card-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card-media {
+      width: 45%;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .btn-nav {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #FFF;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-nav:hover {
+      background: #FFF;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-container">
+    <div class="top-bar">
+      <div>
+        <div class="eyebrow">Recent Portfolio</div>
+        <h2 class="heading">Recent <span class="alt-font">Werk</span></h2>
+      </div>
+      <svg class="badge-spin" viewBox="0 0 100 100">
+        <path id="spin-badge" d="M 50, 50 m -37, 0 a 37,37 0 1,1 74,0 a 37,37 0 1,1 -74,0" fill="none" />
+        <text font-size="10" font-weight="800" fill="#FEE897" letter-spacing="2">
+          <textPath href="#spin-badge">✦ RECENT WERK ✦ EXTRAFAZANT</textPath>
+        </text>
+      </svg>
+    </div>
+
+    <div class="stack-viewport" id="viewport">
+      <!-- Card 0 -->
+      <div class="stack-card" style="background: #FEE897; color: #101010; z-index: 3;" data-idx="0">
+        <div class="card-info">
+          <div>
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase;">01 · Animatie &amp; Campagne</div>
+            <h3 style="font-size: 2.4rem; margin: 0.5rem 0 1rem; font-weight: 900;">P. van der Niet</h3>
+            <p style="font-size: 0.95rem; opacity: 0.85; line-height: 1.5;">
+              Een speelse animatiereeks waarin complexe installatietechniek wordt vertaald naar herkenbare, heldere verhalen.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <span style="background: rgba(0,0,0,0.1); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;">2D Motion</span>
+            <span style="background: rgba(0,0,0,0.1); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;">Campagne</span>
+          </div>
+        </div>
+        <div class="card-media">
+          <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1000&q=80" alt="P. van der Niet">
+        </div>
+      </div>
+
+      <!-- Card 1 -->
+      <div class="stack-card" style="background: #0038FF; color: #FFFFFF; z-index: 2; transform: translate3d(0, 28px, -60px); opacity: 0.88;" data-idx="1">
+        <div class="card-info">
+          <div>
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase;">02 · Brand Film &amp; Social</div>
+            <h3 style="font-size: 2.4rem; margin: 0.5rem 0 1rem; font-weight: 900;">Odido</h3>
+            <p style="font-size: 0.95rem; opacity: 0.85; line-height: 1.5;">
+              Snelle, dynamische content formats voor landelijke introductiecampagnes op TikTok en Instagram.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;">Social Video</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;">Reels</span>
+          </div>
+        </div>
+        <div class="card-media">
+          <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1000&q=80" alt="Odido">
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="stack-card" style="background: #D82234; color: #FFFFFF; z-index: 1; transform: translate3d(0, 56px, -120px); opacity: 0.72;" data-idx="2">
+        <div class="card-info">
+          <div>
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase;">03 · Stadium Visuals</div>
+            <h3 style="font-size: 2.4rem; margin: 0.5rem 0 1rem; font-weight: 900;">Willem II</h3>
+            <p style="font-size: 0.95rem; opacity: 0.85; line-height: 1.5;">
+              Clubtrots in pure cinematografie. Stadionscherm animaties en opzwepende matchday teasers.
+            </p>
+          </div>
+          <div style="display: flex; gap: 0.5rem;">
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;">Cinematografie</span>
+            <span style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 700;">Motion Graphics</span>
+          </div>
+        </div>
+        <div class="card-media">
+          <img src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=1000&q=80" alt="Willem II">
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-bar">
+      <div id="status">CASE 1 OF 3</div>
+      <div style="display: flex; gap: 0.5rem;">
+        <button class="btn-nav" id="prev">←</button>
+        <button class="btn-nav" id="next">→</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cards = Array.from(document.querySelectorAll('.stack-card'));
+    let active = 0;
+
+    function render() {
+      cards.forEach((card, i) => {
+        const diff = (i - active + cards.length) % cards.length;
+        const zIndex = 3 - diff;
+        const zOffset = -diff * 60;
+        const yOffset = diff * 28;
+        const opacity = diff === 0 ? 1 : diff === 1 ? 0.88 : 0.72;
+
+        card.style.zIndex = zIndex;
+        card.style.transform = `translate3d(0, ${yOffset}px, ${zOffset}px)`;
+        card.style.opacity = opacity;
+      });
+      document.getElementById('status').textContent = `CASE ${active + 1} OF ${cards.length}`;
+    }
+
+    document.getElementById('next').onclick = () => { active = (active + 1) % cards.length; render(); };
+    document.getElementById('prev').onclick = () => { active = (active - 1 + cards.length) % cards.length; render(); };
+    cards.forEach((card, idx) => {
+      card.onclick = () => { if (idx !== active) { active = idx; render(); } };
+    });
+  </script>
+</body>
+</html>
+
