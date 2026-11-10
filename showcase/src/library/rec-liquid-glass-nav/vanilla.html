@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Liquid Glass Pill Navbar</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&family=DM+Sans:wght@500;600&display=swap" />
+<style>
+  :root { --fog: #EEF3EB; --ink: #142617; --forest: #1C3320; --moss: #24472A; --ease: cubic-bezier(0.22, 1, 0.36, 1); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; background: var(--fog); color: var(--ink); font-family: "DM Sans", system-ui, sans-serif; overflow-x: hidden; }
+  .blob { position: fixed; border-radius: 50%; filter: blur(40px); animation: drift 10s ease-in-out infinite; }
+  @keyframes drift { 50% { transform: translate3d(8%, 6%, 0) scale(1.12); } }
+  .nav-wrap { position: fixed; inset: 16px 16px auto; z-index: 20; display: flex; justify-content: center; }
+  .glass { position: relative; isolation: isolate; width: 100%; max-width: 860px; overflow: hidden; border-radius: 999px;
+           background: rgba(255,255,255,.42); backdrop-filter: blur(34px) saturate(190%); -webkit-backdrop-filter: blur(34px) saturate(190%);
+           box-shadow: 0 14px 44px rgba(14,30,16,.24), inset 0 1px 1px rgba(255,255,255,.7), inset 0 -1px 2px rgba(47,85,39,.08);
+           border-top: 1px solid rgba(255,255,255,.7); border-bottom: 1px solid rgba(47,85,39,.06); }
+  .glass::before { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit; mix-blend-mode: screen;
+                   background: linear-gradient(145deg, rgba(255,255,255,.6) 0%, rgba(255,255,255,.06) 32%, rgba(255,255,255,0) 60%, rgba(143,196,90,.12) 100%); }
+  .row { position: relative; z-index: 2; height: 56px; display: flex; align-items: center; gap: 8px; padding: 0 8px 0 20px; }
+  .brand { margin-right: auto; display: flex; align-items: center; gap: 8px; font: 700 17px "Outfit", sans-serif; color: inherit; text-decoration: none; }
+  .brand i { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--forest); color: #B8DB94; font-style: normal; font-size: 12px; }
+  .links { display: flex; gap: 2px; list-style: none; }
+  .links a { display: block; padding: 6px 12px; border-radius: 999px; font-size: 13px; color: var(--moss); text-decoration: none; transition: background .3s, color .3s; }
+  .links a:hover { background: rgba(255,255,255,.6); color: var(--ink); }
+  .cta { background: var(--forest); color: #fff; padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 600; text-decoration: none; transition: transform .3s; }
+  .cta:hover { transform: scale(1.04); }
+  .burger { display: none; width: 40px; height: 40px; border: 0; border-radius: 50%; background: rgba(255,255,255,.5); cursor: pointer; place-items: center; }
+  .burger span { position: relative; display: block; width: 20px; height: 12px; }
+  .burger b { position: absolute; left: 0; right: 0; height: 2px; border-radius: 2px; background: var(--ink); transition: transform .45s var(--ease); }
+  .burger b:first-child { top: 0; } .burger b:last-child { bottom: 0; }
+  .open .burger b:first-child { transform: translateY(5px) rotate(45deg); }
+  .open .burger b:last-child { transform: translateY(-5px) rotate(-45deg); }
+  .sheet { position: fixed; inset: 0; z-index: 10; display: flex; flex-direction: column; justify-content: center; padding: 80px 24px 24px;
+           background: rgba(238,243,235,.55); backdrop-filter: blur(28px) saturate(180%); -webkit-backdrop-filter: blur(28px) saturate(180%);
+           opacity: 0; pointer-events: none; transition: opacity .4s var(--ease); list-style: none; }
+  .open .sheet { opacity: 1; pointer-events: auto; }
+  .sheet li { opacity: 0; transform: translateY(14px); transition: opacity .45s var(--ease), transform .45s var(--ease); }
+  .open .sheet li { opacity: 1; transform: none; transition-delay: calc(.08s + var(--i) * .05s); }
+  .sheet a { display: block; padding: 6px 0; font: 600 clamp(24px, 7vw, 40px)/1.2 "Outfit", sans-serif; color: var(--ink); text-decoration: none; }
+  main { position: relative; min-height: 100vh; display: grid; place-items: end center; padding: 24px; }
+  main p { font: 600 clamp(22px, 4.6vw, 48px)/1.05 "Outfit", sans-serif; text-align: center; }
+  @media (max-width: 900px) { .links { display: none; } .burger { display: grid; } }
+  @media (max-width: 480px) { .cta { display: none; } }
+  @media (min-width: 901px) { .sheet { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .blob { animation: none; } }
+</style>
+</head>
+<body>
+  <div class="blob" style="top:-40px;left:8%;width:190px;height:190px;background:#8FC45A"></div>
+  <div class="blob" style="top:24px;right:12%;width:220px;height:160px;background:rgba(226,185,59,.8);animation-direction:reverse"></div>
+  <div class="blob" style="top:45%;left:33%;width:290px;height:220px;background:rgba(92,140,58,.6)"></div>
+
+  <div class="root">
+    <nav class="nav-wrap" aria-label="Main">
+      <div class="glass"><div class="row">
+        <a class="brand" href="#top"><i aria-hidden="true">↻</i>Recursive</a>
+        <ul class="links"></ul>
+        <a class="cta" href="#apply">Apply now</a>
+        <button class="burger" aria-expanded="false" aria-controls="sheet" aria-label="Open menu"><span><b></b><b></b></span></button>
+      </div></div>
+    </nav>
+    <ul class="sheet" id="sheet" inert></ul>
+  </div>
+  <main><p>Credit for the next billion.</p></main>
+
+<script>
+  const links = ["The Thesis", "5-Min Scoring", "Scoring Pillars", "Future Scope", "Partners", "FAQ"];
+  document.querySelector(".links").innerHTML = links.map((l) => `<li><a href="#">${l}</a></li>`).join("");
+  const sheet = document.getElementById("sheet");
+  sheet.innerHTML = links.map((l, i) => `<li style="--i:${i}"><a href="#">${l}</a></li>`).join("");
+
+  const root = document.querySelector(".root"), burger = document.querySelector(".burger");
+  const setOpen = (open) => {
+    root.classList.toggle("open", open);
+    burger.setAttribute("aria-expanded", open);
+    burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    sheet.inert = !open;
+  };
+  burger.addEventListener("click", () => setOpen(!root.classList.contains("open")));
+  sheet.addEventListener("click", (e) => e.target.closest("a") && setOpen(false));
+  addEventListener("keydown", (e) => e.key === "Escape" && setOpen(false));
+</script>
+</body>
+</html>

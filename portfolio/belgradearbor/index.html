@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Belgrade Arbor | Residential & Business Complex in New Belgrade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: '#1F261E',
+            olive: '#3E562E',
+            canopy: '#2F3A26',
+            sand: '#FAF8F5',
+            cream: '#F5F2EB',
+            golden: '#C5A880',
+            sage: '#9BD4D7'
+          },
+          fontFamily: {
+            serif: ['"Instrument Serif"', 'Georgia', 'serif'],
+            sans: ['"Work Sans"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FAF8F5;
+      color: #1F261E;
+      font-family: 'Work Sans', sans-serif;
+      overflow-x: hidden;
+    }
+    .type-serif {
+      font-family: 'Instrument Serif', Georgia, serif;
+    }
+    /* Inquire button sliding label effect */
+    .inquire-btn:hover .label-wrap {
+      transform: translateY(-50%);
+    }
+    .smooth-scroll {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
+<body class="smooth-scroll relative">
+
+  <!-- Awwwards Ribbon -->
+  <div class="fixed top-1/2 right-0 z-50 -translate-y-1/2 hidden md:block">
+    <a href="https://www.awwwards.com/sites/belgrade-arbor" target="_blank" rel="noopener noreferrer" class="block bg-sage text-forest px-3 py-4 text-xs font-semibold uppercase tracking-widest [writing-mode:vertical-rl] rounded-l-md shadow-md hover:bg-forest hover:text-sand transition-colors">
+      Site of the Day · Awwwards
+    </a>
+  </div>
+
+  <!-- Floating Frosted Botanical Navbar -->
+  <header class="fixed top-6 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-4xl">
+    <nav class="bg-forest/90 backdrop-blur-md text-sand rounded-full px-5 py-3 shadow-xl border border-white/10 flex items-center justify-between">
+      
+      <!-- Menu Button -->
+      <button id="menu-btn" type="button" class="flex items-center gap-3 text-xs uppercase tracking-wider font-medium hover:text-golden transition-colors">
+        <div class="w-6 flex flex-col gap-1.5">
+          <span class="block h-[1.5px] w-full bg-sand"></span>
+          <span class="block h-[1.5px] w-full bg-sand"></span>
+        </div>
+        <span class="hidden sm:inline">Menu</span>
+      </button>
+
+      <!-- Center Logo / Monogram -->
+      <a href="#hero" class="flex items-center gap-2 group">
+        <svg width="28" height="28" viewBox="0 0 35 35" fill="none" class="text-golden transition-transform group-hover:scale-105">
+          <path d="M0 6.7V12.2C0 14.9 2.2 17.1 4.8 17.1H9.2C10.7 14 13.9 11.8 17.5 11.8H19.3C21.7 11.8 23.7 10 24 7.7C20.2 7.2 17.2 4 17.1 0H15V3C15 6.6 12.5 9.7 9.1 10.6C10 11.4 11.1 11.8 12.3 11.8H13C12.4 12.1 11.8 12.6 11.3 13.1C10.6 13.8 10 14.7 9.6 15.6C6 14.6 3.3 11.4 3.1 7.4C2 7.4 1 7.1 0 6.7Z" fill="currentColor"/>
+          <path d="M35 4.6C33.9 7.9 31.1 10.3 27.6 10.8C26.2 14 23 16.2 19.3 16.2H17.5C14.9 16.2 12.7 18.3 12.7 21V35H22.3V21C22.3 19.4 21.6 18 20.4 17.1C21.1 17 21.8 16.9 22.5 16.6C23.3 16.3 24 15.8 24.7 15.2C25.9 16.7 26.6 18.5 26.7 20.6H30.2C32.7 20.6 34.7 18.7 35 16.3V4.6Z" fill="currentColor"/>
+        </svg>
+        <span class="type-serif text-lg tracking-wider font-normal text-sand">Belgrade Arbor</span>
+      </a>
+
+      <!-- Inquire Action Button -->
+      <a href="#contact" class="inquire-btn relative overflow-hidden rounded-full border border-golden/50 px-5 py-2 text-xs uppercase tracking-wider font-medium text-sand hover:border-golden hover:bg-forest/80 transition-all">
+        <div class="label-wrap flex flex-col transition-transform duration-300">
+          <span class="h-4 flex items-center gap-1.5">Inquire <span class="text-golden font-bold">→</span></span>
+          <span class="h-4 flex items-center gap-1.5 text-golden">Connect <span>✦</span></span>
+        </div>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Mobile Menu Drawer (Hidden by default) -->
+  <div id="mobile-menu" class="fixed inset-0 bg-forest/95 backdrop-blur-xl z-50 hidden flex-col items-center justify-center p-8 text-center text-sand">
+    <button id="close-menu" type="button" class="absolute top-8 right-8 text-sand text-sm font-semibold tracking-wider uppercase border border-sand/30 rounded-full px-4 py-2">Close ✕</button>
+    <div class="space-y-6 text-3xl font-serif">
+      <a href="#hero" class="block hover:text-golden transition-colors mobile-link">Overview</a>
+      <a href="#vision" class="block hover:text-golden transition-colors mobile-link">Architecture</a>
+      <a href="#residences" class="block hover:text-golden transition-colors mobile-link">Residences</a>
+      <a href="#amenities" class="block hover:text-golden transition-colors mobile-link">Amenities</a>
+      <a href="#location" class="block hover:text-golden transition-colors mobile-link">Location</a>
+      <a href="#contact" class="block hover:text-golden transition-colors mobile-link">Contact</a>
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section id="hero" class="relative min-h-[92vh] pt-32 pb-16 px-6 flex flex-col justify-between items-center text-center max-w-6xl mx-auto">
+      <!-- Coordinates readout badge -->
+      <div class="inline-flex items-center gap-2 rounded-full border border-forest/15 bg-cream/70 px-4 py-1.5 text-xs font-mono uppercase tracking-widest text-forest">
+        <span class="h-2 w-2 rounded-full bg-olive animate-pulse"></span>
+        <span>44°49'08.2"N 20°24'29.1"E · Novi Beograd</span>
+      </div>
+
+      <!-- Main Headline in Editorial Serif -->
+      <div class="my-auto max-w-4xl py-12">
+        <h1 class="type-serif text-[clamp(42px,7.5vw,94px)] leading-[0.98] font-normal tracking-tight text-forest">
+          Harmony of modern living and natural <em class="italic text-olive">greenery</em>.
+        </h1>
+        <p class="mt-6 text-base sm:text-xl text-forest/70 max-w-2xl mx-auto leading-relaxed">
+          Belgrade Arbor is taking shape on Bulevar heroja sa Košara as a curated urban ecosystem that evolves with the rhythm of New Belgrade.
+        </p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href="#residences" class="rounded-full bg-forest px-8 py-3.5 text-sm font-medium text-sand hover:bg-forest/90 transition-all shadow-md">
+            Explore Residences
+          </a>
+          <a href="#vision" class="rounded-full border border-forest/20 px-8 py-3.5 text-sm font-medium text-forest hover:bg-cream transition-all">
+            Architectural Vision
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Visual Elevation Banner -->
+      <div class="w-full rounded-3xl overflow-hidden shadow-2xl relative h-72 sm:h-96 bg-gradient-to-br from-forest via-canopy to-olive flex items-center justify-center p-8 text-sand">
+        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="relative z-10 text-center max-w-xl">
+          <span class="text-xs uppercase tracking-widest text-golden font-mono">Organic Canopy Facade</span>
+          <h2 class="type-serif text-3xl sm:text-4xl mt-2 font-normal">Architecture Inspired by Living Trees</h2>
+          <p class="text-sm text-sand/80 mt-2">A symbol of growth, balance, and longevity designed to shade, breathe, and endure.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ARCHITECTURAL VISION SECTION -->
+    <section id="vision" class="py-24 px-6 bg-cream border-y border-forest/10">
+      <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-xs font-mono uppercase tracking-widest text-olive">The Vision</span>
+          <h2 class="type-serif text-4xl sm:text-5xl mt-3 text-forest leading-tight">
+            A curated urban ecosystem that evolves with the city.
+          </h2>
+          <p class="mt-6 text-forest/75 leading-relaxed">
+            The visual identity of Belgrade Arbor is defined by an elegant facade inspired by the form of a tree canopy, a symbol of growth, balance, and longevity. A clear architectural vision, a carefully selected location, and thoughtfully curated amenities make it a destination where quality and enduring value naturally converge.
+          </p>
+          <div class="mt-8 grid grid-cols-2 gap-6 pt-6 border-t border-forest/10">
+            <div>
+              <div class="type-serif text-3xl text-forest font-normal">18,500 m²</div>
+              <div class="text-xs uppercase text-forest/60 tracking-wider mt-1">Residential Space</div>
+            </div>
+            <div>
+              <div class="type-serif text-3xl text-forest font-normal">140+ Units</div>
+              <div class="text-xs uppercase text-forest/60 tracking-wider mt-1">Bespoke Residences</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-3xl bg-forest p-8 text-sand relative overflow-hidden shadow-xl">
+          <div class="absolute top-0 right-0 p-8 opacity-10">
+            <svg width="180" height="180" viewBox="0 0 35 35" fill="currentColor">
+              <path d="M0 6.7V12.2C0 14.9 2.2 17.1 4.8 17.1H9.2C10.7 14 13.9 11.8 17.5 11.8H19.3C21.7 11.8 23.7 10 24 7.7C20.2 7.2 17.2 4 17.1 0H15V3C15 6.6 12.5 9.7 9.1 10.6C10 11.4 11.1 11.8 12.3 11.8H13C12.4 12.1 11.8 12.6 11.3 13.1C10.6 13.8 10 14.7 9.6 15.6C6 14.6 3.3 11.4 3.1 7.4C2 7.4 1 7.1 0 6.7Z"/>
+            </svg>
+          </div>
+          <span class="text-xs font-mono uppercase tracking-widest text-golden">Sustainable Standards</span>
+          <h3 class="type-serif text-3xl mt-3 text-sand font-normal">Canopy Energy & Living Greenery</h3>
+          <ul class="mt-6 space-y-4 text-sm text-sand/80">
+            <li class="flex items-start gap-3">
+              <span class="text-golden font-bold">✓</span>
+              <span>Natural cross-ventilation designed across all corner duplexes.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-golden font-bold">✓</span>
+              <span>Lush private gardens and shaded rooftop terraced pergolas.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-golden font-bold">✓</span>
+              <span>Subterranean e-vehicle charging stations for every resident.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESIDENCES FLOORPLAN INSPECTOR -->
+    <section id="residences" class="py-24 px-6 max-w-6xl mx-auto">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <span class="text-xs font-mono uppercase tracking-widest text-olive">Unit Blueprint Catalog</span>
+        <h2 class="type-serif text-4xl sm:text-5xl mt-2 text-forest">Interactive Residence Inspector</h2>
+        <p class="text-forest/70 mt-3 text-sm sm:text-base">Select an archetype to view unit dimensions, orientation, and architectural schematics.</p>
+      </div>
+
+      <!-- Unit Selector Tabs -->
+      <div class="flex justify-center gap-2 mb-10 flex-wrap" id="unit-tabs">
+        <button class="unit-btn active rounded-full px-5 py-2.5 text-xs uppercase tracking-wider font-semibold bg-forest text-sand transition-all" data-unit="penthouse">
+          The Penthouse (184 m²)
+        </button>
+        <button class="unit-btn rounded-full px-5 py-2.5 text-xs uppercase tracking-wider font-medium border border-forest/20 text-forest hover:bg-cream transition-all" data-unit="duplex">
+          Garden Duplex (128 m²)
+        </button>
+        <button class="unit-btn rounded-full px-5 py-2.5 text-xs uppercase tracking-wider font-medium border border-forest/20 text-forest hover:bg-cream transition-all" data-unit="classic">
+          2-Bedroom Suite (84 m²)
+        </button>
+      </div>
+
+      <!-- Unit Display Stage -->
+      <div class="rounded-3xl border border-forest/15 bg-white p-6 sm:p-10 shadow-lg grid md:grid-cols-12 gap-8 items-center" id="unit-stage">
+        <!-- Blueprint Schematic Preview -->
+        <div class="md:col-span-7 bg-cream rounded-2xl p-6 sm:p-8 flex flex-col items-center justify-center border border-forest/10 min-h-[320px] relative">
+          <div class="absolute top-4 left-4 text-[10px] font-mono uppercase tracking-widest text-forest/60">
+            CAD Draft · Scale 1:50
+          </div>
+          <!-- SVG Floorplan Illustration -->
+          <svg viewBox="0 0 400 300" class="w-full max-w-md h-auto text-forest" fill="none" stroke="currentColor" stroke-width="1.5">
+            <rect x="20" y="20" width="360" height="260" rx="4" stroke-width="2"/>
+            <line x1="160" y1="20" x2="160" y2="280" stroke-dasharray="4 4"/>
+            <line x1="20" y1="160" x2="160" y2="160"/>
+            <line x1="160" y1="180" x2="380" y2="180"/>
+            <rect x="30" y="30" width="120" height="120" stroke-width="1" class="fill-forest/5"/>
+            <text x="50" y="90" font-size="11" fill="currentColor" stroke="none" font-family="sans-serif">Primary Suite</text>
+            <rect x="170" y="30" width="200" height="140" stroke-width="1" class="fill-golden/10"/>
+            <text x="230" y="100" font-size="12" fill="currentColor" stroke="none" font-family="sans-serif" font-weight="600">Great Room & Terrace</text>
+            <rect x="30" y="170" width="120" height="100" stroke-width="1" class="fill-forest/5"/>
+            <text x="55" y="225" font-size="11" fill="currentColor" stroke="none" font-family="sans-serif">Library / Den</text>
+            <rect x="170" y="190" width="200" height="80" stroke-width="1" class="fill-olive/10"/>
+            <text x="230" y="235" font-size="11" fill="currentColor" stroke="none" font-family="sans-serif">Chef's Kitchen</text>
+          </svg>
+        </div>
+
+        <!-- Telemetry Card -->
+        <div class="md:col-span-5 space-y-6">
+          <div>
+            <span class="text-xs font-mono uppercase tracking-widest text-olive" id="unit-tag">Level 8 · Sky Residence</span>
+            <h3 class="type-serif text-3xl sm:text-4xl text-forest font-normal mt-1" id="unit-name">Canopy Penthouse</h3>
+            <p class="text-forest/70 text-sm mt-2" id="unit-desc">
+              Panoramic double-height ceilings with direct private elevator entry and an expansive 360-degree wrap terrace overlooking the Sava river.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 border-t border-forest/10 pt-4 text-sm">
+            <div>
+              <span class="text-xs text-forest/60 block">Internal Living Area</span>
+              <span class="type-serif text-2xl text-forest" id="unit-area">184 m²</span>
+            </div>
+            <div>
+              <span class="text-xs text-forest/60 block">Terrace Surface</span>
+              <span class="type-serif text-2xl text-forest" id="unit-terrace">46 m²</span>
+            </div>
+            <div>
+              <span class="text-xs text-forest/60 block">Bedrooms / Baths</span>
+              <span class="type-serif text-2xl text-forest" id="unit-rooms">4 Bed · 3.5 Bath</span>
+            </div>
+            <div>
+              <span class="text-xs text-forest/60 block">Solar Exposure</span>
+              <span class="type-serif text-2xl text-forest" id="unit-exposure">South / West</span>
+            </div>
+          </div>
+
+          <a href="#contact" class="block text-center rounded-xl bg-forest px-6 py-3 text-xs uppercase tracking-wider font-semibold text-sand hover:bg-forest/90 transition-all">
+            Schedule Private Inspection
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOCATION & SURROUNDINGS -->
+    <section id="location" class="py-24 px-6 bg-forest text-sand">
+      <div class="max-w-6xl mx-auto">
+        <div class="max-w-2xl mb-12">
+          <span class="text-xs font-mono uppercase tracking-widest text-golden">Strategic Connectivity</span>
+          <h2 class="type-serif text-4xl sm:text-5xl mt-2 text-sand">New Belgrade's Most Dynamic Node</h2>
+          <p class="text-sand/70 mt-4 text-sm sm:text-base leading-relaxed">
+            Positioned seamlessly between business headquarters and cultural avenues, Belgrade Arbor offers rapid connectivity without compromising tranquil sanctuary.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <div class="type-serif text-3xl text-golden">5 min</div>
+            <h4 class="font-medium mt-1 text-sm">Airport City Belgrade</h4>
+            <p class="text-xs text-sand/60 mt-2">Serbia's flagship corporate park hosting global tech innovators and dining.</p>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <div class="type-serif text-3xl text-golden">4 min</div>
+            <h4 class="font-medium mt-1 text-sm">West 65 & Tower</h4>
+            <p class="text-xs text-sand/60 mt-2">Upscale shopping mall, wellness center, and fine dining esplanades.</p>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <div class="type-serif text-3xl text-golden">12 min</div>
+            <h4 class="font-medium mt-1 text-sm">Nikola Tesla Airport</h4>
+            <p class="text-xs text-sand/60 mt-2">Frictionless international highway transfer to international terminals.</p>
+          </div>
+          <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <div class="type-serif text-3xl text-golden">3 min</div>
+            <h4 class="font-medium mt-1 text-sm">Tošin Bunar Transit</h4>
+            <p class="text-xs text-sand/60 mt-2">Direct BG Voz passenger rail connecting Zemun, Old Town, and Novi Sad.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INQUIRY & FOOTER -->
+    <footer id="contact" class="bg-forest text-sand pt-20 pb-12 px-6 border-t border-white/10">
+      <div class="max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-12 gap-12 pb-16 border-b border-white/10">
+          <div class="md:col-span-5 space-y-4">
+            <div class="flex items-center gap-3">
+              <svg width="32" height="32" viewBox="0 0 35 35" fill="none" class="text-golden">
+                <path d="M0 6.7V12.2C0 14.9 2.2 17.1 4.8 17.1H9.2C10.7 14 13.9 11.8 17.5 11.8H19.3C21.7 11.8 23.7 10 24 7.7C20.2 7.2 17.2 4 17.1 0H15V3C15 6.6 12.5 9.7 9.1 10.6C10 11.4 11.1 11.8 12.3 11.8H13C12.4 12.1 11.8 12.6 11.3 13.1C10.6 13.8 10 14.7 9.6 15.6C6 14.6 3.3 11.4 3.1 7.4C2 7.4 1 7.1 0 6.7Z" fill="currentColor"/>
+                <path d="M35 4.6C33.9 7.9 31.1 10.3 27.6 10.8C26.2 14 23 16.2 19.3 16.2H17.5C14.9 16.2 12.7 18.3 12.7 21V35H22.3V21C22.3 19.4 21.6 18 20.4 17.1C21.1 17 21.8 16.9 22.5 16.6C23.3 16.3 24 15.8 24.7 15.2C25.9 16.7 26.6 18.5 26.7 20.6H30.2C32.7 20.6 34.7 18.7 35 16.3V4.6Z" fill="currentColor"/>
+              </svg>
+              <span class="type-serif text-2xl text-sand">Belgrade Arbor</span>
+            </div>
+            <p class="text-xs text-sand/65 max-w-sm leading-relaxed">
+              A residential and commercial complex on Bulevar heroja sa Košara. Inspired by the living canopy, engineered for timeless peace.
+            </p>
+          </div>
+
+          <div class="md:col-span-7">
+            <h4 class="text-xs uppercase tracking-widest text-golden font-mono mb-4">Request Sales Prospectus</h4>
+            <form onsubmit="event.preventDefault(); alert('Inquiry received. A sales associate will contact you.');" class="flex flex-col sm:flex-row gap-3">
+              <input type="email" required placeholder="Enter your business email address..." class="flex-1 rounded-full bg-white/10 border border-white/20 px-5 py-3 text-sm text-sand placeholder:text-sand/40 focus:outline-none focus:border-golden">
+              <button type="submit" class="rounded-full bg-golden px-7 py-3 text-xs uppercase tracking-wider font-semibold text-forest hover:bg-sand transition-all">
+                Inquire
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-sand/50 gap-4">
+          <p>© 2026 Belgrade Arbor. All rights reserved.</p>
+          <div class="flex gap-6">
+            <a href="https://belgradearbor.rs/en" target="_blank" class="hover:text-sand transition-colors">Original Reference Site</a>
+            <a href="https://github.com/harir03/frontend_copied" target="_blank" class="hover:text-sand transition-colors">Frontend Copied Repo</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeMenu = document.getElementById('close-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+
+    menuBtn?.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('flex');
+    });
+
+    const hideMenu = () => {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+    };
+
+    closeMenu?.addEventListener('click', hideMenu);
+    mobileLinks.forEach(l => l.addEventListener('click', hideMenu));
+
+    // Interactive Residence Unit Switcher
+    const units = {
+      penthouse: {
+        tag: 'Level 8 · Sky Residence',
+        name: 'Canopy Penthouse',
+        desc: 'Panoramic double-height ceilings with direct private elevator entry and an expansive 360-degree wrap terrace overlooking the Sava river.',
+        area: '184 m²',
+        terrace: '46 m²',
+        rooms: '4 Bed · 3.5 Bath',
+        exposure: 'South / West'
+      },
+      duplex: {
+        tag: 'Level 1-2 · Garden Estate',
+        name: 'Botanical Garden Duplex',
+        desc: 'Two-story private residence seamlessly connected to a manicured private courtyard with floor-to-ceiling double-glazed sun curtains.',
+        area: '128 m²',
+        terrace: '28 m²',
+        rooms: '3 Bed · 2.5 Bath',
+        exposure: 'East / South'
+      },
+      classic: {
+        tag: 'Levels 3-6 · Premier Living',
+        name: 'Canopy 2-Bedroom Suite',
+        desc: 'Optimized ergonomic floorplan featuring acoustic wall insulation, dedicated walk-in wardrobe, and a deep balcony shaded by the tree facade.',
+        area: '84 m²',
+        terrace: '14 m²',
+        rooms: '2 Bed · 2 Bath',
+        exposure: 'South'
+      }
+    };
+
+    const unitBtns = document.querySelectorAll('.unit-btn');
+    const tagEl = document.getElementById('unit-tag');
+    const nameEl = document.getElementById('unit-name');
+    const descEl = document.getElementById('unit-desc');
+    const areaEl = document.getElementById('unit-area');
+    const terraceEl = document.getElementById('unit-terrace');
+    const roomsEl = document.getElementById('unit-rooms');
+    const exposureEl = document.getElementById('unit-exposure');
+
+    unitBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const uKey = btn.dataset.unit;
+        const data = units[uKey];
+        if (!data) return;
+
+        unitBtns.forEach(b => {
+          b.classList.remove('bg-forest', 'text-sand', 'active');
+          b.classList.add('border', 'border-forest/20', 'text-forest');
+        });
+        btn.classList.add('bg-forest', 'text-sand', 'active');
+        btn.classList.remove('border', 'border-forest/20', 'text-forest');
+
+        tagEl.textContent = data.tag;
+        nameEl.textContent = data.name;
+        descEl.textContent = data.desc;
+        areaEl.textContent = data.area;
+        terraceEl.textContent = data.terrace;
+        roomsEl.textContent = data.rooms;
+        exposureEl.textContent = data.exposure;
+      });
+    });
+  </script>
+</body>
+</html>

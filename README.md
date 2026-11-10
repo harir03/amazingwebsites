@@ -61,8 +61,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 | Fintech | [Recursive](fintech/recursive/) | [https://recursive.money/](https://recursive.money/) | React + Vite + TailwindCSS + TanStack Router | ✅ Complete |
 | Portfolio | [Hello Monday](portfolio/hellomonday/) | [https://www.hellomonday.com/](https://www.hellomonday.com/) | Pixi.js + WebGL + GSAP + Three.js | ✅ Complete ([Local Demo](http://localhost:3001/)) |
 | Portfolio | [Alan Menken](portfolio/alanmenken/) | [https://www.alanmenken.com/](https://www.alanmenken.com/) | HTML5 + CSS3 + GSAP + Audio Sync | ✅ Complete ([Local Demo](http://localhost:3002/)) |
-| Media / App | [Don't Look Up](media/dontlookup/) | [https://www.dontlookup.app/](https://www.dontlookup.app/) | Interactive Canvas / WebGL | ⏳ Queued |
-| Portfolio | [Emotion Agency](portfolio/emotionagency/) | [https://emotion-agency.com/](https://emotion-agency.com/) | Next.js / React + GSAP | ⏳ Queued |
+| Media / App | [Don't Look Up](media/dontlookup/) | [https://www.dontlookup.app/](https://www.dontlookup.app/) | Interactive Canvas / WebGL (Three.js) | ✅ Complete ([Local Demo](http://localhost:3003/)) |
+| Portfolio | [Emotion Agency](portfolio/emotionagency/) | [https://emotion-agency.com/](https://emotion-agency.com/) | Nuxt / Vue + Three.js + GSAP + Lenis | ✅ Complete ([Local Demo](http://localhost:3004/)) |
+| Portfolio | [Belgrade Arbor](portfolio/belgradearbor/) | [https://belgradearbor.rs/en](https://belgradearbor.rs/en) | Next.js + GSAP + Lenis + CAD SVG | ✅ Complete ([Local Demo](http://localhost:3005/)) |
+| E-Commerce | [SweetTape](ecommerce/sweettape/) | [https://sweet-tape.com/](https://sweet-tape.com/) | Next.js + React + Tactile Physics | ✅ Complete ([Local Demo](http://localhost:3006/)) |
+| Media / Audio | [Overworld Audio](media/overworldaudio/) | [https://overworldaudio.com/](https://overworldaudio.com/) | Nuxt + Web Audio API + Canvas | ✅ Complete ([Local Demo](http://localhost:3007/)) |
 
 
 ---
@@ -84,6 +87,18 @@ To guarantee **1:1 fidelity**—where every animation, spring easing, and cursor
 2. **Scroll-Driven Sync**: Native `Lenis` or `ScrollTrigger` scrub synchronization with clamped scroll progress and pin anchors.
 3. **Responsive Cursor Physics**: Fluid lerping (`0.08` to `0.15` factor) with velocity transforms and state mutations.
 4. **Hardware Acceleration**: Explicit `transform: translate3d(...)` and `will-change` utilization for stutter-free 60fps renders.
+
+
+## 🚀 Next Milestone: Component Showcase & AI Prompt Platform
+
+We are building a unified showcase platform on top of this repository (inspired by React Bits, Aceternity UI, and 21st.dev):
+- **Theme-Based Segregation**: Categorize full sites and atomic components by aesthetic archetype (Brutalist, CAD Drafting, Glassmorphic Fintech, WebGL Fluid, Cinematic Serif, Compute Particles).
+- **Interactive Component Catalog**: Live embeds with 1-click code copying for drop-in usage.
+- **AI Agent Prompts**: Copy-paste prompts tailored for AI coding assistants (Antigravity, Cursor, Claude Code, Windsurf) to reproduce and adapt each component and animation.
+
+👉 See the full architectural specifications and task breakdown in [TODO.md](TODO.md).
+
+**Status:** the hub is live in [`showcase/`](showcase/) — `cd showcase && npm install && npm run dev`, then open http://localhost:5000/.
 
 
 ## ⚖️ License

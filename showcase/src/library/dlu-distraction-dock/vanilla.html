@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Distraction Launcher Dock</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@800;900&display=swap" />
+<style>
+  :root { --paper: #f4f3ef; --ink: #14140f; --y2: #f2c31a; --pop: cubic-bezier(0.2, 1.5, 0.32, 1); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { display: flex; flex-direction: column; background: var(--paper); color: var(--ink); font-family: Nunito, system-ui, sans-serif; }
+  .display { font-family: "Luckiest Guy", cursive; font-weight: 400; }
+  .chip { border: 2px solid var(--ink); border-radius: 12px; background: #fff; box-shadow: 2px 3px 0 var(--ink); padding: 6px 12px; }
+  .top { display: flex; justify-content: space-between; padding: 12px; font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .stage { position: relative; flex: 1; margin: 0 12px; display: flex; align-items: flex-end; justify-content: center; border: 2px dashed rgb(20 20 15 / .3); border-radius: 12px; overflow: hidden; }
+  .stage span { margin-bottom: 8px; font-size: clamp(48px, 11vw, 96px); line-height: 1; animation: land .6s cubic-bezier(0.2, 1.4, 0.35, 1) both; }
+  @keyframes land { 0% { transform: translateY(-120%) scale(.6); opacity: 0; } 60% { opacity: 1; } 100% { transform: none; opacity: 1; } }
+  .dock { list-style: none; display: flex; justify-content: center; gap: 8px; padding: 20px 12px 16px; overflow-x: auto; }
+  .card { width: 72px; display: flex; flex-direction: column; align-items: center; padding: 8px 0 6px; border: 2px solid var(--ink); border-radius: 12px; background: #fff;
+          box-shadow: 2px 3px 0 var(--ink); cursor: pointer; font: inherit; color: inherit; transform: rotate(var(--r)); transition: transform .35s var(--pop), box-shadow .15s; }
+  .card:hover, .card:focus-visible { transform: translateY(-10px) rotate(0) scale(1.06); outline: none; }
+  .card:active { transform: translate(2px, 3px); box-shadow: 0 0 0 var(--ink); transition-duration: .08s; }
+  .card.broke { opacity: .55; }
+  .card.deny { animation: shake .4s ease; }
+  @keyframes shake { 20% { translate: -6px 0; } 40% { translate: 6px 0; } 60% { translate: -4px 0; } 80% { translate: 4px 0; } }
+  .card b { font-size: 30px; line-height: 1; font-weight: 400; }
+  .card i { margin-top: 4px; font: 12px/1 "Luckiest Guy", cursive; font-style: normal; }
+  .card small { margin-top: 4px; padding: 0 6px; border-radius: 999px; background: var(--y2); font-size: 10px; font-weight: 900; }
+  @media (prefers-reduced-motion: reduce) { .card, .card:hover { transition: none; transform: none; } .stage span { animation: none; } }
+</style>
+</head>
+<body>
+  <div class="top"><span class="chip">Distracted: <span id="crowd">12</span>%</span><span class="chip display" aria-live="polite"><span id="wallet">250</span>k</span></div>
+  <div class="stage" aria-live="polite"><em style="margin-bottom:24px;font-size:13px;opacity:.5">Pick a distraction ↓</em></div>
+  <ul class="dock" aria-label="Distractions"></ul>
+
+<script>
+  const PROPS = [["📺", "TV", 40, 22], ["⚽", "Ball", 15, 9], ["🐈", "Cat", 25, 14], ["💃", "Dance", 60, 30], ["📰", "News", 80, 38], ["⛪", "Priest", 120, 55], ["🏋️", "Coach", 35, 18]];
+  let wallet = 250, crowd = 12, actx;
+  const dock = document.querySelector(".dock"), stage = document.querySelector(".stage");
+
+  // Procedural SFX: one oscillator + gain envelope per tone. Context is created on first click.
+  function tone(type, from, to, start, dur, vol) {
+    actx ??= new (window.AudioContext || window.webkitAudioContext)();
+    const t = actx.currentTime + start, o = actx.createOscillator(), g = actx.createGain();
+    o.type = type; o.frequency.setValueAtTime(from, t); o.frequency.exponentialRampToValueAtTime(to, t + dur);
+    g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(actx.destination); o.start(t); o.stop(t + dur + 0.02);
+  }
+  const sfx = {
+    place() { tone("sine", 180, 48, 0, 0.28, 0.5); tone("square", 1568, 1568, 0.05, 0.07, 0.06); tone("square", 2093, 2093, 0.11, 0.12, 0.05); },
+    deny() { tone("sawtooth", 140, 90, 0, 0.3, 0.08); },
+  };
+
+  dock.innerHTML = PROPS.map(([e, n, c], i) => `<li><button class="card" style="--r:${i % 2 ? 2.5 : -2.5}deg" data-i="${i}" aria-label="${n}, costs ${c}k"><b aria-hidden="true">${e}</b><i>${n}</i><small>${c}k</small></button></li>`).join("");
+  const render = () => {
+    document.getElementById("wallet").textContent = wallet;
+    document.getElementById("crowd").textContent = crowd;
+    dock.querySelectorAll(".card").forEach((b) => b.classList.toggle("broke", wallet < PROPS[b.dataset.i][2]));
+  };
+
+  dock.addEventListener("click", (e) => {
+    const btn = e.target.closest(".card"); if (!btn) return;
+    const [emoji, , cost, pull] = PROPS[btn.dataset.i];
+    if (wallet < cost) {
+      sfx.deny(); btn.classList.remove("deny"); void btn.offsetWidth; btn.classList.add("deny");
+      return;
+    }
+    sfx.place(); wallet -= cost; crowd = Math.min(100, crowd + pull);
+    stage.innerHTML = `<span>${emoji}</span>`;
+    render();
+  });
+  setInterval(() => { wallet = Math.min(999, wallet + 5); crowd = Math.max(0, crowd - 2); render(); }, 600);
+  render();
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fluid Dot Field</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@300&family=Inter&display=swap" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { background: #f8f6f5; color: #191919; overflow: hidden; cursor: pointer; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; }
+  .copy { position: fixed; left: 20px; bottom: 20px; pointer-events: none; }
+  .copy h1 { font: 300 clamp(26px, 5.5vw, 56px)/1 "Zilla Slab", Georgia, serif; }
+  .copy p { margin-top: 8px; font: 12px Inter, sans-serif; color: #6b6a6a; }
+</style>
+</head>
+<body>
+  <canvas aria-hidden="true"></canvas>
+  <div class="copy"><h1>Make waves.</h1><p>Move to drag the surface · click to drop a ripple</p></div>
+
+<script>
+  const SPACING = 22, SPRING = 0.045, DAMPING = 0.88, RADIUS = 110;
+  const SHADES = ["#cbcac9", "#a9a8a8", "#6b6a6a", "#191919"], BG = "#f8f6f5";
+  const canvas = document.querySelector("canvas"), ctx = canvas.getContext("2d");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let w, h, n, x0, y0, dx, dy, vx, vy;
+
+  function build() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    w = innerWidth; h = innerHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const cols = Math.ceil(w / SPACING) + 1, rows = Math.ceil(h / SPACING) + 1;
+    n = cols * rows;
+    [x0, y0, dx, dy, vx, vy] = Array.from({ length: 6 }, () => new Float32Array(n));
+    const ox = (w - (cols - 1) * SPACING) / 2, oy = (h - (rows - 1) * SPACING) / 2;
+    for (let r = 0, i = 0; r < rows; r++) for (let c = 0; c < cols; c++, i++) { x0[i] = ox + c * SPACING; y0[i] = oy + r * SPACING; }
+  }
+  build();
+  addEventListener("resize", build);
+
+  const pointer = { x: -999, y: -999, vx: 0, vy: 0, last: 0 };
+  const ripples = [];
+  addEventListener("pointermove", (e) => {
+    if (pointer.last) { pointer.vx = e.clientX - pointer.x; pointer.vy = e.clientY - pointer.y; }
+    pointer.x = e.clientX; pointer.y = e.clientY; pointer.last = performance.now();
+  });
+  addEventListener("pointerdown", (e) => ripples.push({ x: e.clientX, y: e.clientY, r: 0 }));
+
+  const buckets = SHADES.map(() => []);
+  let t = 0;
+  (function frame() {
+    t += 1 / 60;
+    if (!reduce && performance.now() - pointer.last > 1200) { // idle ghost cursor
+      const gx = w * (0.5 + 0.34 * Math.sin(t * 0.8)), gy = h * (0.5 + 0.26 * Math.sin(t * 1.6));
+      pointer.vx = pointer.x < -900 ? 0 : gx - pointer.x; pointer.vy = pointer.x < -900 ? 0 : gy - pointer.y;
+      pointer.x = gx; pointer.y = gy;
+    }
+    ripples.forEach((rp) => (rp.r += 7));
+    while (ripples.length && ripples[0].r > Math.hypot(w, h)) ripples.shift();
+
+    const pv = Math.min(40, Math.hypot(pointer.vx, pointer.vy));
+    for (let i = 0; i < n; i++) {
+      const px = x0[i] + dx[i], py = y0[i] + dy[i];
+      if (!reduce && pv > 0.2) {
+        const d = Math.hypot(px - pointer.x, py - pointer.y);
+        if (d < RADIUS) { const f = (1 - d / RADIUS) ** 2; vx[i] += pointer.vx * f * 0.32; vy[i] += pointer.vy * f * 0.32; }
+      }
+      for (const rp of ripples) {
+        const ddx = x0[i] - rp.x, ddy = y0[i] - rp.y, d = Math.hypot(ddx, ddy) || 1, band = Math.abs(d - rp.r);
+        if (band < 18) { const f = (1 - band / 18) * 2.2 * Math.max(0, 1 - rp.r / 700); vx[i] += (ddx / d) * f; vy[i] += (ddy / d) * f; }
+      }
+      vx[i] = (vx[i] - dx[i] * SPRING) * DAMPING; vy[i] = (vy[i] - dy[i] * SPRING) * DAMPING;
+      dx[i] += vx[i]; dy[i] += vy[i];
+    }
+    pointer.vx *= 0.6; pointer.vy *= 0.6;
+
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, w, h);
+    buckets.forEach((b) => (b.length = 0));
+    for (let i = 0; i < n; i++) buckets[Math.min(3, Math.floor(Math.hypot(dx[i], dy[i]) / 5))].push(i);
+    buckets.forEach((b, s) => {
+      if (!b.length) return;
+      ctx.fillStyle = SHADES[s]; ctx.beginPath();
+      const rad = 1.3 + s * 0.9;
+      for (const i of b) { const x = x0[i] + dx[i], y = y0[i] + dy[i]; ctx.moveTo(x + rad, y); ctx.arc(x, y, rad, 0, Math.PI * 2); }
+      ctx.fill();
+    });
+    requestAnimationFrame(frame);
+  })();
+</script>
+</body>
+</html>

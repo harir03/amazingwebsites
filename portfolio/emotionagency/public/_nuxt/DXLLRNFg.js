@@ -1,0 +1,1 @@
+import{d as a,k as e,J as t,aE as n,y as c,z as r}from"./T7ii45zO.js";const s=a({__name:"ColorIndicator",props:{tag:{default:"div"},color:{}},setup(o){return(l,_)=>(e(),t(n(o.tag),{"aria-hidden":"",class:"color-indicator",style:c({"--i-color":o.color})},null,8,["style"]))}}),d=Object.assign(r(s,[["__scopeId","data-v-6d01475a"]]),{__name:"ColorIndicator"});export{d as _};

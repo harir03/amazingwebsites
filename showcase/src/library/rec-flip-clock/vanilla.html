@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Split-Flap Countdown</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@700&family=DM+Sans:wght@600&display=swap" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 32px 16px;
+         background: radial-gradient(ellipse at top, #DCEAD8, #EEF3EB 60%); color: #142617; font-family: "DM Sans", system-ui, sans-serif; text-align: center; }
+  .kicker { font-size: 11px; font-weight: 600; letter-spacing: .22em; color: #5C8C3A; text-transform: uppercase; }
+  h2 { font: 700 clamp(22px, 4.2vw, 40px)/1.2 "Outfit", sans-serif; letter-spacing: -.02em; margin-top: 4px; }
+
+  .fkc { --w: clamp(2.3rem, 8.4vw, 5.4rem); --h: calc(var(--w) * 1.42); --r: calc(var(--w) * .14); --ink: #F4F7EC; --face-b: #16240F;
+         display: flex; flex-wrap: wrap; justify-content: center; gap: calc(var(--w) * .46); }
+  .group { display: flex; flex-direction: column; align-items: center; gap: calc(var(--w) * .2); }
+  .cards { display: flex; gap: calc(var(--w) * .11); }
+  .label { font-size: 11px; font-weight: 600; letter-spacing: .2em; color: #4D6D4A; text-transform: uppercase; }
+
+  .cell { position: relative; display: block; width: var(--w); height: var(--h); }
+  .digit { position: absolute; inset: 0; overflow: hidden; border-radius: var(--r); background: var(--face-b); isolation: isolate;
+           box-shadow: 0 1px 0 rgba(255,255,255,.34), 0 12px 28px -14px rgba(16,32,14,.8), 0 2px 6px -2px rgba(16,32,14,.4); }
+  .half, .flap { position: absolute; left: 0; right: 0; height: 50%; overflow: hidden; display: flex; justify-content: center; backface-visibility: hidden; }
+  .top, .fold { top: 0; align-items: flex-start; border-radius: var(--r) var(--r) 0 0; background: linear-gradient(180deg, #3A5A31, #2A4324); box-shadow: inset 0 1px 0 rgba(214,236,196,.26); }
+  .bottom, .drop { bottom: 0; align-items: flex-end; border-radius: 0 0 var(--r) var(--r); background: linear-gradient(180deg, #1E3218, var(--face-b)); box-shadow: inset 0 -1px 0 rgba(0,0,0,.5); }
+  .digit b { display: block; width: 100%; height: var(--h); font: 400 calc(var(--w) * 1.06)/var(--h) "Bebas Neue", sans-serif; color: var(--ink);
+             text-shadow: 0 1px 0 rgba(0,0,0,.4); font-variant-numeric: tabular-nums; }
+  .anim { position: absolute; inset: 0; perspective: calc(var(--h) * 5.2); transform-style: preserve-3d; }
+  .fold { z-index: 3; transform-origin: 50% 100%; animation: fold 260ms cubic-bezier(.4,0,.7,1) forwards; }
+  .drop { z-index: 4; transform-origin: 50% 0%; opacity: 0; animation: drop 300ms cubic-bezier(.16,.95,.3,1) 260ms forwards; }
+  .cast { position: absolute; left: 0; right: 0; bottom: 0; height: 50%; z-index: 2; border-radius: 0 0 var(--r) var(--r);
+          background: linear-gradient(180deg, rgba(0,0,0,.65), rgba(0,0,0,0) 78%); animation: cast 560ms cubic-bezier(.33,0,.2,1) forwards; }
+  .seam { position: absolute; left: 0; right: 0; top: 50%; height: 1px; z-index: 5; background: rgba(0,0,0,.55); }
+  .gloss { position: absolute; inset: 0; z-index: 5; background: linear-gradient(180deg, rgba(255,255,255,.08), transparent 45%); }
+  .smoke { position: absolute; left: 50%; top: 50%; width: 1px; height: 1px; z-index: 6; pointer-events: none; }
+  .smoke i { position: absolute; left: 0; top: 0; width: calc(var(--w) * .95); aspect-ratio: 1; border-radius: 50%; opacity: 0;
+             transform: translate(-50%, -50%) scale(.16); filter: blur(calc(var(--w) * .13));
+             background: radial-gradient(circle at 50% 58%, rgba(246,250,240,.72) 0%, rgba(224,238,212,.3) 44%, rgba(210,228,198,0) 74%);
+             animation: puff 800ms cubic-bezier(.2,.6,.28,1) var(--d) forwards; }
+  @keyframes fold { 0% { transform: rotateX(0); opacity: 1; } 99% { opacity: 1; } 100% { transform: rotateX(-90deg); opacity: 0; } }
+  @keyframes drop { 0% { transform: rotateX(90deg); opacity: 0; } 1% { opacity: 1; } 100% { transform: rotateX(0); opacity: 1; } }
+  @keyframes cast { 0% { opacity: .9; } 45% { opacity: .65; } 100% { opacity: 0; } }
+  @keyframes puff { 0% { opacity: 0; transform: translate(-50%,-50%) scale(.16); } 20% { opacity: .42; } 50% { opacity: .24; }
+                    100% { opacity: 0; transform: translate(var(--x), var(--y)) scale(var(--sc)); } }
+  @media (prefers-reduced-motion: reduce) { .anim, .smoke { display: none; } }
+</style>
+</head>
+<body>
+  <div><p class="kicker">Applications close in</p><h2>5-minute credit scoring</h2></div>
+  <div class="fkc" role="timer"></div>
+
+<script>
+  const END = Date.now() + 3 * 86400e3 + 4 * 3600e3 + 7 * 60e3 + 12e3; // or new Date("2026-12-01").getTime()
+  const PUFFS = [["0ms", "-58%", "-128%", 1.75], ["50ms", "-40%", "-96%", 2.2], ["100ms", "-64%", "-70%", 1.5], ["150ms", "-46%", "-146%", 2.6]];
+  const LABELS = ["Days", "Hours", "Min", "Sec"];
+  const board = document.querySelector(".fkc");
+
+  const split = (ms) => {
+    const s = Math.max(0, Math.floor(ms / 1000));
+    return [Math.floor(s / 86400), Math.floor((s % 86400) / 3600), Math.floor((s % 3600) / 60), s % 60].map((n) => String(n).padStart(2, "0"));
+  };
+
+  // Build 8 cards once; keep a handle on each.
+  const cards = [];
+  board.innerHTML = LABELS.map((l) => `<div class="group"><div class="cards">${'<span class="cell" aria-hidden="true"></span>'.repeat(2)}</div><span class="label">${l}</span></div>`).join("");
+  board.querySelectorAll(".cell").forEach((cell) => {
+    cell.innerHTML = `<span class="digit"><span class="half top"><b></b></span><span class="half bottom"><b></b></span><span class="seam"></span><span class="gloss"></span></span>`;
+    cards.push({ cell, value: null });
+  });
+
+  function setDigit(card, d) {
+    const top = card.cell.querySelector(".top b"), bottom = card.cell.querySelector(".bottom b"), face = card.cell.querySelector(".digit");
+    const from = card.value;
+    card.value = d;
+    top.textContent = d;
+    if (from === null) { bottom.textContent = d; return; }
+    bottom.textContent = from;
+    card.cell.querySelectorAll(".anim, .smoke").forEach((n) => n.remove());
+    const anim = document.createElement("span");
+    anim.className = "anim";
+    anim.innerHTML = `<span class="flap fold"><b>${from}</b></span><span class="flap drop"><b>${d}</b></span><span class="cast"></span>`;
+    face.insertBefore(anim, face.querySelector(".seam"));
+    const smoke = document.createElement("span");
+    smoke.className = "smoke";
+    smoke.innerHTML = PUFFS.map(([dl, x, y, sc]) => `<i style="--d:${dl};--x:${x};--y:${y};--sc:${sc}"></i>`).join("");
+    card.cell.appendChild(smoke);
+    setTimeout(() => { bottom.textContent = d; anim.remove(); smoke.remove(); }, 650);
+  }
+
+  function render() {
+    const values = split(END - Date.now());
+    board.setAttribute("aria-label", values.map((v, i) => `${+v} ${LABELS[i]}`).join(", "));
+    values.join("").split("").forEach((d, i) => cards[i].value !== d && setDigit(cards[i], d));
+  }
+  render();
+  setInterval(render, 1000);
+</script>
+</body>
+</html>

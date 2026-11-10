@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Elastic Bezier Menu</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@300&family=Inter:wght@400&display=swap" />
+<style>
+  :root { --paper: #f8f6f5; --ink: #191919; --grey: #c6c5c5; --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; overflow: hidden; background: var(--paper); color: var(--ink); font-family: Inter, "Helvetica Neue", Arial, sans-serif; }
+  .serif { font-family: "Zilla Slab", Georgia, serif; font-weight: 300; }
+  header { position: relative; z-index: 30; display: flex; justify-content: space-between; align-items: center; padding: 20px; }
+  header a { font-size: 20px; color: inherit; text-decoration: none; }
+  .toggle { display: flex; align-items: center; gap: 8px; padding: 8px 16px 8px 12px; border: 0; border-radius: 999px; background: var(--ink); color: var(--paper);
+            font: 13px Inter, sans-serif; cursor: pointer; transition: transform .3s; }
+  .toggle:hover { transform: scale(1.04); }
+  .dots { position: relative; width: 12px; height: 12px; }
+  .dots i { position: absolute; width: 6px; height: 6px; border-radius: 50%; background: currentColor; transition: transform .5s; }
+  .dots i:first-child { top: 0; left: 0; } .dots i:last-child { right: 0; bottom: 0; }
+  .open .dots i:first-child { transform: translate(3px, 3px); } .open .dots i:last-child { transform: translate(-3px, -3px); }
+  .claim { position: absolute; left: 20px; right: 20px; bottom: 24px; max-width: 18ch; font-size: clamp(28px, 6vw, 64px); line-height: 1.02; }
+  .panel { position: fixed; top: 0; bottom: 0; right: 0; z-index: 20; width: min(380px, 82%); transform: translate3d(200%, 0, 0); will-change: transform; }
+  .panel svg { position: absolute; top: 0; height: 100%; left: -90px; width: calc(100% + 90px); overflow: visible; }
+  .panel nav { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 32px; color: var(--paper); }
+  .panel ul { list-style: none; }
+  .panel li { opacity: 0; transform: translateX(30px); transition: opacity .5s var(--ease), transform .6s var(--ease); }
+  .open .panel li { opacity: 1; transform: none; transition-delay: calc(.12s + var(--i) * .06s); }
+  .panel a { display: block; padding: 4px 0; font-size: clamp(32px, 6vw, 52px); line-height: 1.2; color: inherit; text-decoration: none; }
+  .panel a span { background: linear-gradient(currentColor, currentColor) left bottom / 0% 1px no-repeat; transition: background-size .5s; }
+  .panel a:hover span { background-size: 100% 1px; }
+  .panel p { margin-top: 32px; font-size: 12px; color: var(--grey); }
+</style>
+</head>
+<body>
+<div class="root">
+  <header><a class="serif" href="#top">Hello Monday</a>
+    <button class="toggle" aria-expanded="false" aria-controls="menu"><span class="dots" aria-hidden="true"><i></i><i></i></span><span class="label">Menu</span></button>
+  </header>
+  <p class="claim serif">We help brands do good, better.</p>
+  <div class="panel" id="menu" inert>
+    <svg aria-hidden="true"><path fill="#191919" /></svg>
+    <nav aria-label="Main">
+      <ul>
+        <li style="--i:0"><a class="serif" href="#"><span>Work</span></a></li>
+        <li style="--i:1"><a class="serif" href="#"><span>About</span></a></li>
+        <li style="--i:2"><a class="serif" href="#"><span>Careers</span></a></li>
+        <li style="--i:3"><a class="serif" href="#"><span>Contact</span></a></li>
+      </ul>
+      <p>New York · Copenhagen · Aarhus</p>
+    </nav>
+  </div>
+</div>
+
+<script>
+  const EDGE = 90;
+  const root = document.querySelector(".root"), panel = document.querySelector(".panel"), path = panel.querySelector("path");
+  const btn = document.querySelector(".toggle"), label = btn.querySelector(".label");
+  let open = false;
+  const setOpen = (v) => {
+    open = v; root.classList.toggle("open", v); panel.inert = !v;
+    btn.setAttribute("aria-expanded", v); label.textContent = v ? "Close" : "Menu";
+  };
+  btn.addEventListener("click", () => setOpen(!open));
+  addEventListener("keydown", (e) => e.key === "Escape" && setOpen(false));
+
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const s = { pos: 0, vel: 0, bulge: 0, bVel: 0, pull: 0, cursorY: 0.5 };
+  addEventListener("pointermove", (e) => {
+    s.cursorY = e.clientY / innerHeight;
+    const dist = panel.getBoundingClientRect().left - e.clientX;
+    s.pull = open && dist > -40 && dist < 160 ? Math.max(0, 1 - Math.abs(dist) / 160) * 46 : 0;
+  });
+
+  let last = performance.now();
+  (function tick(now) {
+    const dt = Math.min(0.032, (now - last) / 1000); last = now;
+    const target = open ? 1 : 0;
+    if (reduce) { s.pos = target; s.bulge = 0; }
+    else {
+      s.vel += (-120 * (s.pos - target) - 20 * s.vel) * dt;            // drawer spring
+      s.pos += s.vel * dt;
+      s.bVel += (-260 * (s.bulge - (-s.vel * 70 + s.pull)) - 9 * s.bVel) * dt; // edge spring
+      s.bulge += s.bVel * dt;
+    }
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    panel.style.transform = `translate3d(${(1 - s.pos) * (w + EDGE)}px,0,0)`;
+    const y = Math.min(0.85, Math.max(0.15, s.cursorY)) * h, c = EDGE - s.bulge;
+    path.setAttribute("d", `M${EDGE},0 C${EDGE},${y * 0.6} ${c},${y - h * 0.18} ${c},${y} S${EDGE},${h} ${EDGE},${h} L${EDGE + w},${h} L${EDGE + w},0 Z`);
+    requestAnimationFrame(tick);
+  })(last);
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Signature Draw Splash</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter&display=swap" />
+<style>
+  :root { --linen: #e7e5df; --night: #0d0c0b; --ease: cubic-bezier(0.6, 0, 0.1, 1); }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { background: var(--linen); color: #1a1917; font-family: "Playfair Display", Georgia, serif; }
+  .page { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; }
+  .page small { font: 11px Inter, sans-serif; letter-spacing: .3em; text-transform: uppercase; opacity: .6; }
+  .page h1 { font-size: clamp(40px, 10vw, 110px); font-style: italic; font-weight: 400; line-height: 1; }
+  .splash { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 24px;
+            background: var(--night); color: var(--linen); transition: opacity .9s var(--ease), visibility 0s linear .9s; }
+  .splash.gone { opacity: 0; visibility: hidden; }
+  .hint { font-size: 13px; letter-spacing: .12em; font-style: italic; opacity: 0; transition: opacity .8s ease .2s; }
+  .sig { width: min(80%, 520px); }
+  .sig path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .sig .name { transition: stroke-dashoffset 2.2s var(--ease) .3s; }
+  .sig .flourish { transition: stroke-dashoffset .9s var(--ease) 2.1s; }
+  .enter { position: relative; width: 64px; height: 64px; display: grid; place-items: center; border: 0; background: none; cursor: pointer; }
+  .enter .ring { position: absolute; inset: 0; transform: rotate(-90deg); }
+  .enter circle { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .4s var(--ease); }
+  .enter .play { width: 20px; height: 20px; opacity: 0; transition: opacity .4s ease .2s, transform .5s; }
+  .enter:hover .play { transform: scale(1.1); }
+  .label { font: 10px Inter, sans-serif; letter-spacing: .3em; text-transform: uppercase; opacity: 0; transition: opacity .4s ease .3s; }
+  .drawing .hint { opacity: .75; }
+  .drawing .sig path { stroke-dashoffset: 0; }
+  .ready circle { stroke-dashoffset: 0; }
+  .ready .play { opacity: 1; }
+  .ready .label { opacity: .55; }
+</style>
+</head>
+<body>
+  <main class="page"><small>Composer · Lyricist</small><h1>Alan Menken</h1><p>Eight Oscars. Eleven Grammys. One Tony. One Emmy.</p></main>
+
+  <div class="splash">
+    <p class="hint">For the full experience, turn your sound on</p>
+    <svg class="sig" viewBox="0 0 400 120" fill="none" stroke="#e7e5df" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Alan Menken signature">
+      <path class="name" pathLength="1" stroke-width="2.6" d="M18 86 C30 40 52 18 60 30 C68 44 50 92 40 96 C30 100 36 70 58 66 C70 64 74 80 82 72 C90 62 96 34 100 28 C98 52 92 86 104 84 C116 82 118 60 128 60 C138 60 130 84 142 82 C152 80 156 62 164 62 C172 62 166 82 176 82 C186 82 192 66 200 66 C210 66 204 86 214 84 C226 80 230 44 240 30 C246 50 236 82 250 80 C260 78 262 60 272 62 C282 64 272 84 284 82 C294 80 296 64 306 64 C314 64 310 84 320 82 C330 80 334 66 342 66 C350 66 346 82 356 80" />
+      <path class="flourish" pathLength="1" stroke-width="1.6" d="M40 104 C120 92 240 90 372 98 C380 99 384 102 376 104" />
+    </svg>
+    <button class="enter" disabled aria-label="Enter site with sound">
+      <svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="none" stroke="#e7e5df" stroke-width="1.2" pathLength="1" /></svg>
+      <svg class="play" viewBox="0 0 24 24" fill="#e7e5df" aria-hidden="true"><path d="M7 4.5v15l12-7.5z" /></svg>
+    </button>
+    <span class="label">Enter</span>
+  </div>
+
+<script>
+  const splash = document.querySelector(".splash"), btn = document.querySelector(".enter");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const ready = () => { splash.classList.add("ready"); btn.disabled = false; };
+  if (reduce) { splash.classList.add("drawing"); ready(); }
+  else {
+    requestAnimationFrame(() => requestAnimationFrame(() => splash.classList.add("drawing")));
+    setTimeout(ready, 2900);
+  }
+
+  // Audio must start from a user gesture: build the context inside the click.
+  function playChord() {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const master = ctx.createGain(), now = ctx.currentTime;
+    master.gain.value = 0.0001; master.connect(ctx.destination);
+    master.gain.exponentialRampToValueAtTime(0.18, now + 0.08);
+    master.gain.exponentialRampToValueAtTime(0.0001, now + 3.2);
+    [261.63, 329.63, 392.0, 493.88, 587.33].forEach((f, i) => { // rolled Cmaj9
+      const o = ctx.createOscillator(), g = ctx.createGain(), t = now + i * 0.06;
+      o.type = "triangle"; o.frequency.value = f;
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.5 / (i + 1.5), t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, now + 3);
+      o.connect(g).connect(master); o.start(t); o.stop(now + 3.3);
+    });
+    setTimeout(() => ctx.close(), 3600);
+  }
+  btn.addEventListener("click", () => { playChord(); splash.classList.add("gone"); });
+</script>
+</body>
+</html>

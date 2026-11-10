@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Musical Strip Accordion</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@0;1&family=Inter&display=swap" />
+<style>
+  :root { --linen: #e7e5df; --ease: cubic-bezier(0.6, 0, 0.1, 1); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { background: var(--linen); padding: 12px; font-family: "Playfair Display", Georgia, serif; }
+  ul { list-style: none; height: 100%; min-height: 360px; display: flex; gap: 3px; }
+  li { position: relative; flex: 1 1 0; min-width: 26px; overflow: hidden; border-radius: 3px; transition: flex-grow .8s var(--ease); }
+  li.on { flex-grow: 7; }
+  li a { position: absolute; inset: 0; display: block; color: #fff; text-decoration: none; }
+  li a:focus-visible { outline: 2px solid var(--linen); outline-offset: -4px; }
+  .footage { position: absolute; inset: 0; background-size: 300% 300%; filter: saturate(.55) brightness(.85); transition: filter .8s var(--ease); }
+  .on .footage { filter: saturate(1.15); animation: footage 8s ease-in-out infinite alternate; }
+  @keyframes footage { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+  .sheen { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.25), transparent 60%); }
+  .collapsed { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding: 12px 0;
+               font-size: 13px; font-style: italic; transition: opacity .4s var(--ease); }
+  .collapsed span:first-child { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
+  .collapsed small { margin-top: 8px; font: 10px Inter, sans-serif; opacity: .7; font-style: normal; }
+  .on .collapsed { opacity: 0; }
+  .card { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 4px; padding: 24px; opacity: 0; transform: translateY(16px);
+          transition: opacity .5s var(--ease), transform .8s var(--ease); }
+  .on .card { opacity: 1; transform: none; transition-delay: .25s, .2s; }
+  .card small { font: 10px Inter, sans-serif; letter-spacing: .3em; text-transform: uppercase; opacity: .8; }
+  .card strong { font-size: clamp(22px, 4.2vw, 52px); line-height: .95; font-style: italic; font-weight: 400; white-space: nowrap; }
+  .card em { margin-top: 8px; width: fit-content; padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,.2); font: 11px Inter, sans-serif; font-style: normal; }
+  @media (max-width: 680px) {
+    ul { flex-direction: column; }
+    li { min-width: 0; min-height: 28px; }
+    .collapsed { flex-direction: row; justify-content: space-between; padding: 0 12px; }
+    .collapsed span:first-child { writing-mode: horizontal-tb; transform: none; }
+    .collapsed small { margin: 0; }
+    .card { padding: 16px; }
+  }
+  @media (prefers-reduced-motion: reduce) { li, .card, .collapsed, .footage { transition: none; animation: none !important; } }
+</style>
+</head>
+<body>
+  <ul id="works"></ul>
+<script>
+  const WORKS = [
+    ["Pocahontas", "1995", "Music", "#b5532e", "#3d1f14"], ["Little Shop of Horrors", "1982", "Music", "#2f6b3a", "#0f2a14"],
+    ["Aladdin", "1992", "Music & Score", "#2b2f8f", "#e6a83a"], ["The Hunchback of Notre Dame", "1996", "Music", "#6b4f8a", "#1d1530"],
+    ["Hercules", "1997", "Music", "#c99a3b", "#3b2a12"], ["Beauty and the Beast", "1991", "Music & Score", "#d4a72c", "#3a1030"],
+    ["Enchanted", "2007", "Music", "#e88fb1", "#4b2a5e"], ["Newsies", "1992", "Music", "#8a8170", "#2a2620"],
+    ["Tangled", "2010", "Music & Score", "#f2c14e", "#5b3a8c"], ["The Little Mermaid", "1989", "Music & Score", "#2aa6a0", "#0d2a4a"],
+  ];
+  const DEFAULT = 2;
+  const ul = document.getElementById("works");
+  ul.innerHTML = WORKS.map(([t, y, role, a, b], i) => `
+    <li class="${i === DEFAULT ? "on" : ""}"><a href="#" aria-label="${t}, ${y}">
+      <span class="footage" style="background-image:linear-gradient(120deg,${a},${b},${a})" aria-hidden="true"></span>
+      <span class="sheen" aria-hidden="true"></span>
+      <span class="collapsed" aria-hidden="true"><span>${t}</span><small>${String(i + 1).padStart(2, "0")}</small></span>
+      <span class="card"><small>${y} · ${role}</small><strong>${t}</strong><em>▶ Listen</em></span>
+    </a></li>`).join("");
+
+  const items = [...ul.children];
+  const activate = (i) => items.forEach((li, j) => li.classList.toggle("on", i === j));
+  items.forEach((li, i) => {
+    const a = li.querySelector("a");
+    a.addEventListener("mouseenter", () => activate(i));
+    a.addEventListener("focus", () => activate(i));
+    a.addEventListener("click", (e) => e.preventDefault());
+  });
+  ul.addEventListener("mouseleave", () => activate(DEFAULT));
+</script>
+</body>
+</html>

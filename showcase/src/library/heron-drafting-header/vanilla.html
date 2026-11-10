@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Drafting Blueprint Header</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Geist+Mono&display=swap" />
+<style>
+  :root { --paper: #fafafa; --ink: #282828; --rule: #b3b3af; --muted: #72726f; --brand: #fa3600; --ease: cubic-bezier(0.22, 1, 0.36, 1); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; background: var(--paper); color: var(--ink); font-family: "Space Grotesk", Arial, sans-serif;
+         background-image: linear-gradient(#b3b3af33 1px, transparent 1px), linear-gradient(90deg, #b3b3af33 1px, transparent 1px); background-size: 24px 24px; }
+  .mono { font-family: "Geist Mono", ui-monospace, monospace; }
+  header { position: sticky; top: 12px; margin: 12px; border: 1px solid var(--rule); background: var(--paper); }
+  .mark { position: absolute; font: 12px/1 "Geist Mono", monospace; color: var(--brand); }
+  .row { display: flex; height: 56px; }
+  .row > * + * { border-left: 1px solid var(--rule); }
+  .logo { display: flex; align-items: center; gap: 8px; padding: 0 16px; color: inherit; text-decoration: none; font-weight: 700; letter-spacing: .12em; }
+  nav { flex: 1; display: flex; align-items: center; padding: 0 12px; }
+  nav ul { position: relative; display: flex; gap: 4px; list-style: none; }
+  .pill { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: var(--ink); transition: left .4s var(--ease), width .4s var(--ease); }
+  nav a { position: relative; display: block; padding: 6px 14px; font: 12px "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase;
+          color: #414140; text-decoration: none; transition: color .3s; }
+  nav a.on { color: var(--paper); }
+  .coords { min-width: 190px; display: flex; flex-direction: column; justify-content: center; padding: 0 16px; font-size: 10px; color: var(--muted); }
+  .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--brand); animation: pulse 1.6s infinite; }
+  @keyframes pulse { 50% { opacity: .3; } }
+  .cta-cell { display: flex; align-items: center; padding: 0 12px; }
+  .cta { background: var(--brand); color: #fff; padding: 8px 16px; font: 600 12px "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; }
+  .cta span { display: inline-block; transition: transform .3s; }
+  .cta:hover span { transform: translateX(4px); }
+  @media (max-width: 860px) { .coords { display: none; } }
+  @media (max-width: 680px) { nav { display: none; } .cta-cell { margin-left: auto; } }
+</style>
+</head>
+<body>
+<header>
+  <span class="mark" style="top:-7px;left:-7px">+</span><span class="mark" style="top:-7px;right:-7px">+</span>
+  <span class="mark" style="bottom:-7px;left:-7px">+</span><span class="mark" style="bottom:-7px;right:-7px">+</span>
+  <div class="row">
+    <a class="logo" href="#top" aria-label="Heron, home">
+      <svg viewBox="0 0 32 32" width="28" height="28" fill="none" stroke="#282828" stroke-width="1.5" stroke-linejoin="round" aria-hidden="true">
+        <path d="M16 3 28 10v12L16 29 4 22V10Z" /><path d="M4 10l12 7 12-7M16 17v12" /><path d="M16 3v6" stroke="#fa3600" />
+      </svg>HERON
+    </a>
+    <nav aria-label="Primary">
+      <ul>
+        <li class="pill" aria-hidden="true"></li>
+        <li><a href="#platform" aria-current="page">Platform</a></li>
+        <li><a href="#use-cases">Use cases</a></li>
+        <li><a href="#why">Why Heron</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+    </nav>
+    <div class="coords mono" aria-hidden="true"><span><i class="dot"></i> SYS · ONLINE</span><span class="xy">X 0000.00 · Y 0000.00</span></div>
+    <div class="cta-cell"><a class="cta" href="#contact">Contact us <span aria-hidden="true">→</span></a></div>
+  </div>
+</header>
+
+<script>
+  const ul = document.querySelector("nav ul"), pill = document.querySelector(".pill");
+  const links = [...ul.querySelectorAll("a")];
+  let active = 0;
+  const show = (i) => {
+    const li = links[i].parentElement;
+    pill.style.left = li.offsetLeft + "px";
+    pill.style.width = li.offsetWidth + "px";
+    links.forEach((a, j) => a.classList.toggle("on", j === i));
+  };
+  links.forEach((a, i) => {
+    a.addEventListener("mouseenter", () => show(i));
+    a.addEventListener("focus", () => show(i));
+    a.addEventListener("click", (e) => {
+      e.preventDefault(); active = i;
+      links.forEach((l, j) => l.toggleAttribute("aria-current", j === i));
+    });
+  });
+  ul.addEventListener("mouseleave", () => show(active));
+  addEventListener("resize", () => show(active));
+  document.fonts.ready.then(() => show(active));
+
+  const xy = document.querySelector(".xy");
+  const fmt = (n) => Math.max(0, n).toFixed(2).padStart(7, "0");
+  addEventListener("pointermove", (e) => (xy.textContent = `X ${fmt(e.clientX)} · Y ${fmt(e.clientY)}`));
+</script>
+</body>
+</html>

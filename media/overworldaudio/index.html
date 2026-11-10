@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overworld Audio | Sound Design & Game Audio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            noir: '#08080A',
+            slate: '#13151F',
+            soniclime: '#A3E635',
+            mutedgray: '#6E8799',
+            sonicwhite: '#E9ECEE'
+          },
+          fontFamily: {
+            display: ['"Space Grotesk"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #08080A;
+      color: #E9ECEE;
+      font-family: 'Space Grotesk', sans-serif;
+      overflow-x: hidden;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    /* Subtle audio grid */
+    .audio-grid {
+      background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+  </style>
+</head>
+<body class="audio-grid relative min-h-screen">
+
+  <!-- Header / Navigation -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-noir/80 backdrop-blur-md border-b border-white/10 px-6 py-4">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-3 w-3 rounded-full bg-soniclime animate-pulse"></div>
+        <span class="font-display font-bold text-lg tracking-tight">OVERWORLD AUDIO</span>
+        <span class="text-[11px] font-mono text-mutedgray uppercase hidden sm:inline ml-2 border border-white/10 px-2 py-0.5 rounded">
+          48kHz · 24-bit
+        </span>
+      </div>
+
+      <nav class="flex items-center gap-6 text-xs font-mono uppercase tracking-wider">
+        <a href="#visualizer" class="text-mutedgray hover:text-soniclime transition-colors">Visualizer</a>
+        <a href="#deck" class="text-mutedgray hover:text-soniclime transition-colors">Stem Deck</a>
+        <a href="#work" class="text-mutedgray hover:text-soniclime transition-colors">Reels</a>
+        <button id="audio-toggle" type="button" class="rounded-full border border-soniclime/40 px-4 py-1.5 text-soniclime hover:bg-soniclime hover:text-noir transition-all flex items-center gap-2">
+          <span>🔊</span>
+          <span id="audio-status-label">Unlock Sound</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="pt-28 pb-20 px-6 max-w-6xl mx-auto">
+    <!-- HERO SECTION WITH INTERACTIVE WAVEFORM -->
+    <section id="visualizer" class="text-center py-16">
+      <div class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-mono text-soniclime mb-6">
+        <span>● LIVE DSP SYNTHESIS</span>
+      </div>
+
+      <h1 class="font-display font-extrabold text-[clamp(38px,7vw,84px)] leading-[0.95] tracking-tight max-w-4xl mx-auto">
+        Building unforgettable <span class="text-soniclime">sonic</span> experiences.
+      </h1>
+
+      <p class="mt-6 text-base sm:text-lg text-mutedgray max-w-2xl mx-auto">
+        Audio co-development for games and interactive virtual worlds, from early procedural prototype to final dynamic surround mix.
+      </p>
+
+      <!-- Canvas Spectrum Analyzer -->
+      <div class="mt-12 rounded-3xl border border-white/10 bg-slate/80 p-6 shadow-2xl relative overflow-hidden">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-4 text-xs font-mono text-mutedgray">
+          <span>REAL-TIME HARMONIC FREQUENCY SPECTRUM</span>
+          <span id="freq-readout">440.0 Hz · SINE WAVE</span>
+        </div>
+        <canvas id="waveform-canvas" width="1000" height="220" class="w-full h-44 sm:h-56 rounded-xl bg-noir/70"></canvas>
+        <div class="mt-4 flex flex-wrap items-center justify-between text-xs font-mono text-mutedgray gap-3">
+          <span>Interactive: Move cursor across waveform to modulate frequency & harmonics</span>
+          <span class="text-soniclime">CLICK ANYWHERE TO TRIGGER SYNTH TONE</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEM AUDIO REEL DECK -->
+    <section id="deck" class="py-16 border-t border-white/10">
+      <div class="mb-10 flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+        <div>
+          <span class="text-xs font-mono uppercase text-soniclime tracking-widest">Multi-Stem Mixing Console</span>
+          <h2 class="font-display font-bold text-3xl sm:text-4xl mt-1">Cybernetic Soundscape Deck</h2>
+        </div>
+        <button id="master-play" type="button" class="rounded-xl bg-soniclime text-noir px-6 py-3 text-xs font-mono font-bold uppercase hover:bg-white transition-all shadow-lg flex items-center gap-2">
+          <span>▶</span>
+          <span id="master-btn-text">Play All Stems</span>
+        </button>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <!-- Stem 1: Bass / Sub -->
+        <div class="stem-card rounded-2xl border border-white/10 bg-slate/60 p-5 space-y-4" data-stem="sub">
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-white font-bold">CH 01 · SUB BASS</span>
+            <span class="text-soniclime stem-meter">−6.2 dB</span>
+          </div>
+          <div class="h-16 rounded-lg bg-noir/80 flex items-center px-3 gap-1 overflow-hidden">
+            <div class="h-6 w-full bg-soniclime/30 rounded-xs flex items-center justify-center text-[10px] font-mono text-soniclime">60Hz Deep Drone</div>
+          </div>
+          <div class="flex gap-2">
+            <button class="stem-mute flex-1 rounded-lg border border-white/10 py-1.5 text-xs font-mono hover:bg-white/10 transition-colors" type="button">Mute</button>
+            <button class="stem-solo flex-1 rounded-lg border border-white/10 py-1.5 text-xs font-mono hover:bg-soniclime hover:text-noir transition-colors" type="button">Solo</button>
+          </div>
+        </div>
+
+        <!-- Stem 2: Percussion / Rhythms -->
+        <div class="stem-card rounded-2xl border border-white/10 bg-slate/60 p-5 space-y-4" data-stem="percussion">
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-white font-bold">CH 02 · PERCUSSION</span>
+            <span class="text-soniclime stem-meter">−3.4 dB</span>
+          </div>
+          <div class="h-16 rounded-lg bg-noir/80 flex items-center px-3 gap-1 overflow-hidden">
+            <div class="h-6 w-full bg-soniclime/30 rounded-xs flex items-center justify-center text-[10px] font-mono text-soniclime">Glitch Rhythm Layer</div>
+          </div>
+          <div class="flex gap-2">
+            <button class="stem-mute flex-1 rounded-lg border border-white/10 py-1.5 text-xs font-mono hover:bg-white/10 transition-colors" type="button">Mute</button>
+            <button class="stem-solo flex-1 rounded-lg border border-white/10 py-1.5 text-xs font-mono hover:bg-soniclime hover:text-noir transition-colors" type="button">Solo</button>
+          </div>
+        </div>
+
+        <!-- Stem 3: Synthesizer Lead -->
+        <div class="stem-card rounded-2xl border border-white/10 bg-slate/60 p-5 space-y-4" data-stem="lead">
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-white font-bold">CH 03 · SYNTH LEAD</span>
+            <span class="text-soniclime stem-meter">−4.8 dB</span>
+          </div>
+          <div class="h-16 rounded-lg bg-noir/80 flex items-center px-3 gap-1 overflow-hidden">
+            <div class="h-6 w-full bg-soniclime/30 rounded-xs flex items-center justify-center text-[10px] font-mono text-soniclime">Arpeggiated Poly</div>
+          </div>
+          <div class="flex gap-2">
+            <button class="stem-mute flex-1 rounded-lg border border-white/10 py-1.5 text-xs font-mono hover:bg-white/10 transition-colors" type="button">Mute</button>
+            <button class="stem-solo flex-1 rounded-lg border border-white/10 py-1.5 text-xs font-mono hover:bg-soniclime hover:text-noir transition-colors" type="button">Solo</button>
+          </div>
+        </div>
+
+        <!-- Stem 4: Foley / Environmental SFX -->
+        <div class="stem-card rounded-2xl border border-white/10 bg-slate/60 p-5 space-y-4" data-stem="foley">
+          <div class="flex items-center justify-between text-xs font-mono">
+            <span class="text-white font-bold">CH 04 · FOLEY & SFX</span>
+            <span class="text-soniclime stem-meter">−8.1 dB</span>
+          </div>
+          <div class="h-16 rounded-lg bg-noir/80 flex items-center px-3 gap-1 overflow-hidden">
+            <div class="h-6 w-full bg-soniclime/30 rounded-xs flex items-center justify-center text-[10px] font-mono text-soniclime">Mechanical Servos</div>
+          </div>
+          <div class="flex gap-2">
+            <button class="stem-mute flex-1 rounded-lg border border-white/10 py-1.5 text-xs font-mono hover:bg-white/10 transition-colors" type="button">Mute</button>
+            <button class="stem-solo flex-1 rounded-lg border border-white/10 py-1.5 text-xs font-mono hover:bg-soniclime hover:text-noir transition-colors" type="button">Solo</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK SHOWCASE -->
+    <section id="work" class="py-16 border-t border-white/10">
+      <div class="max-w-xl mb-10">
+        <span class="text-xs font-mono uppercase text-soniclime tracking-widest">Co-Dev Catalog</span>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl mt-1">Featured Sonic Titles</h2>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="rounded-2xl border border-white/10 bg-slate/40 p-6 hover:border-soniclime/50 transition-colors group">
+          <span class="text-xs font-mono text-mutedgray">Sci-Fi Action RPG</span>
+          <h4 class="font-display font-bold text-xl text-white mt-1 group-hover:text-soniclime transition-colors">PROJECT NEBULA</h4>
+          <p class="text-xs text-mutedgray mt-3 leading-relaxed">Dynamic adaptive combat music orchestration and custom granular weapon synthesizers.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-slate/40 p-6 hover:border-soniclime/50 transition-colors group">
+          <span class="text-xs font-mono text-mutedgray">Psychological Thriller</span>
+          <h4 class="font-display font-bold text-xl text-white mt-1 group-hover:text-soniclime transition-colors">ECHOES OF VALEN</h4>
+          <p class="text-xs text-mutedgray mt-3 leading-relaxed">Binaural spatial 3D audio design with procedural claustrophobic resonance filters.</p>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-slate/40 p-6 hover:border-soniclime/50 transition-colors group">
+          <span class="text-xs font-mono text-mutedgray">Isometric Tactical</span>
+          <h4 class="font-display font-bold text-xl text-white mt-1 group-hover:text-soniclime transition-colors">GRID PROTOCOL</h4>
+          <p class="text-xs text-mutedgray mt-3 leading-relaxed">Chiptune-infused industrial audio branding, mechanical UI clicks, and boss fanfare.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="pt-12 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-mutedgray gap-4">
+      <p>© 2026 Overworld Audio Studio. All sonic rights reserved.</p>
+      <div class="flex gap-6">
+        <a href="https://overworldaudio.com/" target="_blank" class="hover:text-soniclime transition-colors">Original Reference Site</a>
+        <a href="https://github.com/harir03/frontend_copied" target="_blank" class="hover:text-white transition-colors">Frontend Copied</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Procedural Web Audio API sound engine
+    let audioCtx = null;
+    let osc = null;
+    let gainNode = null;
+    let isPlaying = false;
+    let currentFreq = 440;
+
+    const audioToggle = document.getElementById('audio-toggle');
+    const statusLabel = document.getElementById('audio-status-label');
+    const canvas = document.getElementById('waveform-canvas');
+    const ctx = canvas.getContext('2d');
+    const freqReadout = document.getElementById('freq-readout');
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        gainNode = audioCtx.createGain();
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.connect(audioCtx.destination);
+
+        osc = audioCtx.createOscillator();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(currentFreq, audioCtx.currentTime);
+        osc.connect(gainNode);
+        osc.start();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleAudio() {
+      initAudio();
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        gainNode.gain.setTargetAtTime(0.08, audioCtx.currentTime, 0.05);
+        statusLabel.textContent = 'Mute Sound';
+        audioToggle.classList.add('bg-soniclime', 'text-noir');
+      } else {
+        gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.05);
+        statusLabel.textContent = 'Unlock Sound';
+        audioToggle.classList.remove('bg-soniclime', 'text-noir');
+      }
+    }
+
+    audioToggle.addEventListener('click', toggleAudio);
+
+    canvas.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      currentFreq = Math.round(110 + x * 770);
+      freqReadout.textContent = `${currentFreq}.0 Hz · DYNAMIC SYNTH`;
+      if (osc && audioCtx) {
+        osc.frequency.setTargetAtTime(currentFreq, audioCtx.currentTime, 0.03);
+      }
+    });
+
+    canvas.addEventListener('click', () => {
+      if (!isPlaying) toggleAudio();
+    });
+
+    // Waveform Animation Loop
+    let phase = 0;
+    function renderWaveform() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const w = canvas.width;
+      const h = canvas.height;
+      const cy = h / 2;
+
+      ctx.beginPath();
+      ctx.strokeStyle = isPlaying ? '#A3E635' : 'rgba(163, 230, 53, 0.4)';
+      ctx.lineWidth = 2.5;
+
+      const cycles = (currentFreq / 100);
+      for (let x = 0; x < w; x++) {
+        const t = x / w;
+        const amp = isPlaying ? 40 : 15;
+        const y = cy + Math.sin(t * Math.PI * 2 * cycles + phase) * amp * Math.sin(t * Math.PI);
+        if (x === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      phase += isPlaying ? 0.08 : 0.02;
+      requestAnimationFrame(renderWaveform);
+    }
+    renderWaveform();
+
+    // Stem Deck Controls
+    const masterPlay = document.getElementById('master-play');
+    const masterBtnText = document.getElementById('master-btn-text');
+    let deckPlaying = false;
+
+    masterPlay.addEventListener('click', () => {
+      initAudio();
+      deckPlaying = !deckPlaying;
+      masterBtnText.textContent = deckPlaying ? 'Pause All Stems' : 'Play All Stems';
+      masterPlay.classList.toggle('bg-white', deckPlaying);
+      masterPlay.classList.toggle('bg-soniclime', !deckPlaying);
+    });
+
+    document.querySelectorAll('.stem-mute').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('bg-red-500/30');
+        btn.classList.toggle('text-red-400');
+        btn.textContent = btn.classList.contains('bg-red-500/30') ? 'Muted' : 'Mute';
+      });
+    });
+
+    document.querySelectorAll('.stem-solo').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('bg-soniclime');
+        btn.classList.toggle('text-noir');
+      });
+    });
+  </script>
+</body>
+</html>

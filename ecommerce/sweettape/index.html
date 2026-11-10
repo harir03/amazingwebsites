@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SweetTape — Stick By You | Cloth, Masking & OPP Tapes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            tapeyellow: '#F7D000',
+            tapecoral: '#FF7B5F',
+            tapecyan: '#50CBFF',
+            tapenavy: '#2E3EAC',
+            tapeolive: '#034102',
+            tapeblack: '#111111',
+            tapecream: '#FAF8F2'
+          },
+          fontFamily: {
+            display: ['"Syne"', 'sans-serif'],
+            body: ['"Work Sans"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FAF8F2;
+      color: #111111;
+      font-family: 'Work Sans', sans-serif;
+      overflow-x: hidden;
+    }
+    .font-display {
+      font-family: 'Syne', sans-serif;
+    }
+    /* Jagged tape ends using SVG clip-path */
+    .tape-strip {
+      box-shadow: 0 8px 24px -4px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s;
+    }
+    .tape-strip:hover {
+      transform: translateY(-4px) rotate(0.5deg) scale(1.01);
+      box-shadow: 0 16px 36px -4px rgba(0,0,0,0.18);
+    }
+    .sawtooth-left {
+      background: radial-gradient(circle at 0% 50%, transparent 6px, currentColor 6px);
+    }
+  </style>
+</head>
+<body class="relative">
+
+  <!-- Floating Sticky Nav -->
+  <header class="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-[94%] max-w-5xl">
+    <nav class="bg-tapecream/90 backdrop-blur-md border-2 border-tapeblack rounded-2xl px-6 py-3.5 shadow-[4px_4px_0px_#111111] flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-8 w-8 rounded-full bg-tapeyellow border-2 border-tapeblack flex items-center justify-center font-display font-extrabold text-sm">
+          ST
+        </div>
+        <span class="font-display font-black text-xl tracking-tight">SWEETTAPE</span>
+      </div>
+
+      <div class="hidden md:flex items-center gap-8 text-xs font-bold uppercase tracking-wider">
+        <a href="#tapes" class="hover:text-tapecoral transition-colors">Our 6 Tapes</a>
+        <a href="#story" class="hover:text-tapecoral transition-colors">Three Generations</a>
+        <a href="#everyday" class="hover:text-tapecoral transition-colors">Everyday Fixes</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="#tapes" class="rounded-xl bg-tapeblack px-5 py-2 text-xs font-bold uppercase text-white hover:bg-tapeyellow hover:text-tapeblack transition-colors shadow-[2px_2px_0px_#000]">
+          Shop Tapes
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO SECTION -->
+    <section class="pt-36 pb-20 px-6 max-w-6xl mx-auto text-center flex flex-col items-center">
+      
+      <!-- Sticky Tape Badge -->
+      <div class="inline-block bg-tapeyellow border-2 border-tapeblack px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest -rotate-2 mb-8 shadow-[3px_3px_0px_#111111]">
+        ✦ Made in Malaysia Since 1978 ✦
+      </div>
+
+      <h1 class="font-display font-extrabold text-[clamp(44px,9vw,110px)] leading-[0.88] uppercase tracking-tighter max-w-5xl">
+        Stick <span class="bg-tapecoral text-white px-4 py-1 rounded-2xl inline-block rotate-1 shadow-[4px_4px_0px_#111111]">By You</span>
+      </h1>
+
+      <p class="mt-8 text-lg sm:text-2xl font-medium max-w-2xl text-tapeblack/80 leading-snug">
+        Six tapes made for real life. When life gets messy, moving day is chaos, or DIY needs holding—we always stick by you.
+      </p>
+
+      <!-- Jaunty Adhesive Tape Strips Showcase -->
+      <div class="mt-14 w-full grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+        <!-- Strip 1: Yellow Masking -->
+        <div class="tape-strip bg-tapeyellow border-2 border-tapeblack rounded-xl p-6 rotate-[-1.5deg]">
+          <span class="text-xs font-mono uppercase font-bold tracking-wider opacity-70">Tape No. 01</span>
+          <h3 class="font-display font-extrabold text-2xl mt-1">MASKING TAPE</h3>
+          <p class="text-xs mt-2 leading-relaxed font-medium">Clean peeling with zero residue. Crisp edges for paint, labeling, and delicate surfaces.</p>
+        </div>
+
+        <!-- Strip 2: Coral Cloth -->
+        <div class="tape-strip bg-tapecoral text-white border-2 border-tapeblack rounded-xl p-6 rotate-[1deg] translate-y-[-8px]">
+          <span class="text-xs font-mono uppercase font-bold tracking-wider opacity-80">Tape No. 02</span>
+          <h3 class="font-display font-extrabold text-2xl mt-1">HEAVY CLOTH</h3>
+          <p class="text-xs mt-2 leading-relaxed font-medium text-white/90">Woven waterproof backing with industrial rubber resin. Built for emergency pipe & gear fixes.</p>
+        </div>
+
+        <!-- Strip 3: Cyan OPP -->
+        <div class="tape-strip bg-tapecyan border-2 border-tapeblack rounded-xl p-6 rotate-[-0.8deg]">
+          <span class="text-xs font-mono uppercase font-bold tracking-wider opacity-70">Tape No. 03</span>
+          <h3 class="font-display font-extrabold text-2xl mt-1">OPP PACKAGING</h3>
+          <p class="text-xs mt-2 leading-relaxed font-medium">Extra-tensile polypropylene film that locks cartons tight against tropical humidity.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE 6-TAPE SELECTOR -->
+    <section id="tapes" class="py-20 px-6 bg-white border-y-2 border-tapeblack">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center max-w-xl mx-auto mb-12">
+          <span class="text-xs font-bold uppercase tracking-widest text-tapenavy">Pick Your Roll</span>
+          <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-1 uppercase">Meet The Lineup</h2>
+          <p class="text-sm text-tapeblack/70 mt-2 font-medium">Select a tape below to see peel adhesion rating, tensile force, and common uses.</p>
+        </div>
+
+        <!-- Tape Selector Pills -->
+        <div class="flex justify-center gap-2 flex-wrap mb-10" id="tape-tabs">
+          <button class="tape-btn active border-2 border-tapeblack bg-tapeblack text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase shadow-[2px_2px_0px_#111111]" data-tape="cloth">
+            Cloth Tape
+          </button>
+          <button class="tape-btn border-2 border-tapeblack bg-tapecream text-tapeblack px-5 py-2.5 rounded-full text-xs font-bold uppercase hover:bg-tapeyellow shadow-[2px_2px_0px_#111111]" data-tape="masking">
+            Masking Tape
+          </button>
+          <button class="tape-btn border-2 border-tapeblack bg-tapecream text-tapeblack px-5 py-2.5 rounded-full text-xs font-bold uppercase hover:bg-tapecyan shadow-[2px_2px_0px_#111111]" data-tape="opp">
+            OPP Packaging
+          </button>
+          <button class="tape-btn border-2 border-tapeblack bg-tapecream text-tapeblack px-5 py-2.5 rounded-full text-xs font-bold uppercase hover:bg-tapecoral shadow-[2px_2px_0px_#111111]" data-tape="stationery">
+            Stationery Tape
+          </button>
+          <button class="tape-btn border-2 border-tapeblack bg-tapecream text-tapeblack px-5 py-2.5 rounded-full text-xs font-bold uppercase hover:bg-tapeyellow shadow-[2px_2px_0px_#111111]" data-tape="doublesided">
+            Double Sided
+          </button>
+        </div>
+
+        <!-- Interactive Tape Stage -->
+        <div class="rounded-3xl border-2 border-tapeblack bg-tapecream p-8 sm:p-12 shadow-[6px_6px_0px_#111111] grid md:grid-cols-12 gap-8 items-center" id="tape-stage">
+          <!-- Left: Roll Visualization -->
+          <div class="md:col-span-6 bg-white border-2 border-tapeblack rounded-2xl p-8 flex flex-col items-center justify-center min-h-[300px] relative shadow-[4px_4px_0px_#111111]">
+            <div class="w-44 h-44 rounded-full border-8 border-tapeblack relative flex items-center justify-center" id="tape-roll-circle" style="background-color: #FF7B5F;">
+              <div class="w-20 h-20 rounded-full bg-tapecream border-4 border-tapeblack flex items-center justify-center font-display font-black text-xs">
+                CORE
+              </div>
+              <!-- Simulated unrolling tape banner -->
+              <div class="absolute -bottom-4 -right-12 bg-tapeblack text-white px-4 py-1.5 text-xs font-bold uppercase rounded-md shadow-md rotate-[-8deg]" id="tape-tagline">
+                EXTRA STRONG
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Specs Telemetry -->
+          <div class="md:col-span-6 space-y-6">
+            <div>
+              <span class="text-xs font-mono font-bold uppercase tracking-widest text-tapenavy" id="tape-sku">SKU: ST-CLOTH-50</span>
+              <h3 class="font-display font-extrabold text-3xl sm:text-4xl uppercase mt-1" id="tape-title">Heavy-Duty Cloth Tape</h3>
+              <p class="text-tapeblack/80 text-sm mt-3 leading-relaxed" id="tape-desc">
+                High-grade polyethylene-coated cloth mesh with natural rubber solvent adhesive. Tearable by hand both horizontally and vertically.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 border-t-2 border-tapeblack pt-4">
+              <div>
+                <span class="text-[11px] font-bold uppercase text-tapeblack/60 block">Adhesion</span>
+                <span class="font-display font-extrabold text-2xl" id="tape-adhesion">9.8 N/cm</span>
+              </div>
+              <div>
+                <span class="text-[11px] font-bold uppercase text-tapeblack/60 block">Tensile</span>
+                <span class="font-display font-extrabold text-2xl" id="tape-tensile">75 N/cm</span>
+              </div>
+              <div>
+                <span class="text-[11px] font-bold uppercase text-tapeblack/60 block">Thickness</span>
+                <span class="font-display font-extrabold text-2xl" id="tape-thick">0.26 mm</span>
+              </div>
+            </div>
+
+            <button type="button" onclick="alert('Sample pack added to inquiry!')" class="rounded-xl bg-tapeblack text-white px-8 py-3.5 text-xs font-bold uppercase tracking-wider hover:bg-tapeyellow hover:text-tapeblack transition-all border-2 border-tapeblack shadow-[3px_3px_0px_#111111]">
+              Request Tape Sample Pack →
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THREE GENERATIONS STORY -->
+    <section id="story" class="py-20 px-6 max-w-6xl mx-auto">
+      <div class="grid md:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-widest text-tapecoral">Our Heritage</span>
+          <h2 class="font-display font-extrabold text-4xl sm:text-5xl mt-2 uppercase">Three Generations. One Formula.</h2>
+          <p class="mt-6 text-tapeblack/80 leading-relaxed font-medium">
+            From our family workshop in Selangor to production lines reaching 40+ countries, SB Tape Group has formulated adhesives that stick in humid tropical heat and freezing transit.
+          </p>
+          <div class="mt-8 flex gap-8">
+            <div>
+              <div class="font-display font-extrabold text-4xl text-tapeolive">48+</div>
+              <div class="text-xs font-bold uppercase text-tapeblack/60 mt-1">Years Crafting Tape</div>
+            </div>
+            <div>
+              <div class="font-display font-extrabold text-4xl text-tapenavy">100M+</div>
+              <div class="text-xs font-bold uppercase text-tapeblack/60 mt-1">Meters Slit Annually</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-2 border-tapeblack rounded-3xl bg-tapeyellow p-8 shadow-[6px_6px_0px_#111111] rotate-1">
+          <div class="bg-white border-2 border-tapeblack rounded-2xl p-6">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-tapeblack/60">Quality Promise</span>
+            <h4 class="font-display font-extrabold text-2xl mt-2">Zero Gum Residue</h4>
+            <p class="text-xs text-tapeblack/80 mt-2 leading-relaxed">
+              Every master roll is batch-tested for peel adhesion, elongation at break, and thermal resistance before slitting and winding.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-tapeblack text-white py-16 px-6 border-t-2 border-tapeblack">
+      <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="h-8 w-8 rounded-full bg-tapeyellow border-2 border-white flex items-center justify-center font-display font-extrabold text-xs text-tapeblack">
+              ST
+            </div>
+            <span class="font-display font-extrabold text-2xl text-white">SWEETTAPE</span>
+          </div>
+          <p class="text-xs text-white/60 mt-2">Copyright © 2026 SB Tape Group Sdn Bhd. All rights reserved.</p>
+        </div>
+
+        <div class="flex gap-6 text-xs font-bold uppercase">
+          <a href="https://sweet-tape.com/" target="_blank" class="text-tapeyellow hover:underline">Original Site</a>
+          <a href="https://github.com/harir03/frontend_copied" target="_blank" class="text-white hover:text-tapeyellow">Frontend Copied</a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const tapeData = {
+      cloth: {
+        sku: 'SKU: ST-CLOTH-50',
+        title: 'Heavy-Duty Cloth Tape',
+        desc: 'High-grade polyethylene-coated cloth mesh with natural rubber solvent adhesive. Tearable by hand both horizontally and vertically.',
+        adhesion: '9.8 N/cm',
+        tensile: '75 N/cm',
+        thick: '0.26 mm',
+        color: '#FF7B5F',
+        tagline: 'EXTRA STRONG'
+      },
+      masking: {
+        sku: 'SKU: ST-MASK-24',
+        title: 'Precision Masking Tape',
+        desc: 'Natural crepe paper backing with temperature-resistant synthetic rubber resin. Leaves zero sticky gum residues on walls.',
+        adhesion: '6.2 N/cm',
+        tensile: '40 N/cm',
+        thick: '0.14 mm',
+        color: '#F7D000',
+        tagline: 'CLEAN PEEL'
+      },
+      opp: {
+        sku: 'SKU: ST-OPP-48',
+        title: 'OPP Packaging Tape',
+        desc: 'Biaxially oriented polypropylene film coated with water-based acrylic emulsion. High tensile strength for industrial box shipping.',
+        adhesion: '7.5 N/cm',
+        tensile: '92 N/cm',
+        thick: '0.05 mm',
+        color: '#50CBFF',
+        tagline: 'BOX SEAL'
+      },
+      stationery: {
+        sku: 'SKU: ST-STAT-18',
+        title: 'Crystal Clear Stationery',
+        desc: 'Super-clear cellulose film tape ideal for gift wrapping, school scrapbooks, document mending, and light retail counter packaging.',
+        adhesion: '5.0 N/cm',
+        tensile: '32 N/cm',
+        thick: '0.04 mm',
+        color: '#FAF8F2',
+        tagline: 'CRYSTAL CLEAR'
+      },
+      doublesided: {
+        sku: 'SKU: ST-DBL-12',
+        title: 'Double-Sided Tissue Tape',
+        desc: 'Non-woven tissue carrier coated on both sides with aggressive acrylic adhesive and silicone release liner for mounting and crafts.',
+        adhesion: '8.4 N/cm',
+        tensile: '45 N/cm',
+        thick: '0.10 mm',
+        color: '#2E3EAC',
+        tagline: 'DUAL BOND'
+      }
+    };
+
+    const tapeBtns = document.querySelectorAll('.tape-btn');
+    const skuEl = document.getElementById('tape-sku');
+    const titleEl = document.getElementById('tape-title');
+    const descEl = document.getElementById('tape-desc');
+    const adhEl = document.getElementById('tape-adhesion');
+    const tenEl = document.getElementById('tape-tensile');
+    const thkEl = document.getElementById('tape-thick');
+    const circleEl = document.getElementById('tape-roll-circle');
+    const tagEl = document.getElementById('tape-tagline');
+
+    tapeBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.tape;
+        const d = tapeData[key];
+        if (!d) return;
+
+        tapeBtns.forEach(b => {
+          b.classList.remove('bg-tapeblack', 'text-white');
+          b.classList.add('bg-tapecream', 'text-tapeblack');
+        });
+        btn.classList.add('bg-tapeblack', 'text-white');
+        btn.classList.remove('bg-tapecream', 'text-tapeblack');
+
+        skuEl.textContent = d.sku;
+        titleEl.textContent = d.title;
+        descEl.textContent = d.desc;
+        adhEl.textContent = d.adhesion;
+        tenEl.textContent = d.tensile;
+        thkEl.textContent = d.thick;
+        circleEl.style.backgroundColor = d.color;
+        tagEl.textContent = d.tagline;
+      });
+    });
+  </script>
+</body>
+</html>

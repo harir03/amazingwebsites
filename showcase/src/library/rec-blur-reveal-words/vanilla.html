@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Blur Reveal Words</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@600&display=swap" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #EEF3EB; color: #142617; font-family: "Outfit", "Plus Jakarta Sans", sans-serif; }
+  .spacer { height: 70vh; display: grid; place-items: center; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; opacity: .5; }
+  .reveal { padding: 10vh 7vw; max-width: 1100px; margin: 0 auto; }
+  .pill { display: inline-flex; gap: 8px; align-items: center; margin-bottom: 16px; padding: 4px 12px; border-radius: 999px; border: 1px solid rgb(92 140 58 / .25);
+          background: rgb(255 255 255 / .6); font-size: 11px; font-weight: 600; letter-spacing: .18em; color: #2D6325; text-transform: uppercase; }
+  .pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: #5C8C3A; }
+  .reveal p { font-size: clamp(18px, 3.6vw, 40px); line-height: 1.18; font-weight: 600; letter-spacing: -.02em; margin-bottom: 16px; }
+  .rw { display: inline-block; opacity: .72; filter: blur(6px); transform: translate3d(0, 4px, 0); will-change: transform, filter, opacity; }
+</style>
+</head>
+<body>
+  <div class="spacer">Scroll ↓</div>
+  <section class="reveal">
+    <span class="pill">The thesis</span>
+    <p>Half the world has no credit score. Not because they are risky, but because nobody looked.</p>
+    <p>Recursive reads the signals people already leave behind: rent, utilities, mobile top-ups, and turns them into a score a lender can trust in five minutes.</p>
+  </section>
+  <div class="spacer">End</div>
+
+<script>
+  // GSAP-equivalent: ScrollTrigger { start: "top 84%", end: "bottom 38%", scrub: 0.7 },
+  // tween { opacity: dim -> 1, y: 4 -> 0, blur 6 -> 0, ease: "power1.out", stagger: 0.035 }
+  const DIM = 0.72, TWEEN = 0.5, STAGGER = 0.035, SCRUB = 0.7;
+  const section = document.querySelector(".reveal");
+  section.querySelectorAll("p").forEach((p) => {
+    p.innerHTML = p.textContent.split(" ").map((w) => `<span class="rw">${w}&nbsp;</span>`).join("");
+  });
+  const words = [...section.querySelectorAll(".rw")];
+  const total = TWEEN + STAGGER * (words.length - 1);
+
+  const paint = (p) => {
+    const t = p * total;
+    words.forEach((w, i) => {
+      const local = Math.min(1, Math.max(0, (t - i * STAGGER) / TWEEN));
+      const e = 1 - (1 - local) ** 2;
+      w.style.opacity = DIM + (1 - DIM) * e;
+      w.style.filter = `blur(${6 * (1 - e)}px)`;
+      w.style.transform = `translate3d(0, ${4 * (1 - e)}px, 0)`;
+    });
+  };
+
+  const scrollProgress = () => {
+    const r = section.getBoundingClientRect(), vh = innerHeight;
+    const start = vh * 0.84, end = vh * 0.38; // "top 84%" -> "bottom 38%"
+    return Math.min(1, Math.max(0, (start - r.top) / (start - end + r.height)));
+  };
+
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) paint(1);
+  else {
+    let shown = 0, last = performance.now();
+    (function tick(now) {
+      const dt = Math.min(64, now - last); last = now;
+      shown += (scrollProgress() - shown) * (1 - Math.exp(-dt / (SCRUB * 1000 / 3)));
+      paint(shown);
+      requestAnimationFrame(tick);
+    })(last);
+  }
+</script>
+</body>
+</html>

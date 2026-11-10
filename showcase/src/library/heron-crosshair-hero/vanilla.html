@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Crosshair Drafting Hero</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&family=Geist+Mono&display=swap" />
+<style>
+  :root { --paper: #fafafa; --ink: #282828; --rule: #b3b3af; --muted: #72726f; --brand: #fa3600; --draw: cubic-bezier(0.16, 1, 0.3, 1); }
+  * { box-sizing: border-box; margin: 0; }
+  body { font-family: "Space Grotesk", Arial, sans-serif; color: var(--ink); background: var(--paper); }
+  .mono { font-family: "Geist Mono", ui-monospace, monospace; }
+  .hero { position: relative; min-height: 100vh; overflow: hidden; cursor: crosshair;
+          background-image: linear-gradient(#b3b3af55 1px, transparent 1px), linear-gradient(90deg, #b3b3af55 1px, transparent 1px),
+                            linear-gradient(#b3b3af22 1px, transparent 1px), linear-gradient(90deg, #b3b3af22 1px, transparent 1px);
+          background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px; }
+  .ruler-x { position: absolute; inset: 0 0 auto; height: 16px; border-bottom: 1px solid var(--rule); background: var(--paper);
+             background-image: linear-gradient(90deg, var(--muted) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+             background-size: 40px 100%, 8px 40%; background-repeat: repeat-x; background-position: 16px 0, 16px 100%; }
+  .ruler-y { position: absolute; inset: 0 auto 0 0; width: 16px; border-right: 1px solid var(--rule); background: var(--paper);
+             background-image: linear-gradient(var(--muted) 1px, transparent 1px), linear-gradient(var(--rule) 1px, transparent 1px);
+             background-size: 100% 40px, 40% 8px; background-repeat: repeat-y; background-position: 0 16px, 100% 16px; }
+  .inner { position: relative; min-height: 100vh; display: grid; align-items: center; gap: 24px; padding: 40px 24px 40px 40px; grid-template-columns: 1.1fr 1fr; }
+  .kicker { font-size: 11px; letter-spacing: .18em; color: var(--brand); text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-size: clamp(30px, 6.4vw, 76px); line-height: .92; letter-spacing: -.03em; text-transform: uppercase; }
+  .sub { margin-top: 16px; max-width: 46ch; font-size: 14px; line-height: 1.6; color: #414140; }
+  .ctas { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+  .ctas a { padding: 10px 16px; font: 12px "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; color: var(--ink); border: 1px solid var(--ink); }
+  .ctas a:first-child { background: var(--ink); color: #fff; }
+  .ctas a:first-child:hover { background: var(--brand); border-color: var(--brand); }
+  svg path, svg circle { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.6s var(--draw); }
+  .drawn path, .drawn circle { stroke-dashoffset: 0; }
+  .x-v, .x-h, .tag { position: absolute; top: 0; left: 0; pointer-events: none; }
+  .x-v { bottom: 0; width: 1px; background: rgb(250 54 0 / .7); }
+  .x-h { right: 0; height: 1px; background: rgb(250 54 0 / .7); }
+  .tag { background: var(--ink); color: var(--paper); font-size: 10px; padding: 2px 6px; white-space: pre; }
+  @media (max-width: 860px) { .inner { grid-template-columns: 1fr; } .inner svg { display: none; } }
+</style>
+</head>
+<body>
+<section class="hero">
+  <div class="ruler-x" aria-hidden="true"></div><div class="ruler-y" aria-hidden="true"></div>
+  <div class="inner">
+    <div>
+      <p class="kicker mono">[00] — Heron / AI for AEC</p>
+      <h1>Works inside your design tools</h1>
+      <p class="sub">AI review for CAD &amp; BIM — clash checks, code compliance and quantities, right in your model.</p>
+      <div class="ctas"><a href="#demo">Book a demo →</a><a href="#how">How it works</a></div>
+    </div>
+    <svg viewBox="0 0 400 270" fill="none" stroke="#282828" stroke-width="1.2" aria-label="Elevation drawing">
+      <path pathLength="1" d="M40 230 H360" /><path pathLength="1" d="M90 230 V70 H250 V230" /><path pathLength="1" d="M250 230 V120 H320 V230" />
+      <path pathLength="1" d="M90 70 L170 30 L250 70" /><path pathLength="1" d="M110 100 H150 V140 H110 Z" /><path pathLength="1" d="M190 100 H230 V140 H190 Z" />
+      <path pathLength="1" d="M110 165 H150 V205 H110 Z" /><path pathLength="1" d="M190 165 H230 V230" /><path pathLength="1" d="M270 140 H300 V170 H270 Z" />
+      <path pathLength="1" d="M60 230 V250 M340 230 V250 M60 244 H340" />
+      <circle pathLength="1" cx="330" cy="50" r="22" stroke="#fa3600" />
+      <text x="200" y="264" text-anchor="middle" fill="#72726f" stroke="none" font-size="9" font-family="Geist Mono, monospace">12 400 mm</text>
+    </svg>
+  </div>
+  <div class="x-v" aria-hidden="true"></div><div class="x-h" aria-hidden="true"></div><div class="tag mono" aria-hidden="true"></div>
+</section>
+
+<script>
+  const hero = document.querySelector(".hero"), svg = hero.querySelector("svg");
+  [...svg.querySelectorAll("path, circle")].forEach((el, i) => (el.style.transitionDelay = `${0.15 + i * 0.12}s`));
+  requestAnimationFrame(() => requestAnimationFrame(() => svg.classList.add("drawn")));
+
+  const v = hero.querySelector(".x-v"), h = hero.querySelector(".x-h"), tag = hero.querySelector(".tag");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const target = { x: 0, y: 0 }, pos = { x: 0, y: 0 };
+  let inside = false;
+  hero.addEventListener("pointermove", (e) => {
+    const r = hero.getBoundingClientRect();
+    target.x = e.clientX - r.left; target.y = e.clientY - r.top; inside = true;
+  });
+  hero.addEventListener("pointerleave", () => (inside = false));
+  const t0 = performance.now();
+  (function tick(now) {
+    const w = hero.offsetWidth, ht = hero.offsetHeight;
+    if (!inside) { // idle drift on a Lissajous path
+      const t = (now - t0) / 1000;
+      target.x = w * (0.5 + 0.32 * Math.sin(t * 0.45));
+      target.y = ht * (0.5 + 0.28 * Math.sin(t * 0.7 + 1));
+    }
+    const k = reduce ? 1 : 0.12;
+    pos.x += (target.x - pos.x) * k; pos.y += (target.y - pos.y) * k;
+    v.style.transform = `translate3d(${pos.x}px,0,0)`;
+    h.style.transform = `translate3d(0,${pos.y}px,0)`;
+    tag.style.transform = `translate3d(${pos.x + 10}px,${pos.y + 10}px,0)`;
+    tag.textContent = `X ${(pos.x * 10).toFixed(0).padStart(5, "0")}  Y ${(pos.y * 10).toFixed(0).padStart(5, "0")} mm`;
+    requestAnimationFrame(tick);
+  })(t0);
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rotating Type Hero</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@300&family=Inter:wght@400&display=swap" />
+<style>
+  :root { --paper: #f8f6f5; --ink: #191919; --grey: #c6c5c5; --in: cubic-bezier(0.25, 0.46, 0.45, 0.94); --out: cubic-bezier(0.6, 0.2, 0, 0.8); }
+  * { box-sizing: border-box; margin: 0; }
+  body { min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 24px; background: var(--paper); color: var(--ink);
+         font-family: Inter, "Helvetica Neue", Arial, sans-serif; }
+  .serif { font-family: "Zilla Slab", Georgia, serif; font-weight: 300; }
+  .top { display: flex; justify-content: space-between; align-items: center; font-size: 20px; }
+  .top small { font: 11px Inter, sans-serif; border: 1px solid rgb(25 25 25 / .2); border-radius: 999px; padding: 4px 12px; }
+  h1 { font-size: clamp(36px, 9vw, 112px); line-height: .95; letter-spacing: -.02em; }
+  .slot { position: relative; display: inline-block; height: 1.08em; vertical-align: bottom; transition: width .6s var(--in); }
+  .word { position: absolute; top: 0; left: 0; display: flex; white-space: nowrap; }
+  .mask { display: inline-block; overflow: hidden; padding-bottom: .08em; }
+  .ch { display: inline-block; }
+  .in .ch { animation: roll-in .6s var(--in) both; }
+  .out .ch { animation: roll-out .45s var(--out) both; }
+  @keyframes roll-in { from { transform: translateY(105%); } }
+  @keyframes roll-out { to { transform: translateY(-105%); } }
+  .dot { color: var(--grey); }
+  .measure { position: absolute; visibility: hidden; white-space: nowrap; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+  <div class="top"><span class="serif">Hello Monday</span><small>Part of DEPT®</small></div>
+  <h1 class="serif">We make<br /><span class="sr" aria-live="polite"></span><span class="slot" aria-hidden="true"></span><span class="dot">.</span></h1>
+  <span class="measure serif" aria-hidden="true" style="font-size:clamp(36px, 9vw, 112px);letter-spacing:-.02em"></span>
+
+<script>
+  const WORDS = ["Experiences", "Branding", "Products", "Campaigns"], INTERVAL = 2400, STAGGER = 0.025;
+  const slot = document.querySelector(".slot"), measure = document.querySelector(".measure"), sr = document.querySelector(".sr");
+  let i = 0;
+
+  const build = (w, cls) => {
+    const el = document.createElement("span");
+    el.className = `word ${cls}`;
+    el.innerHTML = [...w].map((c, j) => `<span class="mask"><span class="ch" style="animation-delay:${j * STAGGER}s">${c}</span></span>`).join("");
+    return el;
+  };
+  const show = (w, animate) => {
+    measure.textContent = w; sr.textContent = w;
+    slot.style.width = measure.offsetWidth + "px";
+    slot.querySelectorAll(".word").forEach((old) => {
+      old.className = "word out";
+      setTimeout(() => old.remove(), 800);
+    });
+    slot.appendChild(build(w, animate ? "in" : ""));
+  };
+
+  document.fonts.ready.then(() => {
+    show(WORDS[0], false);
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setInterval(() => { i = (i + 1) % WORDS.length; show(WORDS[i], true); }, INTERVAL);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Morphing Particle Field (Web Worker)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&family=IBM+Plex+Mono&display=swap" />
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { background: #121212; overflow: hidden; cursor: pointer; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; }
+  .brand { position: fixed; top: 16px; left: 20px; font: italic 300 clamp(18px, 3vw, 26px) "Cormorant Garamond", serif; color: rgb(255 255 255 / .9); }
+  .meta { position: fixed; left: 20px; right: 20px; bottom: 16px; display: flex; justify-content: space-between; font: 11px "IBM Plex Mono", monospace;
+          letter-spacing: .12em; text-transform: uppercase; color: #a3a6c1; pointer-events: none; }
+</style>
+</head>
+<body>
+  <canvas aria-hidden="true"></canvas>
+  <p class="brand">emotion</p>
+  <div class="meta"><span id="label">Shape 01/04 — e</span><span>click to morph</span></div>
+
+<!-- The simulation. Runs inside a Worker when OffscreenCanvas is available. -->
+<script id="sim" type="text/js-worker">
+  let ctx, w = 0, h = 0, n = 0, pos, vel, targets = [], shape = 0, flat = [true, false, false, false], t = 0;
+  const mouse = { x: -9999, y: -9999 }, STIFF = 0.055, DAMP = 0.86, R = 90;
+  const reduce = { v: false };
+
+  function frame() {
+    t += 0.008;
+    const tgt = targets[shape], scale = Math.min(w, h) * 0.36, cx = w / 2, cy = h / 2 - h * 0.03;
+    const ry = reduce.v ? 0.4 : t, cY = Math.cos(ry), sY = Math.sin(ry), cX = Math.cos(0.35), sX = Math.sin(0.35);
+    ctx.globalCompositeOperation = "source-over"; ctx.fillStyle = "rgba(18,18,18,0.32)"; ctx.fillRect(0, 0, w, h);
+    ctx.globalCompositeOperation = "lighter";
+    for (let b = 0; b < 3; b++) {
+      ctx.fillStyle = ["rgba(113,20,255,0.55)", "rgba(144,71,255,0.75)", "rgba(226,214,255,0.9)"][b];
+      for (let i = b; i < n; i += 3) {
+        let x = tgt[i * 3], y = tgt[i * 3 + 1], z = tgt[i * 3 + 2];
+        if (!flat[shape]) { const x1 = x * cY - z * sY, z1 = x * sY + z * cY; y = y * cX - z1 * sX; z = (tgt[i * 3 + 1]) * sX + z1 * cX; x = x1; }
+        else x += Math.sin(t * 3 + i) * 0.004;
+        const p = 1 / (1.9 - z * 0.45), tx = cx + x * scale * p * 1.5, ty = cy + y * scale * p * 1.5, k = i * 2;
+        let ax = (tx - pos[k]) * STIFF, ay = (ty - pos[k + 1]) * STIFF;
+        const dx = pos[k] - mouse.x, dy = pos[k + 1] - mouse.y, d2 = dx * dx + dy * dy;
+        if (d2 < R * R) { const d = Math.sqrt(d2) || 1, f = (1 - d / R) * 6; ax += (dx / d) * f; ay += (dy / d) * f; }
+        vel[k] = (vel[k] + ax) * DAMP; vel[k + 1] = (vel[k + 1] + ay) * DAMP;
+        pos[k] += vel[k]; pos[k + 1] += vel[k + 1];
+        const s = 0.8 + p * 0.9; ctx.fillRect(pos[k], pos[k + 1], s, s);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  function handle(msg) {
+    if (msg.type === "init") {
+      ctx = msg.canvas.getContext("2d"); n = msg.n; targets = msg.targets; reduce.v = msg.reduce;
+      pos = new Float32Array(n * 2); vel = new Float32Array(n * 2);
+      handle({ type: "resize", w: msg.w, h: msg.h, dpr: msg.dpr });
+      for (let i = 0; i < n; i++) { pos[i * 2] = Math.random() * w; pos[i * 2 + 1] = Math.random() * h; }
+      requestAnimationFrame(frame);
+    } else if (msg.type === "resize") {
+      w = msg.w; h = msg.h; ctx.canvas.width = w * msg.dpr; ctx.canvas.height = h * msg.dpr; ctx.setTransform(msg.dpr, 0, 0, msg.dpr, 0, 0);
+    } else if (msg.type === "mouse") { mouse.x = msg.x; mouse.y = msg.y; }
+    else if (msg.type === "shape") shape = msg.shape;
+    else if (msg.type === "targets") targets[msg.index] = msg.data;
+  }
+  if (typeof window === "undefined") self.onmessage = (e) => handle(e.data); else window.__sim = handle;
+</script>
+
+<script>
+  const SHAPES = ["e", "sphere", "ring", "cube"];
+  const canvas = document.querySelector("canvas");
+  const n = Math.round(Math.min(9000, Math.max(1800, (innerWidth * innerHeight) / 70)));
+
+  // Target shapes are built on the main thread (the glyph needs the page's web font).
+  function glyph() {
+    const S = 220, c = document.createElement("canvas"); c.width = c.height = S;
+    const g = c.getContext("2d"); g.fillStyle = "#fff"; g.textAlign = "center"; g.textBaseline = "middle";
+    g.font = "italic 300 260px 'Cormorant Garamond', Georgia, serif"; g.fillText("e", S / 2, S / 2 - 18);
+    const d = g.getImageData(0, 0, S, S).data, pts = [];
+    for (let y = 0; y < S; y += 2) for (let x = 0; x < S; x += 2) if (d[(y * S + x) * 4 + 3] > 128) pts.push(x, y);
+    const out = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) { const j = (Math.random() * (pts.length / 2) | 0) * 2;
+      out[i * 3] = (pts[j] / S - 0.5) * 2.2; out[i * 3 + 1] = (pts[j + 1] / S - 0.5) * 2.2; out[i * 3 + 2] = (Math.random() - 0.5) * 0.2; }
+    return out;
+  }
+  function solid(kind) {
+    const out = new Float32Array(n * 3);
+    for (let i = 0; i < n; i++) {
+      let x, y, z;
+      if (kind === "sphere") { const t = (i + 0.5) / n, phi = Math.acos(1 - 2 * t), th = Math.PI * (1 + Math.sqrt(5)) * i; x = Math.cos(th) * Math.sin(phi); y = Math.sin(th) * Math.sin(phi); z = Math.cos(phi); }
+      else if (kind === "ring") { const a = Math.random() * 6.283, b = Math.random() * 6.283, r = 0.22 * Math.sqrt(Math.random()); x = (0.85 + r * Math.cos(b)) * Math.cos(a); y = (0.85 + r * Math.cos(b)) * Math.sin(a); z = r * Math.sin(b); }
+      else { const e = Math.random() * 12 | 0, t = (Math.random() * 2 - 1) * 0.7, a = e & 1 ? 0.7 : -0.7, b = e & 2 ? 0.7 : -0.7, ax = e / 4 | 0; [x, y, z] = ax === 0 ? [t, a, b] : ax === 1 ? [a, t, b] : [a, b, t]; }
+      out.set([x, y, z], i * 3);
+    }
+    return out;
+  }
+
+  document.fonts.ready.then(() => {
+    const targets = [glyph(), solid("sphere"), solid("ring"), solid("cube")];
+    const init = { type: "init", n, targets, w: innerWidth, h: innerHeight, dpr: Math.min(devicePixelRatio || 1, 2), reduce: matchMedia("(prefers-reduced-motion: reduce)").matches };
+    let post, worker = null;
+    const src = document.getElementById("sim").textContent;
+    try {
+      // Some sandboxed frames refuse blob: workers; then we fall through to the main thread.
+      if ("transferControlToOffscreen" in canvas) worker = new Worker(URL.createObjectURL(new Blob([src], { type: "text/javascript" })));
+    } catch { worker = null; }
+    if (worker) {
+      const off = canvas.transferControlToOffscreen();
+      worker.postMessage({ ...init, canvas: off }, [off, ...targets.map((t) => t.buffer)]);
+      post = (m) => worker.postMessage(m);
+    } else {
+      new Function(src)(); // main-thread fallback
+      window.__sim({ ...init, canvas });
+      post = (m) => window.__sim(m);
+    }
+    addEventListener("pointermove", (e) => post({ type: "mouse", x: e.clientX, y: e.clientY }));
+    addEventListener("pointerleave", () => post({ type: "mouse", x: -9999, y: -9999 }));
+    addEventListener("resize", () => post({ type: "resize", w: innerWidth, h: innerHeight, dpr: Math.min(devicePixelRatio || 1, 2) }));
+
+    let shape = 0, timer;
+    const label = document.getElementById("label");
+    const next = () => {
+      shape = (shape + 1) % SHAPES.length; post({ type: "shape", shape });
+      label.textContent = `Shape 0${shape + 1}/04 — ${SHAPES[shape]}`;
+      clearInterval(timer); timer = setInterval(next, 3600);
+    };
+    timer = setInterval(next, 3600);
+    addEventListener("click", next);
+  });
+</script>
+</body>
+</html>

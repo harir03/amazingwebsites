@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Numbered FAQ Accordion</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@700&family=DM+Sans:wght@400;700&display=swap" />
+<style>
+  :root { --ease: cubic-bezier(0.22, 1, 0.36, 1); --moss: #2F5527; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #EEF3EB; color: #121A12; font-family: "DM Sans", system-ui, sans-serif; padding: 32px 5vw; }
+  h2 { font: 700 clamp(26px, 5vw, 48px)/1 "Outfit", sans-serif; letter-spacing: -.02em; margin-bottom: 16px; }
+  .faq { border-top: 1px solid rgb(47 85 39 / .2); }
+  .item { border-bottom: 1px solid rgb(47 85 39 / .2); }
+  .item h3 { font: inherit; }
+  .trigger { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 24px; border: 0; border-radius: 12px;
+             background: transparent; text-align: left; cursor: pointer; color: inherit; font: inherit; transition: background .2s; }
+  .trigger:hover { background: rgb(255 255 255 / .5); }
+  .num { min-width: 28px; font: 400 clamp(24px, 3.4vw, 36px) "Bebas Neue", sans-serif; color: var(--moss); }
+  .q { flex: 1; display: flex; align-items: center; gap: 24px; font-size: clamp(15px, 2vw, 20px); font-weight: 700; line-height: 1.35; }
+  .trigger:hover .q span:last-child { color: var(--moss); }
+  .chev { width: 36px; height: 36px; flex-shrink: 0; display: grid; place-items: center; border-radius: 50%; background: rgb(255 255 255 / .8); border: 1px solid rgb(47 85 39 / .15); }
+  .chev svg { width: 16px; height: 16px; color: #57534e; transition: transform .3s var(--ease); }
+  .open .chev svg { transform: rotate(180deg); color: var(--moss); }
+  .panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s var(--ease); }
+  .open .panel { grid-template-rows: 1fr; }
+  .panel > div { min-height: 0; overflow: hidden; }
+  .panel p { padding: 0 48px 24px 76px; font-size: 15px; line-height: 1.6; color: #3d4a3b; opacity: 0; transform: translateY(-6px);
+             transition: opacity .35s ease, transform .45s var(--ease); }
+  .open .panel p { opacity: 1; transform: none; transition-delay: .1s, 0s; }
+  @media (max-width: 600px) { .trigger { padding: 20px 12px; } .q { gap: 16px; } .panel p { padding-left: 56px; } }
+</style>
+</head>
+<body>
+  <h2>Questions, answered</h2>
+  <div class="faq"></div>
+
+<script>
+  const items = [
+    ["Who can apply for a Recursive score?", "Anyone with six months of rent, utility or mobile payment history. No bureau file needed."],
+    ["How long does scoring take?", "About five minutes. You connect your data, consent to each source, and the score is ready before the kettle boils."],
+    ["What data do you read, exactly?", "Only what you approve: payment timestamps and amounts. We never read message contents or contacts."],
+    ["Can lenders see why I got my score?", "Yes. Every score ships with its top factors and what would move it, in plain language."],
+  ];
+  const faq = document.querySelector(".faq");
+  faq.innerHTML = items.map(([q, a], i) => `
+    <div class="item${i === 0 ? " open" : ""}">
+      <h3><button class="trigger" id="faq-b${i}" aria-expanded="${i === 0}" aria-controls="faq-p${i}">
+        <span class="q"><span class="num">${String(i + 1).padStart(2, "0")}</span><span>${q}</span></span>
+        <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </button></h3>
+      <div class="panel" id="faq-p${i}" role="region" aria-labelledby="faq-b${i}"><div><p>${a}</p></div></div>
+    </div>`).join("");
+
+  faq.addEventListener("click", (e) => {
+    const btn = e.target.closest(".trigger");
+    if (!btn) return;
+    const item = btn.closest(".item");
+    const willOpen = !item.classList.contains("open");
+    faq.querySelectorAll(".item").forEach((it) => {
+      it.classList.remove("open");
+      it.querySelector(".trigger").setAttribute("aria-expanded", "false");
+    });
+    if (willOpen) { item.classList.add("open"); btn.setAttribute("aria-expanded", "true"); }
+  });
+</script>
+</body>
+</html>

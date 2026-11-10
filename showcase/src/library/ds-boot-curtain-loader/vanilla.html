@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Boot Curtain Loader</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&family=Geist+Mono:wght@400&display=swap" />
+<style>
+  :root { --blue: #350aff; --lime: #bcf015; --ease: cubic-bezier(0.625, 0.05, 0, 1); }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { height: 100%; }
+  body { font-family: "Geist Mono", monospace; background: #fff; }
+  .page { position: fixed; inset: 0; display: grid; place-items: center; text-align: center; }
+  .page h2 { font: 400 clamp(28px, 7vw, 72px)/0.9 "Silkscreen", monospace; color: var(--blue); }
+  .page p { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; margin-bottom: 12px; }
+
+  .curtain { position: fixed; inset: 0; display: grid; pointer-events: none; }
+  .curtain span { background: var(--blue); }
+  .curtain.open span { opacity: 0; transition: opacity 0s linear var(--d); }
+
+  .boot { position: fixed; inset: 0; background: #000; color: #fff; padding: 20px;
+          display: flex; flex-direction: column; justify-content: space-between; }
+  .boot.hidden { visibility: hidden; }
+  .boot__meta { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; }
+  .boot__title { display: flex; flex-wrap: wrap; justify-content: center; font: 400 clamp(22px, 5.5vw, 56px)/1 "Silkscreen", monospace; }
+  .boot__title .mask { display: inline-block; overflow: hidden; }
+  .boot__title .ch { display: inline-block; transform: translateY(110%); transition: transform .6s var(--ease); }
+  .boot.in .boot__title .ch { transform: none; }
+  .boot__bar { height: 3px; background: rgb(255 255 255 / .15); }
+  .boot__bar div { height: 100%; background: var(--lime); transform-origin: left; transform: scaleX(0); }
+
+  @media (prefers-reduced-motion: reduce) { .boot { display: none; } .curtain { display: none; } }
+</style>
+</head>
+<body>
+  <main class="page"><div><p>Lyon — Société secrète</p><h2>BIENVENUE</h2></div></main>
+  <div class="curtain" aria-hidden="true"></div>
+  <div class="boot" role="status" aria-live="polite">
+    <div class="boot__meta"><span>Booting_</span><span class="boot__pct">000%</span></div>
+    <h1 class="boot__title" aria-label="THE DESIGN SOCIETY"></h1>
+    <div class="boot__bar"><div></div></div>
+  </div>
+
+<script>
+  const COLS = 14, ROWS = 9, COUNT_MS = 2400, CURTAIN_MS = 900, TITLE = "THE DESIGN SOCIETY";
+  const boot = document.querySelector(".boot");
+  const pct = document.querySelector(".boot__pct");
+  const bar = document.querySelector(".boot__bar div");
+  const curtain = document.querySelector(".curtain");
+  const titleEl = document.querySelector(".boot__title");
+
+  // Letters, each in its own overflow mask so it can rise into view.
+  titleEl.innerHTML = [...TITLE].map((c, i) =>
+    `<span class="mask" aria-hidden="true"><span class="ch" style="transition-delay:${i * 0.02}s">${c === " " ? "&nbsp;" : c}</span></span>`
+  ).join("");
+
+  // Pixel grid with a random pop-out delay per cell.
+  curtain.style.gridTemplate = `repeat(${ROWS}, 1fr) / repeat(${COLS}, 1fr)`;
+  const total = COLS * ROWS;
+  const order = [...Array(total).keys()].sort(() => Math.random() - 0.5);
+  curtain.innerHTML = order.map((rank) => `<span style="--d:${(rank / total) * CURTAIN_MS}ms"></span>`).join("");
+
+  requestAnimationFrame(() => boot.classList.add("in"));
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min((now - start) / COUNT_MS, 1);
+    const v = Math.round((1 - Math.pow(1 - p, 4)) * 100);
+    pct.textContent = String(v).padStart(3, "0") + "%";
+    bar.style.transform = `scaleX(${v / 100})`;
+    if (p < 1) return requestAnimationFrame(tick);
+    setTimeout(() => {
+      boot.classList.add("hidden");
+      curtain.classList.add("open");
+      setTimeout(() => curtain.remove(), CURTAIN_MS + 50);
+    }, 350);
+  }
+  requestAnimationFrame(tick);
+</script>
+</body>
+</html>

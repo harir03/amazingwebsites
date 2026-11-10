@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kinetic Marquee Footer</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&family=Geist+Mono&display=swap" />
+<style>
+  :root { --lime: #bcf015; --blue: #350aff; --ease: cubic-bezier(0.625, 0.05, 0, 1); }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: #111; font-family: "Geist Mono", monospace; }
+  footer { position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; background: #000; color: #fff; overflow: hidden; }
+  .stickers { position: absolute; top: 20px; left: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .stickers a { border: 2px solid #000; padding: 6px 12px; font-size: 11px; letter-spacing: .15em; text-transform: uppercase; text-decoration: none;
+                box-shadow: 3px 3px 0 #fff3; transition: transform .3s; }
+  .stickers a:hover { transform: translateY(-4px) rotate(0deg) !important; }
+  .copy { position: absolute; top: 20px; right: 20px; background: none; color: #fff; border: 1px solid rgb(255 255 255 / .3);
+          padding: 6px 12px; font: 11px "Geist Mono", monospace; letter-spacing: .12em; cursor: pointer; }
+  .copy:hover { color: var(--lime); border-color: var(--lime); }
+  .swap { display: inline-grid; overflow: hidden; }
+  .swap span { grid-area: 1 / 1; transition: transform .5s var(--ease); }
+  .swap span:last-child { color: var(--lime); transform: translateY(110%); }
+  .copy.done .swap span:first-child { transform: translateY(-110%); }
+  .copy.done .swap span:last-child { transform: none; }
+  .word { padding: 0 16px 12px; text-align: center; font: 400 clamp(34px, 11.5vw, 150px)/.85 "Silkscreen", monospace;
+          text-transform: uppercase; transform-origin: bottom; will-change: transform; }
+  .strip { transform: rotate(-2deg); background: var(--lime); color: #000; border-block: 2px solid #000; padding: 8px 0; overflow: hidden; }
+  .track { display: flex; width: max-content; gap: 32px; white-space: nowrap; animation: marquee 18s linear infinite; }
+  .track span { font: 400 clamp(16px, 2.4vw, 26px) "Silkscreen", monospace; text-transform: uppercase; display: flex; gap: 32px; }
+  .track b { color: var(--blue); font-weight: 400; }
+  @keyframes marquee { to { transform: translate3d(-50%, 0, 0); } }
+  .legal { display: flex; justify-content: space-between; padding: 12px 20px; font-size: 10px; letter-spacing: .2em; opacity: .5; text-transform: uppercase; }
+  @media (prefers-reduced-motion: reduce) { .track { animation: none; } }
+</style>
+</head>
+<body>
+<footer>
+  <div class="stickers">
+    <a href="#" style="background:#bcf015;color:#000;transform:rotate(-6deg)">Instagram ↗</a>
+    <a href="#" style="background:#350aff;color:#fff;transform:rotate(4deg)">LinkedIn ↗</a>
+    <a href="#" style="background:#fff;color:#000;transform:rotate(-2deg)">Meetup ↗</a>
+  </div>
+  <button class="copy" aria-live="polite"><span class="swap"><span>hello@thedesignsociety.fr</span><span>Copied ✓</span></span></button>
+  <h2 class="word">The Design<br />Society</h2>
+  <div class="strip" aria-label="Bienvenue, Welcome, Willkommen, Benvenuti, Bienvenidos">
+    <div class="track" aria-hidden="true"></div>
+  </div>
+  <div class="legal"><span>© TDS Lyon</span><span>Association loi 1901</span></div>
+</footer>
+
+<script>
+  const words = ["Bienvenue", "Welcome", "Willkommen", "Benvenuti", "Bienvenidos"];
+  document.querySelector(".track").innerHTML = [...words, ...words].map((w) => `<span>${w} <b>✦</b></span>`).join("");
+
+  const copyBtn = document.querySelector(".copy");
+  copyBtn.addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText("hello@thedesignsociety.fr"); } catch {}
+    copyBtn.classList.add("done");
+    setTimeout(() => copyBtn.classList.remove("done"), 1600);
+  });
+
+  // 3D tilt toward the cursor with a 0.08 lerp.
+  const footer = document.querySelector("footer"), word = document.querySelector(".word");
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const t = { x: 0, y: 0 }, c = { x: 0, y: 0 };
+    footer.addEventListener("pointermove", (e) => {
+      const r = footer.getBoundingClientRect();
+      t.x = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      t.y = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    });
+    footer.addEventListener("pointerleave", () => { t.x = 0; t.y = 0; });
+    (function tick() {
+      c.x += (t.x - c.x) * 0.08; c.y += (t.y - c.y) * 0.08;
+      word.style.transform = `perspective(700px) rotateY(${c.x * 14}deg) rotateX(${-c.y * 18}deg) skewX(${c.x * -6}deg)`;
+      requestAnimationFrame(tick);
+    })();
+  }
+</script>
+</body>
+</html>

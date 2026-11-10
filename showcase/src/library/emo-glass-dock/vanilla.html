@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Glassmorphic Floating Dock</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&family=Inter+Tight:wght@500&family=IBM+Plex+Mono&display=swap" />
+<style>
+  :root { --bg: #f5efff; --fg: #2a1647; --muted: #64698b; --glass: rgba(255,255,255,.55); --border: rgba(255,255,255,.75); --panel: rgba(255,255,255,.78);
+          --primary: #9047ff; --primary-active: #7114ff; --spring: cubic-bezier(0.34, 1.56, 0.64, 1); --expo: cubic-bezier(0.16, 1, 0.3, 1); }
+  :root.dark { --bg: #121212; --fg: #fff; --muted: #a3a6c1; --glass: rgba(24,24,24,.55); --border: rgba(255,255,255,.12); --panel: rgba(24,24,24,.8); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { min-height: 100vh; overflow: hidden; background: var(--bg); color: var(--fg); font-family: "Inter Tight", "Helvetica Neue", sans-serif; transition: background .7s, color .7s; }
+  .blob { position: fixed; border-radius: 50%; filter: blur(60px); animation: float 6s ease-in-out infinite; }
+  @keyframes float { 50% { transform: translateY(-14px); } }
+  .copy { position: relative; padding: 32px 24px; }
+  .copy small { font: 11px "IBM Plex Mono", monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .copy h1 { margin-top: 8px; max-width: 14ch; font: italic 300 clamp(30px, 6.5vw, 72px)/.95 "Cormorant Garamond", serif; }
+  .glass { background: var(--glass); backdrop-filter: blur(20px) saturate(160%); -webkit-backdrop-filter: blur(20px) saturate(160%);
+           border: 1px solid var(--border); box-shadow: 0 20px 50px -20px rgba(42,22,71,.45), inset 0 1px 0 rgba(255,255,255,.35); }
+  nav { position: fixed; left: 0; right: 0; bottom: 20px; z-index: 30; display: flex; justify-content: center; padding: 0 12px; }
+  .dock { display: flex; align-items: center; gap: 4px; padding: 6px; border-radius: 999px; }
+  .mark { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: var(--primary); color: #fff; text-decoration: none;
+          font: italic 300 22px/1 "Cormorant Garamond", serif; }
+  .links { position: relative; display: flex; list-style: none; }
+  .links .pill { position: absolute; top: 0; bottom: 0; border-radius: 999px; background: rgba(144,71,255,.12); opacity: 0;
+                 transition: left .45s var(--expo), width .45s var(--expo), opacity .25s; }
+  .dark .links .pill { background: rgba(255,255,255,.1); }
+  .links a { position: relative; display: block; padding: 10px 16px; border-radius: 999px; color: inherit; text-decoration: none; font-size: 14px; }
+  .icon { width: 40px; height: 40px; display: grid; place-items: center; border: 0; border-radius: 50%; background: none; color: inherit; cursor: pointer; transition: background .2s; }
+  .icon:hover { background: rgba(144,71,255,.1); }
+  .eq { display: flex; align-items: flex-end; gap: 2px; height: 16px; }
+  .eq i { display: block; width: 3px; height: 100%; border-radius: 2px; background: currentColor; transform-origin: bottom; animation: eq var(--d) ease-in-out var(--delay) infinite; }
+  .muted .eq i { animation: none; transform: scaleY(.25); }
+  @keyframes eq { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+  .gear svg { transition: transform .55s var(--spring); }
+  .gear[aria-expanded="true"] svg { transform: rotate(90deg); }
+  .cta { margin-left: 4px; padding: 10px 16px; border-radius: 999px; background: var(--primary); color: #fff; text-decoration: none; font-size: 14px; }
+  .cta:hover { background: var(--primary-active); }
+  .panel { position: fixed; left: 50%; bottom: 84px; z-index: 20; width: min(280px, calc(100% - 32px)); padding: 16px; background: var(--panel);
+           border-radius: 999px; transform-origin: bottom right; transform: translateX(-30%) scale(.2); opacity: 0;
+           transition: transform .55s var(--spring), opacity .3s var(--expo), border-radius .55s var(--expo); }
+  .panel.open { border-radius: 24px; transform: translateX(-30%) scale(1); opacity: 1; }
+  .panel small { display: block; margin-bottom: 8px; font: 11px "IBM Plex Mono", monospace; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .switch { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border: 0; background: none; color: inherit; font: 13px "Inter Tight", sans-serif; cursor: pointer; }
+  .switch span { position: relative; width: 36px; height: 20px; border-radius: 999px; background: rgba(127,127,140,.35); transition: background .3s; }
+  .switch span::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: #fff; transition: transform .3s var(--spring); }
+  .switch[aria-checked="true"] span { background: var(--primary); }
+  .switch[aria-checked="true"] span::after { transform: translateX(16px); }
+  @media (max-width: 520px) { .links, .cta { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .blob, .eq i { animation: none; } }
+</style>
+</head>
+<body>
+  <div class="blob" style="top:12%;left:12%;width:160px;height:160px;background:#9047ff;opacity:.6"></div>
+  <div class="blob" style="top:30%;right:10%;width:190px;height:190px;background:#ff9ad5;opacity:.4;animation-duration:8s"></div>
+  <div class="copy"><small>Digital agency — since 2016</small><h1>We design feelings people remember.</h1></div>
+
+  <div class="panel glass" id="settings" role="dialog" aria-label="Settings" inert>
+    <small>Settings</small>
+    <button class="switch" role="switch" aria-checked="false" data-key="dark">Dark mode<span></span></button>
+    <button class="switch" role="switch" aria-checked="true" data-key="sound">Sound<span></span></button>
+    <button class="switch" role="switch" aria-checked="true" data-key="motion">Motion<span></span></button>
+  </div>
+
+  <nav aria-label="Main">
+    <div class="dock glass">
+      <a class="mark" href="#top" aria-label="Emotion, home">e</a>
+      <ul class="links"><li class="pill" aria-hidden="true"></li><li><a href="#">Work</a></li><li><a href="#">About</a></li><li><a href="#">Contact</a></li></ul>
+      <button class="icon sound" aria-pressed="true" aria-label="Mute sound">
+        <span class="eq" aria-hidden="true"><i style="--d:.9s;--delay:0s"></i><i style="--d:.6s;--delay:.12s"></i><i style="--d:1.1s;--delay:.24s"></i><i style="--d:.75s;--delay:.36s"></i></span>
+      </button>
+      <button class="icon gear" aria-expanded="false" aria-controls="settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3" /><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1" />
+        </svg>
+      </button>
+      <a class="cta" href="#contact">Let's talk</a>
+    </div>
+  </nav>
+
+<script>
+  const $ = (s) => document.querySelector(s);
+  const pill = $(".links .pill"), links = [...document.querySelectorAll(".links a")];
+  links.forEach((a) => {
+    const show = () => { const li = a.parentElement; pill.style.left = li.offsetLeft + "px"; pill.style.width = li.offsetWidth + "px"; pill.style.opacity = 1; };
+    a.addEventListener("mouseenter", show); a.addEventListener("focus", show);
+  });
+  $(".links").addEventListener("mouseleave", () => (pill.style.opacity = 0));
+
+  const panel = $("#settings"), gear = $(".gear");
+  const setPanel = (open) => { panel.classList.toggle("open", open); panel.inert = !open; gear.setAttribute("aria-expanded", open); };
+  gear.addEventListener("click", () => setPanel(!panel.classList.contains("open")));
+  addEventListener("keydown", (e) => e.key === "Escape" && setPanel(false));
+
+  const sound = $(".sound");
+  const setSound = (on) => {
+    sound.classList.toggle("muted", !on); sound.setAttribute("aria-pressed", on); sound.setAttribute("aria-label", on ? "Mute sound" : "Unmute sound");
+    panel.querySelector('[data-key="sound"]').setAttribute("aria-checked", on);
+  };
+  sound.addEventListener("click", () => setSound(sound.classList.contains("muted")));
+
+  panel.addEventListener("click", (e) => {
+    const sw = e.target.closest(".switch"); if (!sw) return;
+    const on = sw.getAttribute("aria-checked") !== "true";
+    sw.setAttribute("aria-checked", on);
+    if (sw.dataset.key === "dark") document.documentElement.classList.toggle("dark", on);
+    if (sw.dataset.key === "sound") setSound(on);
+    if (sw.dataset.key === "motion") document.querySelectorAll(".blob, .eq i").forEach((el) => (el.style.animationPlayState = on ? "running" : "paused"));
+  });
+</script>
+</body>
+</html>
