@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artisanal Jar Selector — Agrumea Farm</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #EDE8DF;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #1C1917;
+    }
+    .card {
+      width: 100%;
+      max-width: 900px;
+      background: #FFFDF9;
+      border: 1px solid rgba(28, 25, 23, 0.1);
+      border-radius: 24px;
+      padding: 2.25rem;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.04);
+    }
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 1.5rem;
+    }
+    .eyebrow {
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #DF5C32;
+    }
+    .title {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 2.5rem;
+      line-height: 1.1;
+    }
+    .pills {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .pill-btn {
+      background: transparent;
+      border: 1px solid rgba(28, 25, 23, 0.15);
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #57534E;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pill-btn.active {
+      background: #DF5C32;
+      border-color: #DF5C32;
+      color: #FFF;
+    }
+    .product-box {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 2rem;
+      background: #F8F5EE;
+      border-radius: 18px;
+      padding: 1.75rem;
+      align-items: center;
+    }
+    .media {
+      position: relative;
+      height: 260px;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #364B38;
+      color: #FFF;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+    .jar-heading {
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    .desc {
+      font-size: 0.9rem;
+      color: #57534E;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    .pairing {
+      background: rgba(223, 92, 50, 0.08);
+      border-left: 2px solid #DF5C32;
+      padding: 0.6rem 0.8rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top-row">
+      <div>
+        <div class="eyebrow">Collezione Artigianale</div>
+        <h2 class="title">Artisanal Pantry Jars</h2>
+      </div>
+      <div class="pills">
+        <button class="pill-btn active" data-idx="0">Pesto Pistacchio</button>
+        <button class="pill-btn" data-idx="1">Arance Rosse</button>
+        <button class="pill-btn" data-idx="2">Crema Mandorle</button>
+      </div>
+    </div>
+
+    <div class="product-box">
+      <div class="media">
+        <span class="badge" id="badge">Specialità Salata</span>
+        <img id="img" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" alt="Jar">
+      </div>
+      <div>
+        <h3 class="jar-heading" id="jarName">Pesto Salato di Pistacchio</h3>
+        <p class="desc" id="jarDesc">
+          Enveloping savory pesto made from 65% toasted Sicilian pistachios, cold-pressed sunflower oil, and Trapani sea salt.
+        </p>
+        <div class="pairing" id="pairing">
+          <strong>Abbinamento:</strong> Trofie fresche, burrata pugliese, o guanciale croccante.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      {
+        badge: "Specialità Salata",
+        name: "Pesto Salato di Pistacchio",
+        desc: "Enveloping savory pesto made from 65% toasted Sicilian pistachios, cold-pressed sunflower oil, and Trapani sea salt.",
+        pairing: "Trofie fresche, burrata pugliese, o guanciale croccante.",
+        img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        badge: "Agrumi di Sicilia",
+        name: "Marmellata di Arance Rosse",
+        desc: "Intensely fragrant marmalade from 85% Sicilian Moro and Tarocco blood oranges with candied zest strips.",
+        pairing: "Pane di segale tostato, burro di malga o formaggi erborinati.",
+        img: "https://images.unsplash.com/photo-1596797882870-8c33deeac224?auto=format&fit=crop&w=800&q=80"
+      },
+      {
+        badge: "Crema Dolce",
+        name: "Crema Dolce di Mandorle di Noto",
+        desc: "Silky velvety sweet spread crafted from 55% toasted Noto Roman almonds, rich cocoa butter, and Bourbon vanilla.",
+        pairing: "Brioche col tuppo calda, croissant o gelato al fior di latte.",
+        img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80"
+      }
+    ];
+
+    const btns = document.querySelectorAll('.pill-btn');
+    btns.forEach(btn => {
+      btn.onclick = () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const d = items[parseInt(btn.dataset.idx)];
+        document.getElementById('badge').textContent = d.badge;
+        document.getElementById('jarName').textContent = d.name;
+        document.getElementById('jarDesc').textContent = d.desc;
+        document.getElementById('pairing').innerHTML = `<strong>Abbinamento:</strong> ${d.pairing}`;
+        document.getElementById('img').src = d.img;
+      };
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agrumea Farm | Jams, pestos and flavours of Sicily</title>
+  <meta name="description" content="Agrumea Farm transforms Sicilian citrus fruits, other fruits and produce into artisanal jams, pestos and preserves with an authentic flavour.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-parchment: #F8F5EE;
+      --bg-cream: #FFFDF9;
+      --text-main: #1C1917;
+      --text-muted: #57534E;
+      --terracotta: #DF5C32;
+      --olive: #364B38;
+      --citrus-yellow: #F5CE43;
+      --sand-border: rgba(28, 25, 23, 0.12);
+
+      --font-serif: 'Instrument Serif', Georgia, serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background-color: var(--bg-parchment);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      line-height: 1.5;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.05;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.5rem 2rem;
+      transition: background 0.3s ease, border-color 0.3s;
+    }
+
+    .header-bar {
+      max-width: 1360px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .lang-switcher {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--sand-border);
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .lang-item {
+      text-decoration: none;
+      color: var(--text-muted);
+      padding: 0.1rem 0.4rem;
+      border-radius: 999px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .lang-item.active {
+      color: var(--text-main);
+      background: rgba(28, 25, 23, 0.08);
+    }
+
+    .brand-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-name {
+      font-family: var(--font-serif);
+      font-size: 2.1rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      line-height: 0.9;
+    }
+
+    .brand-tag {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.25em;
+      font-weight: 700;
+      color: var(--terracotta);
+      margin-top: 0.2rem;
+    }
+
+    .btn-shop {
+      background: var(--terracotta);
+      color: #FFF;
+      text-decoration: none;
+      padding: 0.65rem 1.4rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: transform 0.2s ease, background 0.2s;
+    }
+
+    .btn-shop:hover {
+      background: #c74b24;
+      transform: translateY(-2px);
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-top: 8rem;
+      padding-bottom: 4rem;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+      color: var(--olive);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '✦';
+      color: var(--terracotta);
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 6vw, 5.8rem);
+      margin-bottom: 2rem;
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 48ch;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-visual {
+      position: relative;
+      height: 520px;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(54, 75, 56, 0.16);
+      border: 1px solid var(--sand-border);
+    }
+
+    .hero-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-badge-overlay {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      background: rgba(255, 253, 249, 0.92);
+      backdrop-filter: blur(12px);
+      padding: 1.25rem 1.75rem;
+      border-radius: 18px;
+      border: 1px solid var(--sand-border);
+      max-width: 280px;
+    }
+
+    .hero-badge-overlay h4 {
+      font-size: 1.4rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .hero-badge-overlay p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Provenance Bar */
+    .provenance-bar {
+      border-top: 1px solid var(--sand-border);
+      border-bottom: 1px solid var(--sand-border);
+      padding: 2.5rem 0;
+      margin: 4rem 0;
+      background: var(--bg-cream);
+    }
+
+    .provenance-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .provenance-item {
+      text-align: center;
+    }
+
+    .provenance-num {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      color: var(--olive);
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .provenance-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+    }
+
+    /* Interactive Jar Selector */
+    .section-selector {
+      padding: 6rem 0;
+    }
+
+    .selector-header {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .selector-header h2 {
+      font-size: clamp(2.6rem, 5vw, 4.4rem);
+      margin-bottom: 1rem;
+    }
+
+    .jar-card {
+      background: var(--bg-cream);
+      border: 1px solid var(--sand-border);
+      border-radius: 28px;
+      padding: 3.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.04);
+    }
+
+    .jar-media-col {
+      position: relative;
+      height: 440px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #F1ECE1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .jar-media-col img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .jar-badge {
+      position: absolute;
+      top: 1.5rem;
+      left: 1.5rem;
+      background: var(--olive);
+      color: #FFF;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+    }
+
+    .jar-pills {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      background: transparent;
+      border: 1px solid var(--sand-border);
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .pill-btn.active {
+      background: var(--terracotta);
+      border-color: var(--terracotta);
+      color: #FFF;
+    }
+
+    .jar-title {
+      font-size: clamp(2.4rem, 4vw, 3.4rem);
+      margin-bottom: 1.25rem;
+    }
+
+    .jar-desc {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 2rem;
+    }
+
+    .ingredients-box {
+      border-top: 1px solid var(--sand-border);
+      padding-top: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .ingredients-header {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--olive);
+      margin-bottom: 0.75rem;
+    }
+
+    .ingredients-list {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .ingredient-tag {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .pairing-box {
+      background: rgba(223, 92, 50, 0.08);
+      border-left: 3px solid var(--terracotta);
+      padding: 1rem 1.25rem;
+      border-radius: 0 12px 12px 0;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+
+    /* Philosophy / Orchard Section */
+    .section-orchard {
+      padding: 6rem 0;
+      background: var(--olive);
+      color: #F8F5EE;
+    }
+
+    .orchard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .orchard-text h2 {
+      font-size: clamp(2.6rem, 5vw, 4.4rem);
+      color: #FFF;
+      margin-bottom: 1.75rem;
+    }
+
+    .orchard-text p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      opacity: 0.85;
+      margin-bottom: 2rem;
+    }
+
+    .orchard-media {
+      height: 480px;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+
+    .orchard-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--bg-cream);
+      border-top: 1px solid var(--sand-border);
+      padding: 6rem 0 3rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .footer-brand h3 {
+      font-size: 2.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-brand p {
+      color: var(--text-muted);
+      max-width: 36ch;
+      line-height: 1.6;
+    }
+
+    .footer-links h5 {
+      font-size: 0.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--olive);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-links ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--terracotta);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid var(--sand-border);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid, .jar-card, .orchard-grid, .footer-grid {
+        grid-template-columns: 1fr;
+      }
+      .provenance-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-bar">
+      <div class="lang-switcher">
+        <a href="#" class="lang-item">IT</a>
+        <a href="#" class="lang-item active">EN</a>
+      </div>
+
+      <a href="#" class="brand-logo">
+        <span class="brand-name">Agrumea Farm</span>
+        <span class="brand-tag">Sicilia · 100% Artigianale</span>
+      </a>
+
+      <a href="#prodotti" class="btn-shop">
+        <span>Esplora i Prodotti</span>
+        <span>→</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-eyebrow">Autentici Sapori di Sicilia</div>
+          <h1 class="hero-title">
+            Artisanal marmalades, spreads &amp; <em>pestos from Sicily</em>
+          </h1>
+          <p class="hero-desc">
+            Agrumea Farm transforms sun-ripened Sicilian citrus, Etna pistachios, and organic orchard fruits into handcrafted preserves made with love, patience, and zero artificial additives.
+          </p>
+          <a href="#prodotti" class="btn-shop" style="padding: 0.9rem 2rem; font-size: 0.95rem;">
+            <span>Scopri la Collezione</span>
+            <span>↓</span>
+          </a>
+        </div>
+
+        <div class="hero-visual">
+          <img src="https://images.unsplash.com/photo-1618897996318-5a901fa6ca71?auto=format&fit=crop&w=1000&q=80" alt="Sicilian Citrus Grove">
+          <div class="hero-badge-overlay">
+            <h4>Val di Noto Orchards</h4>
+            <p>Hand-harvested citrus and slow cooking in small batches under the Mediterranean sun.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Provenance Bar -->
+  <section class="provenance-bar">
+    <div class="container">
+      <div class="provenance-grid">
+        <div class="provenance-item">
+          <div class="provenance-num">85%</div>
+          <div class="provenance-label">Fruit Content</div>
+        </div>
+        <div class="provenance-item">
+          <div class="provenance-num">0%</div>
+          <div class="provenance-label">Artificial Additives</div>
+        </div>
+        <div class="provenance-item">
+          <div class="provenance-num">100%</div>
+          <div class="provenance-label">Sicilian Raw Material</div>
+        </div>
+        <div class="provenance-item">
+          <div class="provenance-num">Etna</div>
+          <div class="provenance-label">Volcanic Soil Minerals</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Jar Selector -->
+  <section class="section-selector" id="prodotti">
+    <div class="container">
+      <div class="selector-header">
+        <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: var(--terracotta); margin-bottom: 0.75rem;">
+          Collezione Artigianale
+        </div>
+        <h2>Artisanal Pantry Jars</h2>
+        <p style="color: var(--text-muted); font-size: 1.1rem;">
+          Select a specialty jar below to inspect its origin, ingredient percentages, and pairing secrets.
+        </p>
+      </div>
+
+      <div class="jar-card">
+        <div class="jar-media-col">
+          <span class="jar-badge" id="jarBadge">Specialità Salata</span>
+          <img id="jarImg" src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80" alt="Pesto al Pistacchio">
+        </div>
+
+        <div class="jar-info-col">
+          <!-- Switcher Pills -->
+          <div class="jar-pills" id="pillsContainer">
+            <button class="pill-btn active" data-id="pesto">Pesto Pistacchio</button>
+            <button class="pill-btn" data-id="arancia">Arance Rosse</button>
+            <button class="pill-btn" data-id="mandorle">Crema Mandorle</button>
+            <button class="pill-btn" data-id="nocellara">Olive Nocellara</button>
+          </div>
+
+          <h3 class="jar-title" id="jarTitle">Pesto Salato di Pistacchio</h3>
+          <p class="jar-desc" id="jarDesc">
+            Enveloping savory pesto made from 65% toasted Sicilian pistachios, cold-pressed sunflower oil, and sea salt. Ideal for traditional pasta, warm focaccia, or accompanying aged pecorino.
+          </p>
+
+          <div class="ingredients-box">
+            <div class="ingredients-header">Composizione &amp; Origine</div>
+            <div class="ingredients-list" id="jarIngredients">
+              <span class="ingredient-tag">✦ 65% Pistacchi di Sicilia</span>
+              <span class="ingredient-tag">✦ Olio di Semi di Girasole</span>
+              <span class="ingredient-tag">✦ Sale Marino di Trapani</span>
+            </div>
+          </div>
+
+          <div class="pairing-box" id="jarPairing">
+            <strong>Consiglio di Abbinamento:</strong> Perfetto con trofie fresche, burrata pugliese o guanciale croccante.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Orchard Story Section -->
+  <section class="section-orchard">
+    <div class="container">
+      <div class="orchard-grid">
+        <div class="orchard-text">
+          <div style="font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.15em; color: var(--citrus-yellow); margin-bottom: 1rem;">
+            La Nostra Filosofia
+          </div>
+          <h2>From Volcanic Soil to Handcrafted Glass</h2>
+          <p>
+            The microclimate between the Ionian Sea and the foothills of Mount Etna produces citrus fruits with unmatched sugar balance, fragrant essential oils, and intense floral aromas.
+          </p>
+          <p>
+            We harvest by hand at peak ripeness, gently peel, and simmer in small copper kettles to preserve the vibrant Mediterranean colors and natural pectins.
+          </p>
+        </div>
+
+        <div class="orchard-media">
+          <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=1000&q=80" alt="Harvesting citrus in Sicily">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-name" style="font-size: 2.2rem;">Agrumea Farm</div>
+          <div class="brand-tag" style="margin-bottom: 1.25rem;">Custodi della Tradizione Siciliana</div>
+          <p>
+            Produzione artigianale di marmellate, composte e pesti tipici siciliani. Spedizioni in tutta Europa con imballaggi 100% riciclabili.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h5>Navigazione</h5>
+          <ul>
+            <li><a href="#prodotti">Marmellate di Agrumi</a></li>
+            <li><a href="#prodotti">Pesti &amp; Creme Salate</a></li>
+            <li><a href="#prodotti">Creme Dolci Spalmabili</a></li>
+            <li><a href="#">La Nostra Tenuta</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h5>Contatti &amp; Tenuta</h5>
+          <ul>
+            <li><span style="opacity: 0.8;">Catania / Noto (SR), Italia</span></li>
+            <li><a href="mailto:info@agrumeafarm.it">info@agrumeafarm.it</a></li>
+            <li><a href="tel:+390951234567">+39 095 123 4567</a></li>
+            <li><a href="#">Instagram @agrumeafarm</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>© 2026 Agrumea Farm S.r.l. Tutti i diritti riservati.</div>
+        <div>P.IVA 05849300871 · Certificato Biologico UE</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const PRODUCTS = {
+      pesto: {
+        badge: "Specialità Salata",
+        title: "Pesto Salato di Pistacchio",
+        desc: "Enveloping savory pesto made from 65% toasted Sicilian pistachios, cold-pressed sunflower oil, and sea salt. Ideal for traditional pasta, warm focaccia, or accompanying aged pecorino.",
+        ingredients: ["✦ 65% Pistacchi di Sicilia", "✦ Olio di Semi di Girasole", "✦ Sale Marino di Trapani"],
+        pairing: "Consiglio di Abbinamento: Perfetto con trofie fresche, burrata pugliese o guanciale croccante.",
+        img: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
+      },
+      arancia: {
+        badge: "Agrumi di Sicilia",
+        title: "Marmellata di Arance Rosse",
+        desc: "Sweet, intensely fragrant marmalade made from 85% Sicilian Moro and Tarocco blood oranges with caramelized zest strips and raw cane sugar.",
+        ingredients: ["✦ 85% Arance Rosse di Sicilia IGP", "✦ Zucchero di Canna Grezzo", "✦ Succo di Limone Naturale"],
+        pairing: "Consiglio di Abbinamento: Sublimi su pane di segale tostato con burro di malga o formaggi erborinati.",
+        img: "https://images.unsplash.com/photo-1596797882870-8c33deeac224?auto=format&fit=crop&w=800&q=80"
+      },
+      mandorle: {
+        badge: "Crema Dolce",
+        title: "Crema Dolce di Mandorle di Noto",
+        desc: "Silky, velvety sweet spread crafted from 55% toasted Noto Roman almonds, rich cocoa butter, and natural Bourbon vanilla pods.",
+        ingredients: ["✦ 55% Mandorle di Noto", "✦ Burro di Cacao Puro", "✦ Bacche di Vaniglia Bourbon"],
+        pairing: "Consiglio di Abbinamento: Da spalmare su brioche col tuppo, croissant caldi o gelato fior di latte.",
+        img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=800&q=80"
+      },
+      nocellara: {
+        badge: "Frantoio & Olive",
+        title: "Paté di Olive Nocellara del Belice",
+        desc: "Rustic olive paste with vibrant emerald color, crushed wild oregano, and Extra Virgin Olive Oil from the Belice valley.",
+        ingredients: ["✦ 75% Olive Nocellara del Belice DOP", "✦ Olio Extra Vergine di Oliva", "✦ Origano Selvatico dell'Etna"],
+        pairing: "Consiglio di Abbinamento: Ideale per crostini di semola, caponata di melanzane e taglieri misti.",
+        img: "https://images.unsplash.com/photo-1471193945509-9ad0617afabf?auto=format&fit=crop&w=800&q=80"
+      }
+    };
+
+    const pills = document.querySelectorAll('.pill-btn');
+    const badgeEl = document.getElementById('jarBadge');
+    const titleEl = document.getElementById('jarTitle');
+    const descEl = document.getElementById('jarDesc');
+    const ingEl = document.getElementById('jarIngredients');
+    const pairingEl = document.getElementById('jarPairing');
+    const imgEl = document.getElementById('jarImg');
+
+    pills.forEach(btn => {
+      btn.addEventListener('click', () => {
+        pills.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const key = btn.getAttribute('data-id');
+        const data = PRODUCTS[key];
+        if (!data) return;
+
+        badgeEl.textContent = data.badge;
+        titleEl.textContent = data.title;
+        descEl.textContent = data.desc;
+        pairingEl.innerHTML = `<strong>Consiglio di Abbinamento:</strong> ${data.pairing.replace('Consiglio di Abbinamento: ', '')}`;
+        imgEl.src = data.img;
+
+        ingEl.innerHTML = data.ingredients.map(ing => `<span class="ingredient-tag">${ing}</span>`).join('');
+      });
+    });
+  </script>
+</body>
+</html>
+
