@@ -12,7 +12,8 @@ export type ThemeArchetype =
   | "kinetic-video-editorial"
   | "mediterranean-botanical-artisan"
   | "tactical-aerospace-hud"
-  | "athletic-fashion-editorial";
+  | "athletic-fashion-editorial"
+  | "minimalist-editorial-monolith";
 
 export type ComponentCategory =
   | "navbar"

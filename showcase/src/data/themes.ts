@@ -108,6 +108,13 @@ export const THEMES: ThemeMeta[] = [
     accent: "#fde047",
     blurb: "3D holographic collectible cards, yardline scrub rails, NFL gridiron power, haute couture streetwear.",
   },
+  {
+    id: "minimalist-editorial-monolith",
+    name: "Minimalist Editorial & Photography Agency Monolith",
+    short: "Editorial Monolith",
+    accent: "#18181b",
+    blurb: "Staggered chromatic artist galleries, Garamond Narrow high-fashion typography, live studio timezones, Quentin easing.",
+  },
 ];
 
 export const THEME_BY_ID = Object.fromEntries(THEMES.map((t) => [t.id, t])) as Record<ThemeArchetype, ThemeMeta>;

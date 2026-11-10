@@ -12,6 +12,7 @@ import { sweetTape } from "./sites/sweettape";
 import { theDesignSociety } from "./sites/thedesignsociety";
 import { zrkTechnology } from "./sites/zrk";
 import { justinJefferson } from "./sites/justinjefferson";
+import { vivMgmt } from "./sites/vivmgmt";
 import type { ComponentItem, WebsiteEntry } from "./types";
 
 export type { ComponentCategory, ComponentItem, ThemeArchetype, WebsiteEntry } from "./types";
@@ -31,6 +32,7 @@ export const CATALOG: WebsiteEntry[] = [
   agrumeaFarm,
   zrkTechnology,
   justinJefferson,
+  vivMgmt,
 ];
 
 export interface CatalogComponent extends ComponentItem {
